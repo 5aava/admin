@@ -1,0 +1,14 @@
+version: "3.0"
+
+services:
+  mariadb:
+    container_name: "itbot_db"
+    image: "mariadb:latest"
+    restart: "always"
+    ports:
+      - 127.0.0.1:3307:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: "J369xcN6jFwXwvr6LUh"
+      MYSQL_DATABASE: "itbot_db"
+      MYSQL_USER: "itbot_user"
+      MYSQL_PASSWORD: "E753RakR56Kbx2qUQKz"
