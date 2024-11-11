@@ -39,8 +39,6 @@ export default function Index() {
     dialogOpenSet(false);
   };
 
-
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (emailError || passwordError) {
@@ -53,13 +51,13 @@ export default function Index() {
     });
 
     if(response.data?.auth == false){
-      localStorage.removeItem('x-api-key');
+      localStorage.removeItem('access-token');
       snackbarOpenSet(true);
     }
 
     if(response.data?.auth == true){
-      localStorage.setItem('x-api-key', response.data?.jwt);
-      router.push('/main')
+      localStorage.setItem('access-token', response.data?.jwt);
+      router.push('/dashboard')
     }
 
   };
@@ -98,7 +96,7 @@ export default function Index() {
     <Container maxWidth="sm">
       <Box sx={{ my: 8 }}>
         <Typography variant="h4" align={'center'} component="h1" sx={{ mb: 4 }}>
-          Платформа расчетов
+          RCSG
         </Typography>
         <Card variant="outlined">
           <Typography

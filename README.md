@@ -8,12 +8,21 @@ logger            +
 api               +
 snackbars         +
 dialog            +
+loader            +
+auth jwt          +    
+auth integration  +
 
-integration       
-sequelize     
-migrations
+app               +
+drawler           +
+header            +
+logout            +
+
+
+sequelize         
+migrations         
 models
 seeds
 
-auth
-jwt
+crud
+
+menu
