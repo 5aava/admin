@@ -45,7 +45,7 @@ export default function Index() {
       return;
     }
     const data = new FormData(event.currentTarget);
-    const response = await axios.post('/api/auth', {
+    const response = await axios.post('/api/myauth', {
       email: data.get('email'),
       password: data.get('password'),
     });
