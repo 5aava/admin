@@ -46,7 +46,7 @@ module.exports = {
       acquire: 300000,
       idle: 100000,
     },
-    logging:  console.log, // console.log,
+    logging: console.log, // console.log,
   },
   production: {
     database: process.env.DB_DATABASE,

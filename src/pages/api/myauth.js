@@ -21,24 +21,28 @@ export default async function myauth(req, res) {
     res.status(200).json({ auth: false });
   }
   
-  const passwordBcrypt = await Users.findOne({
+  const user = await Users.findOne({
     where: {
       email: req.body.email,
     },
-  }).then(user => user.password)
-    .catch(err => res.status(200).json({ auth: false }));
+  });
 
-    console.log(req.body);
-  console.log(passwordBcrypt);
-
-  const isAuth = await bcrypt.compare(req.body.password, passwordBcrypt);
+  const isAuth = await bcrypt.compare(req.body.password, user.password);
   console.log(isAuth);
+
+  logger.info(`login: ${isAuth}`);
 
   if(isAuth){
     const privateKey = process.env.PRIVATE_JWT_KEY;
     const token = jwt.sign({ email: req.body.email }, privateKey);
 
-    res.status(200).json({ auth: true, jwt: token })
+    res.status(200).json({ 
+      auth: true, 
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      jwt: token, 
+    })
   }
 
   res.status(200).json({ auth: false })

@@ -16,8 +16,9 @@ import Button from '@mui/material/Button';
 
 // pages
 import Dashboard from './Pages/Dashboard';
-import Users from './Pages/Users';
+import Users from './Pages/Users/Users';
 import Orders from './Pages/Orders';
+
 
 
 const NAVIGATION = [
@@ -108,6 +109,21 @@ function useDemoRouter(initialPath) {
 export default function App() {
   const router = useRouter()
   const demoRouter = useDemoRouter('/dashboard');
+  
+  const [session, setSession] = React.useState(null);
+
+  React.useEffect(() => {
+    const localUser = JSON.parse(localStorage.getItem('user'));
+
+    const lsUser = {
+      name: localUser.name,
+      role: localUser.role,
+      email: localUser.email,
+      // image: 'https://avatars.githubusercontent.com/u/19550456',
+    };
+
+    setSession({ user: lsUser });
+  }, [])
 
   const renderSwitchPages = (param) => {
     let obj = { page: <Dashboard /> };
@@ -119,6 +135,9 @@ export default function App() {
       case '/users':
         obj = { page: <Users /> };
         break;
+      case '/users':
+        obj = { page: <UserId /> };
+        break;
       case '/orders':
         obj = { page: <Orders /> };
         break;
@@ -127,25 +146,15 @@ export default function App() {
     return obj;
   };
 
-  const user = {
-    user: {
-      name: 'Admin Adminich',
-      email: 'alex@e-store.pro',
-      image: 'https://avatars.githubusercontent.com/u/19550456',
-    },
-  }
-
-  const [session, setSession] = React.useState(user);
 
   const authentication = React.useMemo(() => {
     return {
       signIn: () => {
-        setSession(user);
+        setSession(null);
       },
       signOut: () => {
         setSession(null);
-        router.push('/')
-        localStorage.removeItem('access-token');
+        router.push('/');
       },
     };
   }, []);

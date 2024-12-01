@@ -6,7 +6,7 @@ const Users = [
     id: 1,
     name: 'admin',
     email: 'admin@rcsg.com',
-    password: '$2a$10$UmlXQbjH8m0xse5GsXQ8/uugSpS52ejwZ6x12dWTUKxKXeK59Q6Ku', // bcrypt password rounds 10
+    password: '$2a$10$kQOVbm3hwlhPznSw0bl84Oq0.i6Lwk50imjnFGghg1dOzHA50IWli', // admin@rcsg.com
     role: 'admin',
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -15,7 +15,7 @@ const Users = [
     id: 2,
     name: 'moderator',
     email: 'moderator@rcsg.com',
-    password: '$2a$10$UmlXQbjH8m0xse5GsXQ8/uugSpS52ejwZ6x12dWTUKxKXeK59Q6Ku',
+    password: '$2a$10$inaTgrMh9QivKwIlKY3/wucEHG.B3pJbHbOE89r.Kcit.cW9eIHMq', // moderator@rcsg.com
     role: 'moderator',
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -24,7 +24,7 @@ const Users = [
     id: 3,
     name: 'manager',
     email: 'manager@rcsg.com',
-    password: '$2a$10$UmlXQbjH8m0xse5GsXQ8/uugSpS52ejwZ6x12dWTUKxKXeK59Q6Ku',
+    password: '$2a$10$nVwncmEgVFiTloDoDY2EEeteA8fXke6DQGxHWPorrk75BnALU8DxO', // manager@rcsg.com
     role: 'manager',
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -33,7 +33,7 @@ const Users = [
     id: 4,
     name: 'finance',
     email: 'finance@rcsg.com',
-    password: '$2a$10$UmlXQbjH8m0xse5GsXQ8/uugSpS52ejwZ6x12dWTUKxKXeK59Q6Ku',
+    password: '$2a$10$vBY.Sv7Izknms3fMbXlIBOvuDKpLU/bWWJVwD8uqLgPfkMdzZTcIC', // finance@rcsg.com
     role: 'finance',
     createdAt: new Date(),
     updatedAt: new Date(),

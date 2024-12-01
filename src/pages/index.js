@@ -56,8 +56,13 @@ export default function Index() {
     }
 
     if(response.data?.auth == true){
-      localStorage.setItem('access-token', response.data?.jwt);
-      router.push('/dashboard')
+      localStorage.setItem('access-token', response.data.jwt);
+      localStorage.setItem('user', JSON.stringify({
+        name: response.data.name,
+        role: response.data.role,
+        email: response.data.email,
+      }));
+      router.push('/dashboard');
     }
 
   };

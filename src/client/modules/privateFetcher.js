@@ -9,8 +9,8 @@ export default async function privateFetcher (url, body){
       'X-ACCESS-TOKEN': window.localStorage.getItem('access-token') || null,
       'Content-type': 'application/json',
     },
-    body: JSON.stringify({ body }),
+    body: JSON.stringify(body),
   })
     .then((res) => res.json())
-    .then((json) => json.data);
+    .then((json) => json);
 }
