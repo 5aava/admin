@@ -7,9 +7,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import Snackbar from '../../../components/Snackbar';
 
-import CreateUserDialog from './CreateUserDialog'
-import DeleteUserDialog from './DeleteUserDialog'
-import UpdateUserDialog from './UpdateUserDialog'
+import CreateContractorDialog from './CreateContractorDialog'
+import DeleteContractorDialog from './DeleteContractorDialog'
+import UpdateContractorDialog from './UpdateContractorDialog'
 
 import {
   DataGrid,
@@ -20,7 +20,7 @@ import {
 import useFetch from "../../../modules/useFetch";
 
 
-export default function Users() {
+export default function Сontractors() {
   const apiRef = useGridApiRef();
 
   const [rows, setRows] = useState(null);
@@ -29,16 +29,16 @@ export default function Users() {
   const [dialogOpen, dialogOpenSet] = useState(false);
 
   const [dialogUpdate, dialogUpdateSet] = useState(false);
-  const [dialogUpdateUser, dialogUpdateUserSet] = useState(null);
+  const [dialogUpdateContractor, dialogUpdateContractorSet] = useState(null);
 
   const [dialogDelete, dialogDeleteSet] = useState(false);
-  const [dialogDeleteUser, dialogDeleteUserSet] = useState(null);
+  const [dialogDeleteContractor, dialogDeleteContractorSet] = useState(null);
 
-  const [snackbarText, snackbarTextSet] = useState('Ошибка: Пользователь не добавлен');
+  const [snackbarText, snackbarTextSet] = useState('Ошибка: Исполнитель не добавлен');
   const [snackbarType, snackbarTypeSet] = useState('error');
   const [snackbarOpen, snackbarOpenSet] = useState(false);
 
-  const [response] = useFetch("/api/private/users/all", {});
+  const [response] = useFetch("/api/private/contractors/all", {});
 
   useEffect(() => {
     if(response) {
@@ -47,15 +47,15 @@ export default function Users() {
   }, [response])
 
   const handleUpdateClick = (id) => () => {
-    const user = rows.filter((row) => row.id === id)[0];
+    const contractor = rows.filter((row) => row.id === id)[0];
 
     dialogUpdateSet(true);
-    dialogUpdateUserSet(user);
+    dialogUpdateContractorSet(contractor);
   };
 
   const handleDeleteClick = (id) => () => {
     dialogDeleteSet(true);
-    dialogDeleteUserSet(id);
+    dialogDeleteContractorSet(id);
   };
 
   const handleDialogClose = () => {
@@ -83,12 +83,24 @@ export default function Users() {
     switch(route){
       case 'add': 
         apiRef.current.updateRows([
-          { id: data.id, name: data.name, email: data.email , role: data.role }
+          { 
+            id: data.id, 
+            nickname: data.nickname, 
+            firstname: data.firstname, 
+            lastname: data.lastname,
+            patronymic: data.patronymic 
+          }
         ]);
       break;
       case 'update': 
         apiRef.current.updateRows([
-          { id: data.id, name: data.name, email: data.email , role: data.role }
+          { 
+            id: data.id, 
+            nickname: data.nickname, 
+            firstname: data.firstname, 
+            lastname: data.lastname,
+            patronymic: data.patronymic 
+          }
         ]);
       break;
       case 'delete': 
@@ -100,9 +112,10 @@ export default function Users() {
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 60, editable: false },
-    { field: 'name', headerName: 'Name', width: 180, editable: true },
-    { field: 'email', headerName: 'Email', width: 240, editable: true },
-    { field: 'role', headerName: 'Role', width: 180, editable: true },
+    { field: 'nickname', headerName: 'Псевдоним', width: 180, editable: true },
+    { field: 'firstname', headerName: 'Имя', width: 180, editable: true },
+    { field: 'lastname', headerName: 'Фамилия', width: 180, editable: true },
+    { field: 'patronymic', headerName: 'Отчество', width: 180, editable: true },
      {
       field: 'actions',
       type: 'actions',
@@ -153,26 +166,26 @@ export default function Users() {
         rowsLoadingMode="server"
       />
 
-      <CreateUserDialog
-        title={"Добавить пользователя"}
+      <CreateContractorDialog
+        title={"Добавить исполнителя"}
         text={"Для добавления необходимо заполнить все поля"}
         open={dialogOpen} 
         close={handleDialogClose}
         handleSnackbarOpen={handleSnackbarOpen}
       />
 
-      <UpdateUserDialog
-        title={"Обновить пользователя"}
+      <UpdateContractorDialog
+        title={"Обновить исполнителя"}
         text={"Для обновления необходимо заполнить все поля"}
         open={dialogUpdate} 
         close={handleDialogClose}
-        user={dialogUpdateUser}
+        contractor={dialogUpdateContractor}
         handleSnackbarOpen={handleSnackbarOpen}
       />
 
-      <DeleteUserDialog
+      <DeleteContractorDialog
         open={dialogDelete} 
-        userId={dialogDeleteUser}
+        contractorId={dialogDeleteContractor}
         close={handleDialogClose}
         handleSnackbarOpen={handleSnackbarOpen}
       />

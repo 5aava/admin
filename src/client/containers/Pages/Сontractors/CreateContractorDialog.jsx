@@ -1,4 +1,3 @@
-import {useState, useEffect} from 'react';
 import privateFetcher from '../../../modules/privateFetcher'
 
 import Button from '@mui/material/Button';
@@ -15,8 +14,6 @@ import CancelIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
 
 import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
-
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -28,29 +25,33 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function UpdateUserDialogs(props) {
+export default function CreateContractorDialog(props) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
-    const response = await privateFetcher('/api/private/users/update', {
-      id: props.user.id,
-      name: data.get('name'),
-      email: data.get('email'),
-      role: data.get('role'),
-      // password: data.get('password'),
-      // confirm: data.get('confirm'),
+    const response = await privateFetcher('/api/private/contractors/create', {
+      nickname: data.get('nickname'),
+      firstname: data.get('firstname'),
+      lastname: data.get('lastname'),
+      patronymic: data.get('patronymic'),
     });
+
     
     if(response.status == 'ok'){
       props.close();
-      props.handleSnackbarOpen(response.data, 'success', 'Данные пользователя обновлены', 'update');
+      props.handleSnackbarOpen(response.data, 'success', 'Исполнитель добавлен', 'add');
+    }
+
+    if(response.status == 'error'){
+      props.handleSnackbarOpen(response.data, 'error', 'Исполнитель не добавлен');
     }
 
     if(response.status == 'error' && response.data == 'dublicate'){
-      props.handleSnackbarOpen(response.data, 'error', 'Пользователь с таким ником уже существует');
+      props.handleSnackbarOpen(response.data, 'error', 'Исполнитель с таким псевдонимом уже существует');
     }
+
   }
 
   return (
@@ -82,71 +83,47 @@ export default function UpdateUserDialogs(props) {
             {props.form}
             <TextField
               fullWidth
+              label="Псевдоним"
+              id="nickname"
+              name="nickname"
+              required
+              variant="outlined"
+              style={{marginBottom: 20}}
+            /><br />
+            <TextField
+              fullWidth
               label="Имя"
-              variant="outlined"
-              id="name"
-              type="name"
-              name="name"
-              defaultValue={props?.user?.name}
-              required
-              style={{marginBottom: 20, width: 400}}
-            /><br />
-            <TextField
-              fullWidth
-              label="Email"
-              id="email"
-              type="email"
-              name="email"
-              defaultValue={props?.user?.email}
-              required
-              variant="outlined"
-              style={{marginBottom: 20}}
-            /><br />
-            <TextField
-              select
-              fullWidth
-              label="Роль"
-              variant="outlined"
-              defaultValue={props?.user?.role}
-              style={{marginBottom: 20}}
-              name="role"
-              id="role"
-            >
-              <MenuItem value={'admin'}>Админ</MenuItem>
-              <MenuItem value={'moderator'}>Модератор</MenuItem>
-              <MenuItem value={'manager'}>Менеджер</MenuItem>
-              <MenuItem value={'finance'}>Финансист</MenuItem>
-            </TextField><br />
-           {/*  <TextField
-              fullWidth
-              label="Пароль"
-              name="password"
-              placeholder="••••••"
-              type="password"
-              id="password"
-              autoComplete="current-password"
+              id="firstname"
+              name="firstname"
               required
               variant="outlined"
               style={{marginBottom: 20}}
             /><br />
             <TextField
               fullWidth
-              label="Подтвердить пароль"
-              name="confirm"
-              placeholder="••••••"
-              type="password"
-              id="confirm"
+              label="Фамилия"
+              id="lastname"
+              name="lastname"
               required
               variant="outlined"
               style={{marginBottom: 20}}
-            /> */}
+            /><br />
+            <TextField
+              fullWidth
+              label="Отчество"
+              id="patronymic"
+              name="patronymic"
+              required
+              variant="outlined"
+              style={{marginBottom: 20}}
+            /><br />
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.close} startIcon={<CancelIcon />} >
+          <Button onClick={props.close} startIcon={<CancelIcon />}  >
             Отменить
           </Button>
-          <Button type="submit" variant="contained" startIcon={<SaveIcon />}>
-            Обновить
+          <Button type="submit" variant="contained" startIcon={<SaveIcon />} >
+            Добавить
           </Button>
         </DialogActions>
       </form>

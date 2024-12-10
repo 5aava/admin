@@ -18,7 +18,6 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 
 
-
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
@@ -28,28 +27,24 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function UpdateUserDialogs(props) {
+export default function UpdatelicensorDialog(props) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
-    const response = await privateFetcher('/api/private/users/update', {
-      id: props.user.id,
+    const response = await privateFetcher('/api/private/licensors/update', {
+      id: props.licensor.id,
       name: data.get('name'),
-      email: data.get('email'),
-      role: data.get('role'),
-      // password: data.get('password'),
-      // confirm: data.get('confirm'),
     });
     
     if(response.status == 'ok'){
       props.close();
-      props.handleSnackbarOpen(response.data, 'success', 'Данные пользователя обновлены', 'update');
+      props.handleSnackbarOpen(response.data, 'success', 'Данные лицензиара обновлены', 'update');
     }
 
     if(response.status == 'error' && response.data == 'dublicate'){
-      props.handleSnackbarOpen(response.data, 'error', 'Пользователь с таким ником уже существует');
+      props.handleSnackbarOpen(response.data, 'error', 'Лицензиар с таким названием уже существует');
     }
   }
 
@@ -82,64 +77,14 @@ export default function UpdateUserDialogs(props) {
             {props.form}
             <TextField
               fullWidth
-              label="Имя"
-              variant="outlined"
+              label="Название"
               id="name"
-              type="name"
               name="name"
-              defaultValue={props?.user?.name}
-              required
-              style={{marginBottom: 20, width: 400}}
-            /><br />
-            <TextField
-              fullWidth
-              label="Email"
-              id="email"
-              type="email"
-              name="email"
-              defaultValue={props?.user?.email}
               required
               variant="outlined"
+              defaultValue={props?.licensor?.name}
               style={{marginBottom: 20}}
             /><br />
-            <TextField
-              select
-              fullWidth
-              label="Роль"
-              variant="outlined"
-              defaultValue={props?.user?.role}
-              style={{marginBottom: 20}}
-              name="role"
-              id="role"
-            >
-              <MenuItem value={'admin'}>Админ</MenuItem>
-              <MenuItem value={'moderator'}>Модератор</MenuItem>
-              <MenuItem value={'manager'}>Менеджер</MenuItem>
-              <MenuItem value={'finance'}>Финансист</MenuItem>
-            </TextField><br />
-           {/*  <TextField
-              fullWidth
-              label="Пароль"
-              name="password"
-              placeholder="••••••"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              required
-              variant="outlined"
-              style={{marginBottom: 20}}
-            /><br />
-            <TextField
-              fullWidth
-              label="Подтвердить пароль"
-              name="confirm"
-              placeholder="••••••"
-              type="password"
-              id="confirm"
-              required
-              variant="outlined"
-              style={{marginBottom: 20}}
-            /> */}
         </DialogContent>
         <DialogActions>
           <Button onClick={props.close} startIcon={<CancelIcon />} >

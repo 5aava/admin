@@ -4,6 +4,6 @@
 export default function Dashboard(props) {
   
   return (
-    <>Dashboard</>
+    <>Страница в разработке</>
   );
 }

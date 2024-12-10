@@ -1,13 +1,24 @@
 import * as React from 'react';
 import { useRouter } from 'next/router'
 import { extendTheme, styled } from '@mui/material/styles';
+import { AppProvider } from '@toolpad/core/nextjs';
+
+
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import DescriptionIcon from '@mui/icons-material/Description';
+import ArticleIcon from '@mui/icons-material/Article';
 import LayersIcon from '@mui/icons-material/Layers';
-// import { AppProvider } from '@toolpad/core/AppProvider';
-import { AppProvider } from '@toolpad/core/nextjs';
+import GroupIcon from '@mui/icons-material/Group';
+import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
+import AudiotrackIcon from '@mui/icons-material/Audiotrack';
+import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import PaymentIcon from '@mui/icons-material/Payment';
+import PianoIcon from '@mui/icons-material/Piano';
+import PriceChangeIcon from '@mui/icons-material/PriceChange';
+
 
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
@@ -17,44 +28,79 @@ import Button from '@mui/material/Button';
 // pages
 import Dashboard from './Pages/Dashboard';
 import Users from './Pages/Users/Users';
-import Orders from './Pages/Orders';
-
+import Сontractors from './Pages/Сontractors/Сontractors';
+import Licensors from './Pages/Licensors/Licensors';
+import Tracks from './Pages/Tracks/Tracks';
 
 
 const NAVIGATION = [
   {
+    segment: 'contracts',
+    title: 'Договора',
+    icon: <ArticleIcon />,
+  },
+  {
     kind: 'header',
     title: 'Справочник',
   },
+
   {
-    segment: 'dashboard',
-    title: 'Dashboard',
-    icon: <DashboardIcon />,
+    segment: 'contractors',
+    title: 'Исполнителя',
+    icon: <HeadsetMicIcon />,
   },
   {
-    segment: 'users',
-    title: 'Users',
-    icon: <ShoppingCartIcon />,
+    segment: 'tracks',
+    title: 'Треки',
+    icon: <AudiotrackIcon />,
   },
   {
-    segment: 'orders',
-    title: 'Orders',
-    icon: <ShoppingCartIcon />,
+    segment: 'licensors',
+    title: 'Лицензиары',
+    icon: <LocalPoliceIcon />,
   },
-  /* {
+  {
+    segment: 'incomes',
+    title: 'Доходы',
+    icon: <MonetizationOnIcon />,
+  },
+  {
+    segment: 'payments',
+    title: 'Выплаты',
+    icon: <PaymentIcon />,
+  },
+  
+  {
     kind: 'divider',
   },
   {
     kind: 'header',
-    title: 'Расчеты',
+    title: 'Административные',
   },
   {
+    segment: 'users',
+    title: 'Пользователи',
+    icon: <GroupIcon />,
+  },
+  {
+    segment: 'royalties',
+    title: 'Расчёт роялти',
+    icon: <PianoIcon />,
+  },
+  {
+    segment: 'reports',
+    title: 'Денежный отчет',
+    icon: <PriceChangeIcon />,
+  },
+
+  /* {
     segment: 'reports',
     title: 'Reports',
     icon: <BarChartIcon />,
     children: [
       {
         segment: 'sales',
+        
         title: 'Sales',
         icon: <DescriptionIcon />,
       },
@@ -64,16 +110,6 @@ const NAVIGATION = [
         icon: <DescriptionIcon />,
       },
     ],
-  },
-  {
-    segment: 'integrations',
-    title: 'Integrations',
-    icon: <LayersIcon />,
-  },
-  {
-    segment: 'page-2',
-    title: 'Page 2',
-    icon: <LayersIcon />,
   }, */
 ];
 
@@ -108,7 +144,7 @@ function useDemoRouter(initialPath) {
 
 export default function App() {
   const router = useRouter()
-  const demoRouter = useDemoRouter('/dashboard');
+  const demoRouter = useDemoRouter('/contracts');
   
   const [session, setSession] = React.useState(null);
 
@@ -129,18 +165,28 @@ export default function App() {
     let obj = { page: <Dashboard /> };
 
     switch (param) {
-      case '/dashboard':
+      case '/contracts':
         obj = { page: <Dashboard /> };
         break;
       case '/users':
         obj = { page: <Users /> };
         break;
-      case '/users':
-        obj = { page: <UserId /> };
+      case '/contractors':
+        obj = { page: <Сontractors /> };
         break;
-      case '/orders':
-        obj = { page: <Orders /> };
+      case '/licensors':
+        obj = { page: <Licensors /> };
         break;
+      case '/tracks':
+        obj = { page: <Tracks /> };
+        break;
+        
+        /*
+        incomes
+        payments
+        royalties
+        reports
+        */
     }
 
     return obj;

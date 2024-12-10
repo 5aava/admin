@@ -7,9 +7,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import Snackbar from '../../../components/Snackbar';
 
-import CreateUserDialog from './CreateUserDialog'
-import DeleteUserDialog from './DeleteUserDialog'
-import UpdateUserDialog from './UpdateUserDialog'
+import CreateLicensorDialog from './CreateLicensorDialog'
+import DeleteLicensorDialog from './DeleteLicensorDialog'
+import UpdateLicensorDialog from './UpdateLicensorDialog'
 
 import {
   DataGrid,
@@ -20,7 +20,7 @@ import {
 import useFetch from "../../../modules/useFetch";
 
 
-export default function Users() {
+export default function Licensors() {
   const apiRef = useGridApiRef();
 
   const [rows, setRows] = useState(null);
@@ -29,16 +29,16 @@ export default function Users() {
   const [dialogOpen, dialogOpenSet] = useState(false);
 
   const [dialogUpdate, dialogUpdateSet] = useState(false);
-  const [dialogUpdateUser, dialogUpdateUserSet] = useState(null);
+  const [dialogUpdateLicensor, dialogUpdateLicensorSet] = useState(null);
 
   const [dialogDelete, dialogDeleteSet] = useState(false);
-  const [dialogDeleteUser, dialogDeleteUserSet] = useState(null);
+  const [dialogDeleteLicensor, dialogDeleteLicensorSet] = useState(null);
 
-  const [snackbarText, snackbarTextSet] = useState('Ошибка: Пользователь не добавлен');
+  const [snackbarText, snackbarTextSet] = useState('Ошибка: Лицензиар не добавлен');
   const [snackbarType, snackbarTypeSet] = useState('error');
   const [snackbarOpen, snackbarOpenSet] = useState(false);
 
-  const [response] = useFetch("/api/private/users/all", {});
+  const [response] = useFetch("/api/private/licensors/all", {});
 
   useEffect(() => {
     if(response) {
@@ -47,15 +47,15 @@ export default function Users() {
   }, [response])
 
   const handleUpdateClick = (id) => () => {
-    const user = rows.filter((row) => row.id === id)[0];
+    const licensor = rows.filter((row) => row.id === id)[0];
 
     dialogUpdateSet(true);
-    dialogUpdateUserSet(user);
+    dialogUpdateLicensorSet(licensor);
   };
 
   const handleDeleteClick = (id) => () => {
     dialogDeleteSet(true);
-    dialogDeleteUserSet(id);
+    dialogDeleteLicensorSet(id);
   };
 
   const handleDialogClose = () => {
@@ -83,12 +83,18 @@ export default function Users() {
     switch(route){
       case 'add': 
         apiRef.current.updateRows([
-          { id: data.id, name: data.name, email: data.email , role: data.role }
+          { 
+            id: data.id, 
+            name: data.name, 
+          }
         ]);
       break;
       case 'update': 
         apiRef.current.updateRows([
-          { id: data.id, name: data.name, email: data.email , role: data.role }
+          { 
+            id: data.id, 
+            name: data.name,
+          }
         ]);
       break;
       case 'delete': 
@@ -100,9 +106,7 @@ export default function Users() {
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 60, editable: false },
-    { field: 'name', headerName: 'Name', width: 180, editable: true },
-    { field: 'email', headerName: 'Email', width: 240, editable: true },
-    { field: 'role', headerName: 'Role', width: 180, editable: true },
+    { field: 'name', headerName: 'Название', width: 180, editable: true },
      {
       field: 'actions',
       type: 'actions',
@@ -153,26 +157,26 @@ export default function Users() {
         rowsLoadingMode="server"
       />
 
-      <CreateUserDialog
-        title={"Добавить пользователя"}
+      <CreateLicensorDialog
+        title={"Добавить лицензиара"}
         text={"Для добавления необходимо заполнить все поля"}
-        open={dialogOpen} 
+        open={dialogOpen}
         close={handleDialogClose}
         handleSnackbarOpen={handleSnackbarOpen}
       />
 
-      <UpdateUserDialog
-        title={"Обновить пользователя"}
+      <UpdateLicensorDialog
+        title={"Обновить лицензиара"}
         text={"Для обновления необходимо заполнить все поля"}
         open={dialogUpdate} 
         close={handleDialogClose}
-        user={dialogUpdateUser}
+        licensor={dialogUpdateLicensor}
         handleSnackbarOpen={handleSnackbarOpen}
       />
 
-      <DeleteUserDialog
+      <DeleteLicensorDialog
         open={dialogDelete} 
-        userId={dialogDeleteUser}
+        licensorId={dialogDeleteLicensor}
         close={handleDialogClose}
         handleSnackbarOpen={handleSnackbarOpen}
       />

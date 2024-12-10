@@ -1,4 +1,3 @@
-import {useState, useEffect} from 'react';
 import privateFetcher from '../../../modules/privateFetcher'
 
 import Button from '@mui/material/Button';
@@ -12,11 +11,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 
 import CancelIcon from '@mui/icons-material/Close';
-import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
 
 import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
-
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -28,17 +25,30 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function DeleteUserDialog(props) {
+export default function CreateLicensorDialog(props) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const response = await privateFetcher('/api/private/users/delete', {id: props.userId});
+    const data = new FormData(event.currentTarget);
+    const response = await privateFetcher('/api/private/licensors/create', {
+      name: data.get('name'),
+    });
+
     
     if(response.status == 'ok'){
       props.close();
-      props.handleSnackbarOpen(response.data, 'success', 'Пользователь удален', 'delete');
+      props.handleSnackbarOpen(response.data, 'success', 'Лицензиар добавлен', 'add');
     }
+
+    if(response.status == 'error'){
+      props.handleSnackbarOpen(response.data, 'error', 'Лицензиар не добавлен');
+    }
+
+    if(response.status == 'error' && response.data == 'dublicate'){
+      props.handleSnackbarOpen(response.data, 'error', 'Лицензиар с таким псевдонимом уже существует');
+    }
+
   }
 
   return (
@@ -49,7 +59,7 @@ export default function DeleteUserDialog(props) {
     >
       <form onSubmit={handleSubmit} >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Удалить пользователя
+          {props.title}
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -65,18 +75,29 @@ export default function DeleteUserDialog(props) {
         </IconButton>
         <DialogContent dividers>
           <Typography gutterBottom>
-            Точно решили удалить пользователя c ID {props.userId}?
+            {props.text}<br /><br />
           </Typography>
+            {props.form}
+            <TextField
+              fullWidth
+              label="Название"
+              id="name"
+              name="name"
+              required
+              variant="outlined"
+              style={{marginBottom: 20}}
+            /><br />
+        
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.close} startIcon={<CancelIcon />} >
+          <Button onClick={props.close} startIcon={<CancelIcon />}  >
             Отменить
           </Button>
-          <Button type="submit" variant="contained" startIcon={<DeleteIcon />} color="error">
-            Удалить
+          <Button type="submit" variant="contained" startIcon={<SaveIcon />} >
+            Добавить
           </Button>
         </DialogActions>
-    </form>
-  </BootstrapDialog>
+      </form>
+    </BootstrapDialog>
   );
 }

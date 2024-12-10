@@ -1,5 +1,7 @@
 import {useState, useEffect} from 'react';
-import privateFetcher from '../../../modules/privateFetcher'
+
+import useFetch from "../../../modules/useFetch";
+import privateFetcher from '../../../modules/privateFetcher';
 
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -14,9 +16,9 @@ import Typography from '@mui/material/Typography';
 import CancelIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
 
+import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -28,28 +30,43 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function UpdateUserDialogs(props) {
+export default function UpdateTrackDialog(props) {
+  const [contractors, setContractors] = useState([]);
+  const [inputContractorName, setInputContracortName] = useState({});
+  const [inputContractorId, setInputContracortId] = useState('');
+
+  const [constr] = useFetch("/api/private/contractors/all", {});
+  useEffect(() => {
+    if(constr) {
+
+      const newContractors = constr.map(item => {
+        return {
+          id: item.id,
+          title: `${item.lastname} ${item.firstname} ${item.patronymic} (${item.nickname})`
+        }
+      });
+
+      setContractors(newContractors);
+    }
+  }, [constr])
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
-    const response = await privateFetcher('/api/private/users/update', {
-      id: props.user.id,
+    const response = await privateFetcher('/api/private/tracks/update', {
+      id: props.track.id,
       name: data.get('name'),
-      email: data.get('email'),
-      role: data.get('role'),
-      // password: data.get('password'),
-      // confirm: data.get('confirm'),
+      contractorId: inputContractorId
     });
     
     if(response.status == 'ok'){
       props.close();
-      props.handleSnackbarOpen(response.data, 'success', 'Данные пользователя обновлены', 'update');
+      props.handleSnackbarOpen(response.data, 'success', 'Данные трека обновлены', 'update');
     }
 
     if(response.status == 'error' && response.data == 'dublicate'){
-      props.handleSnackbarOpen(response.data, 'error', 'Пользователь с таким ником уже существует');
+      props.handleSnackbarOpen(response.data, 'error', 'Трек с таким названием уже существует');
     }
   }
 
@@ -82,64 +99,35 @@ export default function UpdateUserDialogs(props) {
             {props.form}
             <TextField
               fullWidth
-              label="Имя"
-              variant="outlined"
+              label="Название"
               id="name"
-              type="name"
               name="name"
-              defaultValue={props?.user?.name}
-              required
-              style={{marginBottom: 20, width: 400}}
-            /><br />
-            <TextField
-              fullWidth
-              label="Email"
-              id="email"
-              type="email"
-              name="email"
-              defaultValue={props?.user?.email}
               required
               variant="outlined"
+              defaultValue={props?.track?.name}
               style={{marginBottom: 20}}
             /><br />
-            <TextField
-              select
-              fullWidth
-              label="Роль"
-              variant="outlined"
-              defaultValue={props?.user?.role}
-              style={{marginBottom: 20}}
-              name="role"
-              id="role"
-            >
-              <MenuItem value={'admin'}>Админ</MenuItem>
-              <MenuItem value={'moderator'}>Модератор</MenuItem>
-              <MenuItem value={'manager'}>Менеджер</MenuItem>
-              <MenuItem value={'finance'}>Финансист</MenuItem>
-            </TextField><br />
-           {/*  <TextField
-              fullWidth
-              label="Пароль"
-              name="password"
-              placeholder="••••••"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              required
-              variant="outlined"
-              style={{marginBottom: 20}}
+            <Autocomplete
+              disablePortal
+              options={contractors}
+              id="contractorId"
+              name="contractorId"
+              inputValue={inputContractorName}
+              // defaultValue={}
+              getOptionLabel={(option) => {
+                setInputContracortId(option.id);
+                return option.title;
+              }}
+              onInputChange={(event, newInputValue) => {
+                console.log(newInputValue);
+                setInputContracortName(newInputValue);
+              }}
+              renderInput={(params) => 
+                <TextField 
+                  {...params}
+                  label="Исполнители" 
+                />}
             /><br />
-            <TextField
-              fullWidth
-              label="Подтвердить пароль"
-              name="confirm"
-              placeholder="••••••"
-              type="password"
-              id="confirm"
-              required
-              variant="outlined"
-              style={{marginBottom: 20}}
-            /> */}
         </DialogContent>
         <DialogActions>
           <Button onClick={props.close} startIcon={<CancelIcon />} >

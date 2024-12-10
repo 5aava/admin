@@ -14,10 +14,6 @@ import Typography from '@mui/material/Typography';
 import CancelIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
-
-
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -28,16 +24,16 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function DeleteUserDialog(props) {
+export default function DeleteLicensorDialog(props) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const response = await privateFetcher('/api/private/users/delete', {id: props.userId});
+    const response = await privateFetcher('/api/private/licensors/delete', {id: props.licensorId});
     
     if(response.status == 'ok'){
       props.close();
-      props.handleSnackbarOpen(response.data, 'success', 'Пользователь удален', 'delete');
+      props.handleSnackbarOpen(response.data, 'success', 'Лицензиар удален', 'delete');
     }
   }
 
@@ -65,7 +61,7 @@ export default function DeleteUserDialog(props) {
         </IconButton>
         <DialogContent dividers>
           <Typography gutterBottom>
-            Точно решили удалить пользователя c ID {props.userId}?
+            Точно решили удалить Лицензиара c ID {props.licensorId}?
           </Typography>
         </DialogContent>
         <DialogActions>

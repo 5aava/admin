@@ -1,7 +1,7 @@
 import { logger } from '../../../../server/modules/logger.js';
 import isAuth from '../../../../server/modules/isAuth.js';
 import config from '../../../../server/config/config.server.js';
-import { updateUser } from '../../../../server/services/Users/usersServices.js';
+import { createContractor } from '../../../../server/services/Contractors/contractorsService.js'
 
 
 export default async function create(req, res) {
@@ -13,17 +13,17 @@ export default async function create(req, res) {
   }
 
   const values = {
-    name: req.body.name,
-    email: req.body.email,
-    role: req.body.role
+    nickname: req.body.nickname,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    patronymic: req.body.patronymic,
   };
 
-
-  const data = await updateUser(req.body.id, values);
+  const data = await createContractor(values);
 
   if(data == 'dublicate'){
     config.sendError(res, 409, data);
   }
-  
+
   config.sendOk(res, data);
 }

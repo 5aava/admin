@@ -32,18 +32,23 @@ export async function createUser (values) {
 }
 
 
-export async function updateUser (userId, values) {
-  const data = {}
+export async function updateUser (id, values) {
+  const data = await updateItems(Users, values, id);
 
-  const [user] = await updateItems(Users, values, userId);
-  if(user){
-    data.id = userId;
-    data.name = values.name;
-    data.email = values.email;
-    data.role = values.role;
+  if(data.name == 'SequelizeUniqueConstraintError'){
+    return 'dublicate';
+  }
+  
+  if([data] == 1){
+    return {
+      id: id,
+      name: values.name,
+      email: values.email,
+      role: values.role,
+    }
   }
 
-  return data;
+  return false;
 }
 
 

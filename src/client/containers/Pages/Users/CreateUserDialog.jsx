@@ -189,7 +189,11 @@ export default function AddUserDialogs(props) {
           <Button onClick={props.close} startIcon={<CancelIcon />}  >
             Отменить
           </Button>
-          <Button onClick={validateInputs} type="submit" variant="contained" startIcon={<SaveIcon />}>
+          <Button 
+            onClick={validateInputs} 
+            type="submit" 
+            variant="contained" 
+            startIcon={<SaveIcon />} >
             Добавить
           </Button>
         </DialogActions>

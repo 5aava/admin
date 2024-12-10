@@ -1,7 +1,7 @@
 import { logger } from '../../../../server/modules/logger.js';
 import isAuth from '../../../../server/modules/isAuth.js';
 import config from '../../../../server/config/config.server.js';
-import { updateUser } from '../../../../server/services/Users/usersServices.js';
+import { createTrack } from '../../../../server/services/Tracks/tracksService.js'
 
 
 export default async function create(req, res) {
@@ -13,17 +13,18 @@ export default async function create(req, res) {
   }
 
   const values = {
+    id: req.body.id,
     name: req.body.name,
-    email: req.body.email,
-    role: req.body.role
+    contractorId: req.body.contractorId
   };
 
+  console.log(values);
 
-  const data = await updateUser(req.body.id, values);
+  const data = await createTrack(values);
 
   if(data == 'dublicate'){
     config.sendError(res, 409, data);
   }
-  
+
   config.sendOk(res, data);
 }
