@@ -1,38 +1,29 @@
 # admin
-Test Admin panel
 
 
-docker            +
-mariadb           +
-logger            +
-api               +
-snackbars         +
-dialog            +
-loader            +
-auth jwt          +    
-auth integration  +
+## Договора
+                                                        db        API         Front
+Поля
+- Номер договора (текстовое поле)                         +
+- Один Главный исполнитель                                +
+- Один трек исполнителя                                   +
+- Один лицензиар                                          +
+- Дата релиза (календарь)                                 +
 
-app               +
-drawler           +
-header            +
-logout            +
+- Добавить исполнителя (+)                                +
+  - Исполнитель                                           +
+  - Выбор (певец, автор текста, автор музыки)             +
+  - процентная ставка                                     +
+  - Кнопка добавить, удалить                              +
 
-sequelize         +
+- Налог (0% или 6%)                                       +
+- вручную вносим ISRC (текстовое поле)                    +
+- вручную вносим UPC (текстовое поле)                     +
+- вручную вносим "Ссылка на релиз" (текстовое поле)       +
 
-
-crud (Users)
-  - read          
-  - create
-  - update
-  - delete
-
-role  
-
-menu              
-
-migrations        
-models            
-seeds             
+-	подгружаем PDF файл                                     +
+-	Сохраняем, отправляем на Модерацию                      +
+ 
 
 ## Migrations
 
@@ -52,7 +43,14 @@ sequelize-cli.cmd model:generate --name Contractors --attributes 'nickname:strin
 
 sequelize-cli.cmd model:generate --name Licensors --attributes 'name:string'
 
-sequelize-cli.cmd model:generate --name Tracks --attributes 'name:string,contractorId:number'
+sequelize-cli.cmd model:generate --name Tracks --attributes 'name:string,contractorId:integer'
+
+sequelize-cli.cmd model:generate --name Contracts --attributes 'sku:string, contractorId:integer, trackId:integer, LicensorId:integer, date:date, tax:integer, iscr:string, upc:string, link:string, file:string, moderated:integer'
+
+sequelize-cli.cmd model:generate --name ContractsCtrs --attributes 'contractId:integer, contractorId:integer, type:string, percent:integer'
+
+# pm2
+pm2 start npm --name "prod" -- run "start"
 
 ```
 
