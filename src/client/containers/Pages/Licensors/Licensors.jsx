@@ -110,7 +110,7 @@ export default function Licensors() {
      {
       field: 'actions',
       type: 'actions',
-      headerName: 'Actions',
+      headerName: 'Действия',
       cellClassName: 'actions',
       getActions: ({ id }) => {
         return [
@@ -156,30 +156,36 @@ export default function Licensors() {
         rowModesModel={rowModesModel}
         rowsLoadingMode="server"
       />
+      
+      { dialogOpen && (
+        <CreateLicensorDialog
+          title={"Добавить лицензиара"}
+          text={"Для добавления необходимо заполнить все поля"}
+          open={dialogOpen}
+          close={handleDialogClose}
+          handleSnackbarOpen={handleSnackbarOpen}
+        />
+      )}
 
-      <CreateLicensorDialog
-        title={"Добавить лицензиара"}
-        text={"Для добавления необходимо заполнить все поля"}
-        open={dialogOpen}
-        close={handleDialogClose}
-        handleSnackbarOpen={handleSnackbarOpen}
-      />
+      { dialogUpdate && (
+        <UpdateLicensorDialog
+          title={"Обновить лицензиара"}
+          text={"Для обновления необходимо заполнить все поля"}
+          open={dialogUpdate} 
+          close={handleDialogClose}
+          licensor={dialogUpdateLicensor}
+          handleSnackbarOpen={handleSnackbarOpen}
+        />
+      )}
 
-      <UpdateLicensorDialog
-        title={"Обновить лицензиара"}
-        text={"Для обновления необходимо заполнить все поля"}
-        open={dialogUpdate} 
-        close={handleDialogClose}
-        licensor={dialogUpdateLicensor}
-        handleSnackbarOpen={handleSnackbarOpen}
-      />
-
-      <DeleteLicensorDialog
-        open={dialogDelete} 
-        licensorId={dialogDeleteLicensor}
-        close={handleDialogClose}
-        handleSnackbarOpen={handleSnackbarOpen}
-      />
+      { dialogDelete && (
+        <DeleteLicensorDialog
+          open={dialogDelete} 
+          licensorId={dialogDeleteLicensor}
+          close={handleDialogClose}
+          handleSnackbarOpen={handleSnackbarOpen}
+        />
+      )}
 
       <Snackbar 
         open={snackbarOpen} 

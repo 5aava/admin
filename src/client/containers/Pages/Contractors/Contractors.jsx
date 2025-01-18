@@ -119,7 +119,7 @@ export default function Сontractors() {
      {
       field: 'actions',
       type: 'actions',
-      headerName: 'Actions',
+      headerName: 'Действия',
       cellClassName: 'actions',
       getActions: ({ id }) => {
         return [
@@ -166,29 +166,35 @@ export default function Сontractors() {
         rowsLoadingMode="server"
       />
 
-      <CreateContractorDialog
-        title={"Добавить исполнителя"}
-        text={"Для добавления необходимо заполнить все поля"}
-        open={dialogOpen} 
-        close={handleDialogClose}
-        handleSnackbarOpen={handleSnackbarOpen}
-      />
+      { dialogOpen && (
+        <CreateContractorDialog
+          title={"Добавить исполнителя"}
+          text={"Для добавления необходимо заполнить все поля"}
+          open={dialogOpen} 
+          close={handleDialogClose}
+          handleSnackbarOpen={handleSnackbarOpen}
+        />
+      )}
 
-      <UpdateContractorDialog
-        title={"Обновить исполнителя"}
-        text={"Для обновления необходимо заполнить все поля"}
-        open={dialogUpdate} 
-        close={handleDialogClose}
-        contractor={dialogUpdateContractor}
-        handleSnackbarOpen={handleSnackbarOpen}
-      />
+      { dialogUpdate && (
+        <UpdateContractorDialog
+          title={"Обновить исполнителя"}
+          text={"Для обновления необходимо заполнить все поля"}
+          open={dialogUpdate} 
+          close={handleDialogClose}
+          contractor={dialogUpdateContractor}
+          handleSnackbarOpen={handleSnackbarOpen}
+        />
+      )}
 
-      <DeleteContractorDialog
-        open={dialogDelete} 
-        contractorId={dialogDeleteContractor}
-        close={handleDialogClose}
-        handleSnackbarOpen={handleSnackbarOpen}
-      />
+      { dialogDelete && (
+        <DeleteContractorDialog
+          open={dialogDelete} 
+          contractorId={dialogDeleteContractor}
+          close={handleDialogClose}
+          handleSnackbarOpen={handleSnackbarOpen}
+        />
+      )}
 
       <Snackbar 
         open={snackbarOpen} 

@@ -2,13 +2,13 @@
 
 
 ## Договора
-                                                        db        API         Front
+                                                        db        Front         API         
 Поля
-- Номер договора (текстовое поле)                         +
-- Один Главный исполнитель                                +
-- Один трек исполнителя                                   +
-- Один лицензиар                                          +
-- Дата релиза (календарь)                                 +
+- Номер договора (текстовое поле)                         +         
+- Один Главный исполнитель                                +         
+- Один трек исполнителя                                   +         
+- Один лицензиар                                          +         
+- Дата релиза (календарь)                                 +         
 
 - Добавить исполнителя (+)                                +
   - Исполнитель                                           +
@@ -29,11 +29,10 @@
 
 ```sh
 sequelize-cli.cmd db:migrate:undo:all | sequelize-cli.cmd db:migrate | sequelize-cli.cmd db:seed:all
-```
 
-- Create Migrations and Models
+sequelize-cli.cmd db:seed --seed 20250118134800-contracts.js
 
-```sh
+sequelize-cli.cmd db:migrate --to 20250112142348-create-contracts.js
 
 # migration create
 sequelize-cli.cmd migration:create --name create-reports

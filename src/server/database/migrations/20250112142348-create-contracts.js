@@ -13,27 +13,27 @@ module.exports = {
       },
       contractorId: {
         type: Sequelize.INTEGER,
-        onDelete: 'RESTRICT',
+        /* onDelete: 'RESTRICT',
         references: {
           model: 'Contractors',
           key: 'id',
-        },
+        }, */
       },
       trackId: {
         type: Sequelize.INTEGER,
-        onDelete: 'RESTRICT',
+        /* onDelete: 'RESTRICT',
         references: {
           model: 'Tracks',
           key: 'id',
-        },
+        }, */
       },
-      LicensorId: {
+      licensorId: {
         type: Sequelize.INTEGER,
-        onDelete: 'RESTRICT',
+        /* onDelete: 'RESTRICT',
         references: {
           model: 'Licensors',
           key: 'id',
-        },
+        }, */
       },
       date: {
         type: Sequelize.DATE
@@ -41,8 +41,8 @@ module.exports = {
       tax: {
         type: Sequelize.INTEGER
       },
-      iscr: {
-        type: Sequelize.INTEGER
+      isrc: {
+        type: Sequelize.STRING
       },
       upc: {
         type: Sequelize.STRING
@@ -65,6 +65,10 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
+
+    await queryInterface.addIndex(
+      'Contracts', ['sku'], {unique: true},
+    );
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Contracts');

@@ -10,19 +10,19 @@ module.exports = {
       },
       contractId: {
         type: Sequelize.INTEGER,
-        onDelete: 'RESTRICT',
+        /* onDelete: 'RESTRICT',
         references: {
           model: 'Contracts',
           key: 'id',
-        },
+        }, */
       },
       contractorId: {
         type: Sequelize.INTEGER,
-        onDelete: 'RESTRICT',
+        /* onDelete: 'RESTRICT',
         references: {
           model: 'Contractors',
           key: 'id',
-        },
+        }, */
       },
       type: {
         type: Sequelize.STRING

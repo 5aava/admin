@@ -28,9 +28,11 @@ import Button from '@mui/material/Button';
 // pages
 import Dashboard from './Pages/Dashboard';
 import Users from './Pages/Users/Users';
-import Сontractors from './Pages/Сontractors/Сontractors';
+import Contractors from './Pages/Contractors/Contractors';
 import Licensors from './Pages/Licensors/Licensors';
 import Tracks from './Pages/Tracks/Tracks';
+import Contracts from './Pages/Contracts/Contracts';
+
 
 
 const NAVIGATION = [
@@ -166,13 +168,13 @@ export default function App() {
 
     switch (param) {
       case '/contracts':
-        obj = { page: <Dashboard /> };
+        obj = { page: <Contracts /> };
         break;
       case '/users':
         obj = { page: <Users /> };
         break;
       case '/contractors':
-        obj = { page: <Сontractors /> };
+        obj = { page: <Contractors /> };
         break;
       case '/licensors':
         obj = { page: <Licensors /> };

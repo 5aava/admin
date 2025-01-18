@@ -7,9 +7,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import Snackbar from '../../../components/Snackbar';
 
-import CreateTrackDialog from './CreateTrackDialog'
-import DeleteTrackDialog from './DeleteTrackDialog'
-import UpdateTrackDialog from './UpdateTrackDialog'
+import CreateContractDialog from './CreateContractDialog'
+import DeleteContractDialog from './DeleteContractDialog'
+import UpdateContractDialog from './UpdateContractDialog'
 
 import {
   DataGrid,
@@ -20,7 +20,7 @@ import {
 import useFetch from "../../../modules/useFetch";
 
 
-export default function Tracks() {
+export default function Contracts() {
   const apiRef = useGridApiRef();
 
   const [rows, setRows] = useState(null);
@@ -29,33 +29,34 @@ export default function Tracks() {
   const [dialogOpen, dialogOpenSet] = useState(false);
 
   const [dialogUpdate, dialogUpdateSet] = useState(false);
-  const [dialogUpdateTrack, dialogUpdateTrackSet] = useState(null);
+  const [dialogUpdateContract, dialogUpdateContractSet] = useState(null);
 
   const [dialogDelete, dialogDeleteSet] = useState(false);
-  const [dialogDeleteTrack, dialogDeleteTrackSet] = useState(null);
+  const [dialogDeleteContract, dialogDeleteContractSet] = useState(null);
 
-  const [snackbarText, snackbarTextSet] = useState('Ошибка: Лицензиар не добавлен');
+  const [snackbarText, snackbarTextSet] = useState('Ошибка: Договор не добавлен');
   const [snackbarType, snackbarTypeSet] = useState('error');
   const [snackbarOpen, snackbarOpenSet] = useState(false);
 
-  const [response] = useFetch("/api/private/tracks/all", {});
+  const [response] = useFetch("/api/private/contracts/all", {});
 
   useEffect(() => {
     if(response) {
+      console.log(response);
       setRows(response);
     }
   }, [response])
 
   const handleUpdateClick = (id) => () => {
-    const track = rows.filter((row) => row.id === id)[0];
+    const contract = rows.filter((row) => row.id === id)[0];
 
     dialogUpdateSet(true);
-    dialogUpdateTrackSet(track);
+    dialogUpdateContractSet(contract);
   };
 
   const handleDeleteClick = (id) => () => {
     dialogDeleteSet(true);
-    dialogDeleteTrackSet(id);
+    dialogDeleteContractSet(id);
   };
 
   const handleDialogClose = () => {
@@ -112,13 +113,44 @@ export default function Tracks() {
     
   }
 
+  /*
+- Номер договора (текстовое поле)                         +         
+- Один Главный исполнитель                                +
+- Один трек исполнителя                                   +
+- Один лицензиар                                          +
+- Дата релиза (календарь)                                 +
+
+- Добавить исполнителя (+)                                
+  - Исполнитель                                           
+  - Выбор (певец, автор текста, автор музыки)             
+  - процентная ставка                                     
+  - Кнопка добавить, удалить                              
+
+- Налог (0% или 6%)                                       +
+- вручную вносим ISRC (текстовое поле)                    +
+- вручную вносим UPC (текстовое поле)                     +
+- вручную вносим "Ссылка на релиз" (текстовое поле)       +
+
+-	подгружаем PDF файл                                     +
+-	Сохраняем, отправляем на Модерацию                      
+
+  */
   const columns = [
-    { field: 'id', headerName: 'ID', width: 60, editable: false },
-    { field: 'name', headerName: 'Название трека', width: 180, editable: true },
-    { field: 'nickname', headerName: 'Псевдоним исполнителя', width: 180, editable: true },
-    { field: 'firstname', headerName: 'Имя', width: 180, editable: true },
-    { field: 'lastname', headerName: 'Фамилия', width: 180, editable: true },
-    { field: 'patronymic', headerName: 'Отчество', width: 180, editable: true },
+    { field: 'id', headerName: 'ID', width: 40, editable: false },
+    { field: 'sku', headerName: 'Договор №', width: 120, editable: true },
+    { field: 'contractor', headerName: 'Гл. исп-тель', width: 240, editable: true },
+    { field: 'track', headerName: 'Трек', width: 120, editable: true },
+    { field: 'licensor', headerName: 'Лицензиар', width: 120, editable: true },
+    { field: 'date', headerName: 'Дата релиза', width: 120, editable: true },
+
+    { field: 'authors', headerName: 'Авторы и певцы', width: 140, editable: true },
+
+    { field: 'tax', headerName: 'Налог', width: 120, editable: true },
+    { field: 'isrc', headerName: 'ISRC', width: 120, editable: true },
+    { field: 'upc', headerName: 'UPC', width: 120, editable: true },
+    { field: 'link', headerName: 'Ссылка на релиз', width: 120, editable: true },
+    { field: 'file', headerName: 'PDF файл', width: 120, editable: true },
+    { field: 'moderated', headerName: 'На модерации', width: 120, editable: true },
      {
       field: 'actions',
       type: 'actions',
@@ -158,7 +190,7 @@ export default function Tracks() {
       }}
     >
       <Button color="primary" startIcon={<AddIcon />} onClick={handleCreateClick}>
-        Добавить запись
+        Добавить договор
       </Button>
       <DataGrid
         apiRef={apiRef} 
@@ -170,8 +202,8 @@ export default function Tracks() {
       />
 
       { dialogOpen && (
-        <CreateTrackDialog
-          title={"Добавить трек"}
+        <CreateContractDialog
+          title={"Добавить договор"}
           text={"Для добавления необходимо заполнить все поля"}
           open={dialogOpen}
           close={handleDialogClose}
@@ -180,20 +212,20 @@ export default function Tracks() {
       )}
 
       { dialogUpdate && (
-        <UpdateTrackDialog
-          title={"Обновить трек"}
+        <UpdateContractDialog
+          title={"Обновить договор"}
           text={"Для обновления необходимо заполнить все поля"}
           open={dialogUpdate} 
           close={handleDialogClose}
-          track={dialogUpdateTrack}
+          contract={dialogUpdateContract}
           handleSnackbarOpen={handleSnackbarOpen}
         />
       )}
 
       { dialogDelete && (
-        <DeleteTrackDialog
+        <DeleteContractDialog
           open={dialogDelete} 
-          trackId={dialogDeleteTrack}
+          contractId={dialogDeleteContract}
           close={handleDialogClose}
           handleSnackbarOpen={handleSnackbarOpen}
         />

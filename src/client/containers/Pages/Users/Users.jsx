@@ -106,7 +106,7 @@ export default function Users() {
      {
       field: 'actions',
       type: 'actions',
-      headerName: 'Actions',
+      headerName: 'Действия',
       cellClassName: 'actions',
       getActions: ({ id }) => {
         return [
@@ -153,29 +153,35 @@ export default function Users() {
         rowsLoadingMode="server"
       />
 
-      <CreateUserDialog
-        title={"Добавить пользователя"}
-        text={"Для добавления необходимо заполнить все поля"}
-        open={dialogOpen} 
-        close={handleDialogClose}
-        handleSnackbarOpen={handleSnackbarOpen}
-      />
+      {dialogOpen && (
+        <CreateUserDialog
+          title={"Добавить пользователя"}
+          text={"Для добавления необходимо заполнить все поля"}
+          open={dialogOpen} 
+          close={handleDialogClose}
+          handleSnackbarOpen={handleSnackbarOpen}
+        />
+      )}
 
-      <UpdateUserDialog
-        title={"Обновить пользователя"}
-        text={"Для обновления необходимо заполнить все поля"}
-        open={dialogUpdate} 
-        close={handleDialogClose}
-        user={dialogUpdateUser}
-        handleSnackbarOpen={handleSnackbarOpen}
-      />
+      { dialogUpdate && (
+        <UpdateUserDialog
+          title={"Обновить пользователя"}
+          text={"Для обновления необходимо заполнить все поля"}
+          open={dialogUpdate} 
+          close={handleDialogClose}
+          user={dialogUpdateUser}
+          handleSnackbarOpen={handleSnackbarOpen}
+        />
+      )}
 
-      <DeleteUserDialog
-        open={dialogDelete} 
-        userId={dialogDeleteUser}
-        close={handleDialogClose}
-        handleSnackbarOpen={handleSnackbarOpen}
-      />
+      { dialogDelete && (
+        <DeleteUserDialog
+          open={dialogDelete} 
+          userId={dialogDeleteUser}
+          close={handleDialogClose}
+          handleSnackbarOpen={handleSnackbarOpen}
+        />
+      )}
 
       <Snackbar 
         open={snackbarOpen} 
