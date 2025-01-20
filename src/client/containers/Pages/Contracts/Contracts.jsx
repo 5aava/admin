@@ -42,7 +42,6 @@ export default function Contracts() {
 
   useEffect(() => {
     if(response) {
-      console.log(response);
       setRows(response);
     }
   }, [response])
@@ -158,13 +157,6 @@ export default function Contracts() {
       cellClassName: 'actions',
       getActions: ({ id }) => {
         return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleUpdateClick(id)}
-            color="inherit"
-          />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"

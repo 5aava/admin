@@ -11,7 +11,8 @@ export default async function all(req, res) {
   if(!isAuth(req.headers)){
     res.status(403).json({ auth: false, error: '403 Forbidden' })
   }
-    
-  const data = await getTracks();
+  
+  const contractorId = req.body.contractorId;
+  const data = await getTracks(contractorId);
   config.sendOk(res, data);
 }

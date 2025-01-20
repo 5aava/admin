@@ -4,8 +4,9 @@ export async function getItem (Model, id) {
 }
 
 
-export async function getItems (Model) {
+export async function getItems (Model, where) {
   return await Model.findAll({
+    where: where,
     attributes: {
       exclude: ['password']
     }

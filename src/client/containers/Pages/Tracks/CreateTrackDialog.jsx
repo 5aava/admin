@@ -56,7 +56,6 @@ export default function CreateTrackDialog(props) {
 
     const data = new FormData(event.currentTarget);
     const response = await privateFetcher('/api/private/tracks/create', {
-      id: data.get('id'),
       name: data.get('name'),
       contractorId: inputContractorId
     });

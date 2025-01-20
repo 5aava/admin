@@ -3,7 +3,7 @@ import clientConfig from '../config/config.client';
 
 
 const useFetch = (url, body) => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     fetch(url, {

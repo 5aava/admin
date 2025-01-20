@@ -8,8 +8,9 @@ export async function getTrack (id) {
 }
 
 
-export async function getTracks () {
-  const tracks = await getItems(Tracks);
+export async function getTracks (contractorId = null) {
+  const where = contractorId ? { contractorId: contractorId } : {}
+  const tracks = await getItems(Tracks, where);
 
   const data = [];
   for(const track of tracks){
@@ -21,6 +22,7 @@ export async function getTracks () {
       firstname: contractor.firstname,
       lastname: contractor.lastname,
       patronymic: contractor.patronymic,
+      contractorId: track.contractorId
     })
   }
 
