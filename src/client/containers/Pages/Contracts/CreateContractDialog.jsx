@@ -27,6 +27,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -396,19 +399,18 @@ export default function CreateTrackDialog(props) {
             {dopContractors.length ? (
               <>
                 <Typography variant='h6' sx={{color: '#00AA00'}}>Добавленые исполнители: </Typography>
+                <Stack >
                 {
-                  dopContractors.map(item => {
-                    return <Typography variant='h6'>
-                      {item.type} {item.tax}% - {item.name} 
-                      <Button onClick={() => handleDeleteContractors(item.id)} startIcon={<DeleteIcon />} />
-                    </Typography>
+                  dopContractors.map((item, key) => {
+                    return <Chip sx={{margin:'1px', p: '1px'}} key={key} label={`${item.type} ${item.tax}% - ${item.name}`} 
+                        onDelete={() => handleDeleteContractors(item.id)} />
                   })
-                }
+                } </Stack>
               </>
             ): null}
 
 
-            <Divider sx={{ marginBottom: 2 }} />
+            <Divider sx={{ margin: 2 }} />
 
             <TextField
               select
