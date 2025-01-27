@@ -21,6 +21,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -51,6 +52,8 @@ const VisuallyHiddenInput = styled('input')({
 
 
 export default function CreateTrackDialog(props) {
+  const [maxWidth, setMaxWidth] = useState(500);
+
   const [contractors, setContractors] = useState([]);
   const [inputContractorName, setInputContracortName] = useState({});
   const [inputContractorId, setInputContracortId] = useState('');
@@ -67,7 +70,7 @@ export default function CreateTrackDialog(props) {
   const [inputContractorName2, setInputContracortName2] = useState({});
   const [inputContractorId2, setInputContracortId2] = useState('');
   
-  const [dopContractorType, setDopContractorType] = useState('music');
+  const [dopContractorType, setDopContractorType] = useState('');
   const [dopContractorTax, setDopContractorTax] = useState(0);
 
   const [dopContractors, setDopContractors] = useState([]);
@@ -122,6 +125,24 @@ export default function CreateTrackDialog(props) {
   const handleAddContractors = async () => {
     const dopContrs = dopContractors.map(item => item);
 
+    /* 
+    console.log('inputContractorId2', inputContractorId2);
+    console.log('inputContractorName2', inputContractorName2);
+    console.log('dopContractorType', dopContractorType);
+    console.log('dopContractorTax', dopContractorTax); 
+    */
+
+    // не добавлять пустого исполнителя
+    if(!inputContractorId2 || !inputContractorName2 || !dopContractorType || dopContractorTax == 0){
+      return false;
+    }
+
+    // не добавлять дважды одного и того же исполнителя
+    if(dopContrs.find(({ id }) => id === inputContractorId2)){
+      return false;
+    };
+
+
     dopContrs.push({
       id: inputContractorId2,
       name: inputContractorName2,
@@ -129,9 +150,15 @@ export default function CreateTrackDialog(props) {
       tax: dopContractorTax
     });
 
-    console.log(dopContractors);
+    // console.log(dopContractors);
     
     setDopContractors(dopContrs);
+  }
+
+  const handleDeleteContractors = async (id) => {
+    const dopContrs = dopContractors.map(item => item);
+    const filtered = dopContrs.filter(function(el) { return el.id != id; }); 
+    setDopContractors(filtered);
   }
   
   const handleSubmit = async (event) => {
@@ -142,8 +169,17 @@ export default function CreateTrackDialog(props) {
       sku: data.get('sku'),
       contractorId: inputContractorId,
       licensorId: inputLicensorId,
-      trackId: inputTrackId
+      trackId: inputTrackId,
+      releaseDate: data.get('releaseDate'),
+      // =======================
+      contractors: JSON.stringify(dopContractors),
+      tax: data.get('tax'),
+      isrc: data.get('isrc'),
+      upc: data.get('upc'),
+      link: data.get('link'),
     });
+
+    console.log(response);
 
     
     if(response.status == 'ok'){
@@ -195,7 +231,7 @@ export default function CreateTrackDialog(props) {
               name="sku"
               required
               variant="outlined"
-              style={{marginBottom: 20, width: 400}}
+              style={{marginBottom: 20, width: maxWidth}}
             /><br />
 
             <Autocomplete
@@ -270,14 +306,14 @@ export default function CreateTrackDialog(props) {
               <DatePicker
                 label="Дата релиза" 
                 fullWidth
-                id="date"
-                name="date"
+                id="releaseDate"
+                name="releaseDate"
                 required
                 variant="outlined"
-                width={400}
+                width={maxWidth}
                 format="DD.MM.YYYY"
                 sx={{ 
-                  minWidth: 400,
+                  minWidth: maxWidth,
                   marginBottom: 2
                  }}
                />
@@ -295,22 +331,21 @@ export default function CreateTrackDialog(props) {
               label="Автор или певец"
               variant="outlined"
               sx={{ 
-                minWidth: 400,
+                minWidth: maxWidth,
                 marginBottom: 2
                }}
               name="author"
               id="author"
-              defaultValue={'music'}
+              defaultValue={''}
               onChange={(e) => setDopContractorType(e.target.value)}
             >
-              <MenuItem value={'music'}>Автор музыки</MenuItem>
-              <MenuItem value={'text'}>Автор текста</MenuItem>
-              <MenuItem value={'singer'}>Певец</MenuItem>
+              <MenuItem value={'Музыка'}>Автор музыки</MenuItem>
+              <MenuItem value={'Текст'}>Автор текста</MenuItem>
+              <MenuItem value={'Певец'}>Певец</MenuItem>
             </TextField><br />
 
             <Autocomplete
               disablePortal
-              required
               options={contractors2}
               id="contractorId2"
               name="contractorId2"
@@ -330,13 +365,12 @@ export default function CreateTrackDialog(props) {
                 )
               }
               sx={{ 
-                minWidth: 400,
+                minWidth: maxWidth,
                 marginBottom: 2
                }}
             />
 
             <TextField 
-              required
               id="outlined-basic" 
               label="Доля в %" 
               variant="outlined"
@@ -361,10 +395,13 @@ export default function CreateTrackDialog(props) {
 
             {dopContractors.length ? (
               <>
-                Добавлены исполнители: <br />
+                <Typography variant='h6' sx={{color: '#00AA00'}}>Добавленые исполнители: </Typography>
                 {
                   dopContractors.map(item => {
-                    return <>{item.type} - {item.name} {item.tax}% <br /></>
+                    return <Typography variant='h6'>
+                      {item.type} {item.tax}% - {item.name} 
+                      <Button onClick={() => handleDeleteContractors(item.id)} startIcon={<DeleteIcon />} />
+                    </Typography>
                   })
                 }
               </>
@@ -379,43 +416,46 @@ export default function CreateTrackDialog(props) {
               label="Налог 0% или 6%"
               variant="outlined"
               sx={{ 
-                minWidth: 400,
+                minWidth: maxWidth,
                 marginBottom: 2
                }}
               name="tax"
               id="tax"
-              defaultValue={'0'}
+              defaultValue={0}
             >
-              <MenuItem value={'0'}>0 %</MenuItem>
-              <MenuItem value={'6'}>6 %</MenuItem>
+              <MenuItem value={0}>0 %</MenuItem>
+              <MenuItem value={6}>6 %</MenuItem>
             </TextField><br />
 
             <TextField 
-              id="ISRC" 
+              id="isrc"
+              name="isrc"
               label="ISRC" 
               variant="outlined"
               sx={{ 
-                minWidth: 400,
+                minWidth: maxWidth,
                 marginBottom: 2
                }}
             /><br />
 
             <TextField 
-              id="UPC" 
+              id="upc"
+              name="upc"
               label="UPC" 
               variant="outlined"
               sx={{ 
-                minWidth: 400,
+                minWidth: maxWidth,
                 marginBottom: 2
                }}
             /><br />
 
             <TextField 
-              id="Link" 
+              id="link"
+              name="link"
               label="Сылка на релиз" 
               variant="outlined"
               sx={{ 
-                minWidth: 400,
+                minWidth: maxWidth,
                 marginBottom: 2
                }}
             /><br />
@@ -432,7 +472,7 @@ export default function CreateTrackDialog(props) {
               variant="outlined"
               startIcon={<CloudUploadIcon />}
               sx={{ 
-                minWidth: 400,
+                minWidth: maxWidth,
                 marginBottom: 2
                }}
             >

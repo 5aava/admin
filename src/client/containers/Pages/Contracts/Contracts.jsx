@@ -85,11 +85,18 @@ export default function Contracts() {
         apiRef.current.updateRows([
           { 
             id: data.id, 
-            name: data.name, 
-            nickname: data.nickname,
-            firstname: data.firstname,
-            lastname: data.lastname,
-            patronymic: data.patronymic,
+            sku: data.sku, 
+            contractor: data.contractor, 
+            track: data.track, 
+            licensor: data.licensor, 
+            authors: data.authors, 
+            date: data.date, 
+            tax: data.tax, 
+            isrc: data.isrc, 
+            upc: data.upc, 
+            link: data.link, 
+            file: data.file, 
+            moderated: data.moderated, 
           }
         ]);
       break;
@@ -97,11 +104,18 @@ export default function Contracts() {
         apiRef.current.updateRows([
           { 
             id: data.id, 
-            name: data.name,
-            nickname: data.nickname,
-            firstname: data.firstname,
-            lastname: data.lastname,
-            patronymic: data.patronymic,
+            sku: data.sku, 
+            contractor: data.contractor, 
+            track: data.track, 
+            licensor: data.licensor, 
+            authors: data.authors, 
+            date: data.date, 
+            tax: data.tax, 
+            isrc: data.isrc, 
+            upc: data.upc, 
+            link: data.link, 
+            file: data.file, 
+            moderated: data.moderated, 
           }
         ]);
       break;
@@ -142,7 +156,7 @@ export default function Contracts() {
     { field: 'licensor', headerName: 'Лицензиар', width: 120, editable: true },
     { field: 'date', headerName: 'Дата релиза', width: 120, editable: true },
 
-    { field: 'authors', headerName: 'Авторы и певцы', width: 140, editable: true },
+    { field: 'authors', headerName: 'Авторы и певцы', width: 300, editable: true },
 
     { field: 'tax', headerName: 'Налог', width: 120, editable: true },
     { field: 'isrc', headerName: 'ISRC', width: 120, editable: true },

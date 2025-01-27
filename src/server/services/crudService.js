@@ -19,6 +19,10 @@ export async function createItems (Model, values) {
     .catch(e => e);
 }
 
+export async function createBulkItems (Model, values) {
+  return await Model.bulkCreate(values, {returning: true})
+    .catch(e => e);
+}
 
 export async function updateItems (Model, values, userId) {
   return await Model.update({ ...values }, { where: { id: userId } })

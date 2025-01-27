@@ -1,5 +1,5 @@
-import { getItem, getItems, createItems, updateItems, deleteItems} from '../crudService';
-import { Contracts, Contractors, Tracks, Licensors } 
+import { getItem, getItems, createItems, createBulkItems, updateItems, deleteItems} from '../crudService';
+import { Contracts, Contractors, ContractsCtrs, Tracks, Licensors } 
   from '../../database/models/index';
 
 
@@ -15,12 +15,22 @@ export async function getContracts () {
   const data = [];
   for(const c of cs){
     const [ctr] = await getItem(Contractors, c.contractorId);
-    const contractor = `${ctr.lastname} ${ctr.firstname} ${ctr.patronymic} (${ctr.nickname})`
+    const contractor = `${ctr.lastname} ${ctr.firstname} ${ctr.patronymic} (${ctr.nickname})`;
 
     const [track] = await getItem(Tracks, c.trackId);
     const [licensor] = await getItem(Licensors, c.licensorId);
 
     const moderated = c.moderated ? 'Да' : 'Нет';
+
+    const cstrs = await getItems(ContractsCtrs, {contractId: c.id});
+    // console.log(cstrs);
+
+    let authors = '';
+    for(const cstr of cstrs){
+      const [ctr] = await getItem(Contractors, cstr.contractorId);
+      const contractor = `${ctr.lastname} ${ctr.firstname} ${ctr.patronymic} (${ctr.nickname})`;
+      authors += `${cstr.type} ${cstr.percent}% - ${contractor} \n`;
+    };
 
     data.push({
       id: c.id,
@@ -28,6 +38,7 @@ export async function getContracts () {
       contractor: contractor,
       track: track.name,
       licensor: licensor.name,
+      authors: authors,
       date: c.date,
       tax: c.tax,
       isrc: c.isrc,
@@ -43,36 +54,61 @@ export async function getContracts () {
 
 
 export async function createContract (values) {
-  const data = await createItems(Contracts, values);
+  console.log('!!!!!!!!! createContract');
 
-  if(data.name == 'SequelizeUniqueConstraintError'){
+  const contract = await createItems(Contracts, values);
+  const ctrsValues = values.contractors.map(c => {
+    return {
+      contractId: contract.id,
+      contractorId: c.id,
+      type: c.type,
+      percent: c.tax,
+    }
+  })
+
+  const ctrs = await createBulkItems(ContractsCtrs, ctrsValues);
+
+  if(contract.name == 'SequelizeUniqueConstraintError'){
     return 'dublicate';
   }
 
-  return data;
+  const data = [];
+
+  const [ctr] = await getItem(Contractors, contract.contractorId);
+  const contractor = `${ctr.lastname} ${ctr.firstname} ${ctr.patronymic} (${ctr.nickname})`;
+
+  const [track] = await getItem(Tracks, contract.trackId);
+  const [licensor] = await getItem(Licensors, contract.licensorId);
+
+  data.push({
+    id: contract.id,
+    sku: contract.sku,
+    contractor: contractor,
+    track: track.name,
+    licensor: licensor.name,
+    authors: '', // string
+    date: contract.date,
+    tax: contract.tax,
+    isrc: contract.isrc,
+    upc: contract.upc,
+    link: contract.link,
+    file: 'filename',
+    moderated: 'Да'
+  });
+
+  console.log(data);
+
+  return data[0];
 }
 
 
 export async function updateContract (id, values) {
   const contract = await updateItems(Contracts, values, id);
 
-  if(track.name == 'SequelizeUniqueConstraintError'){
+  if(contract.name == 'SequelizeUniqueConstraintError'){
     return 'dublicate';
   }
   
-  /* if([track] == 1){
-    const [contractor] = await getItem(Contractors, values.contractorId);
-    
-    return {
-      id: id,
-      name: values.name,
-      nickname: contractor.nickname,
-      firstname: contractor.firstname,
-      lastname: contractor.lastname,
-      patronymic: contractor.patronymic,
-    }
-  } */
-
   return false;
 }
 
