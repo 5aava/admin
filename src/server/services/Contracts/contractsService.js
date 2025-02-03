@@ -2,6 +2,8 @@ import { getItem, getItems, createItems, createBulkItems, updateItems, deleteIte
 import { Contracts, Contractors, ContractsCtrs, Tracks, Licensors } 
   from '../../database/models/index';
 
+import dayjs from 'dayjs';
+import customParseFormat from "dayjs/plugin/customParseFormat";
 
 export async function getContract (id) {
   const data = await getItem(Contracts, id);
@@ -10,6 +12,7 @@ export async function getContract (id) {
 
 
 export async function getContracts () {
+  dayjs.extend(customParseFormat);
   const cs = await getItems(Contracts);
 
   const data = [];
@@ -26,20 +29,34 @@ export async function getContracts () {
     // console.log(cstrs);
 
     let authors = '';
+    const dopContractors = [];
+
     for(const cstr of cstrs){
       const [ctr] = await getItem(Contractors, cstr.contractorId);
       const contractor = `${ctr.lastname} ${ctr.firstname} ${ctr.patronymic} (${ctr.nickname})`;
       authors += `${cstr.type} ${cstr.percent}% - ${contractor} \n`;
+      dopContractors.push({
+        id: cstr.id,
+        name: contractor,
+        type: cstr.type,
+        tax: cstr.percent
+      })
     };
+
+    // console.log(c.date); // 2025-01-15T06:00:00.000Z
+    const date = dayjs(c.date).format('DD.MM.YYYY') ; // .add(9, 'hour')
 
     data.push({
       id: c.id,
       sku: c.sku,
       contractor: contractor,
+      contractorId: c.contractorId,
       track: track.name,
+      trackId: c.trackId,
       licensor: licensor.name,
       authors: authors,
-      date: c.date,
+      dopContractors: dopContractors,
+      date: date,
       tax: c.tax,
       isrc: c.isrc,
       upc: c.upc,
@@ -54,8 +71,6 @@ export async function getContracts () {
 
 
 export async function createContract (values) {
-  console.log('!!!!!!!!! createContract');
-
   const contract = await createItems(Contracts, values);
   const ctrsValues = values.contractors.map(c => {
     return {
@@ -86,8 +101,8 @@ export async function createContract (values) {
     contractor: contractor,
     track: track.name,
     licensor: licensor.name,
-    authors: '', // string
     date: contract.date,
+    authors: '', // string
     tax: contract.tax,
     isrc: contract.isrc,
     upc: contract.upc,
@@ -109,6 +124,36 @@ export async function updateContract (id, values) {
     return 'dublicate';
   }
   
+  if([contract] == 1){
+    /* const [ctr] = await getItem(Contractors, values.contractorId);
+    const contractor = `${ctr.lastname} ${ctr.firstname} ${ctr.patronymic} (${ctr.nickname})`;
+  
+    const [track] = await getItem(Tracks, values.trackId);
+    const [licensor] = await getItem(Licensors, values.licensorId); */
+    
+    return {
+      id: id,
+      sku: values.sku,
+
+      contractorId: values.contractorId,
+      licensorId: values.licensorId,
+      trackId: values.trackId,
+      date: values.date,
+
+      tax: values.tax,
+      isrc: values.isrc,
+      upc: values.upc,
+      link: values.link,
+      /* contractor: contractor,
+      track: track.name,
+      licensor: licensor.name,
+      date: values.date,
+      authors: '', // string
+
+      moderated: values.moderated, */
+    }
+  }
+
   return false;
 }
 

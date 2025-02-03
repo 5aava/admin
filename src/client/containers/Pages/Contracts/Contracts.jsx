@@ -105,9 +105,9 @@ export default function Contracts() {
           { 
             id: data.id, 
             sku: data.sku, 
-            contractor: data.contractor, 
-            track: data.track, 
-            licensor: data.licensor, 
+            contractorId: data.contractorId,
+            licensorId: data.licensorId,
+            trackId: data.trackId,
             authors: data.authors, 
             date: data.date, 
             tax: data.tax, 
@@ -172,6 +172,13 @@ export default function Contracts() {
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Редактировать"
+            className="textPrimary"
+            onClick={handleUpdateClick(id)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(id)}
@@ -219,8 +226,8 @@ export default function Contracts() {
 
       { dialogUpdate && (
         <UpdateContractDialog
-          title={"Обновить договор"}
-          text={"Для обновления необходимо заполнить все поля"}
+          title={"Редактировать договор"}
+          text={"Для сохранения необходимо заполнить номер договора"}
           open={dialogUpdate} 
           close={handleDialogClose}
           contract={dialogUpdateContract}

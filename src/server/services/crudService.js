@@ -1,6 +1,6 @@
 
 export async function getItem (Model, id) {
-  return await Model.findAll({ where: { id: id} });
+  return await Model.findAll({ where: { id } });
 }
 
 
@@ -24,8 +24,8 @@ export async function createBulkItems (Model, values) {
     .catch(e => e);
 }
 
-export async function updateItems (Model, values, userId) {
-  return await Model.update({ ...values }, { where: { id: userId } })
+export async function updateItems (Model, values, id) {
+  return await Model.update({ ...values }, { where: { id } })
     .catch(e => e);
 }
 

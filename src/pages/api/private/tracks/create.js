@@ -13,12 +13,9 @@ export default async function create(req, res) {
   }
 
   const values = {
-    id: req.body.id,
     name: req.body.name,
     contractorId: req.body.contractorId
   };
-
-  console.log(values);
 
   const data = await createTrack(values);
 

@@ -70,8 +70,8 @@ export default function CreateTrackDialog(props) {
   const [inputTrackId, setInputTrackId] = useState('');
 
   const [contractors2, setContractors2] = useState([]);
-  const [inputContractorName2, setInputContracortName2] = useState({});
-  const [inputContractorId2, setInputContracortId2] = useState('');
+  const [inputContractorName2, setInputContractorName2] = useState({});
+  const [inputContractorId2, setInputContractorId2] = useState('');
   
   const [dopContractorType, setDopContractorType] = useState('');
   const [dopContractorTax, setDopContractorTax] = useState(0);
@@ -128,13 +128,6 @@ export default function CreateTrackDialog(props) {
   const handleAddContractors = async () => {
     const dopContrs = dopContractors.map(item => item);
 
-    /* 
-    console.log('inputContractorId2', inputContractorId2);
-    console.log('inputContractorName2', inputContractorName2);
-    console.log('dopContractorType', dopContractorType);
-    console.log('dopContractorTax', dopContractorTax); 
-    */
-
     // не добавлять пустого исполнителя
     if(!inputContractorId2 || !inputContractorName2 || !dopContractorType || dopContractorTax == 0){
       return false;
@@ -181,9 +174,6 @@ export default function CreateTrackDialog(props) {
       upc: data.get('upc'),
       link: data.get('link'),
     });
-
-    console.log(response);
-
     
     if(response.status == 'ok'){
       props.close();
@@ -354,11 +344,11 @@ export default function CreateTrackDialog(props) {
               name="contractorId2"
               inputValue={inputContractorName2}
               getOptionLabel={(option) => {
-                setInputContracortId2(option.id);
+                setInputContractorId2(option.id);
                 return option.title;
               }}
               onInputChange={(event, value) => {
-                setInputContracortName2(value);
+                setInputContractorName2(value);
               }}
               renderInput={(params) => (
                   <TextField 
@@ -462,6 +452,7 @@ export default function CreateTrackDialog(props) {
                }}
             /><br />
 
+            {/* 
             <Divider />
 
             <Typography sx={{ m: 0, p: 2 }} variant='h6'>
@@ -483,7 +474,8 @@ export default function CreateTrackDialog(props) {
                 type="file"
                 onChange={(event) => console.log(event.target.files)}
               />
-            </Button>
+            </Button> 
+            */}
             
         
         </DialogContent>
@@ -492,7 +484,7 @@ export default function CreateTrackDialog(props) {
             Отменить
           </Button>
           <Button type="submit" variant="contained" startIcon={<SaveIcon />} >
-            Отправить на модерацию
+            Сохранить
           </Button>
         </DialogActions>
       </form>
