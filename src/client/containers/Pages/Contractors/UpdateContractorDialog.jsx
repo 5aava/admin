@@ -90,22 +90,22 @@ export default function UpdateContractorDialog(props) {
             /><br />
             <TextField
               fullWidth
-              label="Имя"
-              id="firstname"
-              name="firstname"
-              required
-              variant="outlined"
-              defaultValue={props?.contractor?.firstname}
-              style={{marginBottom: 20}}
-            /><br />
-            <TextField
-              fullWidth
               label="Фамилия"
               id="lastname"
               name="lastname"
               required
               variant="outlined"
               defaultValue={props?.contractor?.lastname}
+              style={{marginBottom: 20}}
+            /><br />
+            <TextField
+              fullWidth
+              label="Имя"
+              id="firstname"
+              name="firstname"
+              required
+              variant="outlined"
+              defaultValue={props?.contractor?.firstname}
               style={{marginBottom: 20}}
             /><br />
             <TextField

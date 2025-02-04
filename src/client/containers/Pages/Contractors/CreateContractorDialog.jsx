@@ -92,18 +92,18 @@ export default function CreateContractorDialog(props) {
             /><br />
             <TextField
               fullWidth
-              label="Имя"
-              id="firstname"
-              name="firstname"
+              label="Фамилия"
+              id="lastname"
+              name="lastname"
               required
               variant="outlined"
               style={{marginBottom: 20}}
             /><br />
             <TextField
               fullWidth
-              label="Фамилия"
-              id="lastname"
-              name="lastname"
+              label="Имя"
+              id="firstname"
+              name="firstname"
               required
               variant="outlined"
               style={{marginBottom: 20}}

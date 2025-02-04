@@ -38,7 +38,7 @@ import Contracts from './Pages/Contracts/Contracts';
 const NAVIGATION = [
   {
     segment: 'contracts',
-    title: 'Договора',
+    title: 'Договоры',
     icon: <ArticleIcon />,
   },
   {

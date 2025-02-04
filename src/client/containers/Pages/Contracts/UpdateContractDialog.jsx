@@ -161,7 +161,7 @@ export default function UpdateContractDialog(props) {
 
     if(response.status == 'ok'){
       props.close();
-      props.handleSnackbarOpen(response.data, 'success', 'Данные договора обновлены', 'update');
+      props.handleSnackbarOpen(response.data, 'success', 'Данные обновлены', 'update');
     }
 
     if(response.status == 'error' && response.data == 'dublicate'){
