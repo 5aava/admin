@@ -105,7 +105,7 @@ export default function Licensors() {
   }
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 60, editable: false },
+    { field: 'id', headerName: 'ID', width: 40, editable: false },
     { field: 'name', headerName: 'Название', width: 180, editable: true },
      {
       field: 'actions',

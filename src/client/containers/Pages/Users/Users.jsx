@@ -99,7 +99,7 @@ export default function Users() {
   }
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 60, editable: false },
+    { field: 'id', headerName: 'ID', width: 40, editable: false },
     { field: 'name', headerName: 'Name', width: 180, editable: true },
     { field: 'email', headerName: 'Email', width: 240, editable: true },
     { field: 'role', headerName: 'Role', width: 180, editable: true },

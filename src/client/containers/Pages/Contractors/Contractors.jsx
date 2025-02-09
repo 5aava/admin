@@ -111,7 +111,7 @@ export default function Сontractors() {
   }
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 60, editable: false },
+    { field: 'id', headerName: 'ID', width: 40, editable: false },
     { field: 'nickname', headerName: 'Псевдоним', width: 180, editable: true },
     { field: 'firstname', headerName: 'Имя', width: 180, editable: true },
     { field: 'lastname', headerName: 'Фамилия', width: 180, editable: true },

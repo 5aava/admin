@@ -24,16 +24,16 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function DeleteContractDialog(props) {
+export default function DeletePaymentsDialog(props) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const response = await privateFetcher('/api/private/contracts/delete', {id: props.contractId});
+    const response = await privateFetcher('/api/private/payments/delete', {id: props.paymentId});
     
     if(response.status == 'ok'){
       props.close();
-      props.handleSnackbarOpen(response.data, 'success', 'Договор удален', 'delete');
+      props.handleSnackbarOpen(response.data, 'success', 'Доход удален', 'delete');
     }
   }
 
@@ -45,7 +45,7 @@ export default function DeleteContractDialog(props) {
     >
       <form onSubmit={handleSubmit} >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Удалить запись
+          Удалить пользователя
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -61,7 +61,7 @@ export default function DeleteContractDialog(props) {
         </IconButton>
         <DialogContent dividers>
           <Typography gutterBottom>
-            Точно решили удалить запись c ID {props.contractId}?
+            Точно решили удалить Выплату c ID {props.paymentId}?
           </Typography>
         </DialogContent>
         <DialogActions>

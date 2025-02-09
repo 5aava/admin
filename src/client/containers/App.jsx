@@ -33,6 +33,10 @@ import Licensors from './Pages/Licensors/Licensors';
 import Tracks from './Pages/Tracks/Tracks';
 import Contracts from './Pages/Contracts/Contracts';
 
+import Incomes from './Pages/Incomes/Incomes';
+import Payments from './Pages/Payments/Payments';
+/* import Royalties from './Pages/Royalties/Royalties';
+import Reports from './Pages/Reports/Reports'; */
 
 
 const NAVIGATION = [
@@ -183,12 +187,21 @@ export default function App() {
         obj = { page: <Tracks /> };
         break;
         
-        /*
-        incomes
-        payments
-        royalties
-        reports
-        */
+      case '/incomes':
+        obj = { page: <Incomes /> };
+        break;
+
+      case '/payments':
+        obj = { page: <Payments /> };
+        break;
+      /* 
+      case '/royalties':
+        obj = { page: <Royalties /> };
+        break;
+
+      case '/reports':
+        obj = { page: <Reports /> };
+        break; */
     }
 
     return obj;

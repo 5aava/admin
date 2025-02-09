@@ -113,7 +113,7 @@ export default function Tracks() {
   }
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 60, editable: false },
+    { field: 'id', headerName: 'ID', width: 40, editable: false },
     { field: 'name', headerName: 'Название трека', width: 180, editable: true },
     { field: 'nickname', headerName: 'Псевдоним исполнителя', width: 180, editable: true },
     { field: 'firstname', headerName: 'Имя', width: 180, editable: true },

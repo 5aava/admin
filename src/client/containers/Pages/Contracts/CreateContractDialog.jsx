@@ -30,6 +30,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 
+import InputMask from "react-input-mask";
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -56,6 +58,7 @@ const VisuallyHiddenInput = styled('input')({
 
 export default function CreateTrackDialog(props) {
   const [maxWidth, setMaxWidth] = useState(500);
+  const [linkValue, setLinkValue] = useState(null);
 
   const [contractors, setContractors] = useState([]);
   const [inputContractorName, setInputContracortName] = useState({});
@@ -172,7 +175,7 @@ export default function CreateTrackDialog(props) {
       tax: data.get('tax'),
       isrc: data.get('isrc'),
       upc: data.get('upc'),
-      link: data.get('link'),
+      link: linkValue,
     });
     
     if(response.status == 'ok'){
@@ -213,10 +216,10 @@ export default function CreateTrackDialog(props) {
           <CloseIcon />
         </IconButton>
         <DialogContent dividers>
-          <Typography gutterBottom>
-            {/* {props.text}<br /><br /> */}
+          {/* <Typography gutterBottom>
+            {/* {props.text}<br /><br /> 
           </Typography>
-            {props.form}
+            {props.form} */}
             <TextField
               fullWidth
               label="Номер договора"
@@ -441,16 +444,23 @@ export default function CreateTrackDialog(props) {
                }}
             /><br />
 
-            <TextField 
-              id="link"
-              name="link"
-              label="Сылка на релиз" 
-              variant="outlined"
-              sx={{ 
-                minWidth: maxWidth,
-                marginBottom: 2
-               }}
-            /><br />
+            <InputMask
+              mask="https://b\and.link/**************************"
+              value={linkValue}
+              disabled={false}
+              maskChar={' '}
+              alwaysShowMask={true}
+              onChange={(e) => setLinkValue(e.target.value)}
+            >
+              {() => <TextField 
+                        id="link"
+                        name="link"
+                        label="Сылка на релиз"
+                        sx={{
+                          minWidth: maxWidth,
+                          marginBottom: 2
+                        }} />}
+            </InputMask>
 
             {/* 
             <Divider />

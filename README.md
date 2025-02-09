@@ -3,22 +3,16 @@
 
 На сегодня 
 
-По фронту 
-- проверки автора или певца                               +
-- не добавлять пустого исполнителя                        +
-- не добавлять дважды одного и того же исполнителя        +
-- красивое отображение + иконка удалить                   +
-- удалять исполнителя                                     +
+- сохранение всех параметров
+  - не сохранился линк                                    +
+  - по фронту не добавились авторы                        +
+- удаление доп контракторсов                              +
+- редактирование всех параметров                          +
 
-По беку
-- сохранять в базу данные                                 +
-- сохранять в базу данные доп исполнителей                +
-- выводить доп исполнителей                               +
-
-Редактирования Договоров
-
-
-- сохранять pdf файлы                                     
+Для заказщиков
+- Добавил маску для ссылок с доменом
+- Добавил кликабельную ссылку в таблицу
+- улучшил систему редактирования (вывод в таблице)
 
 
 ## Договора
@@ -41,8 +35,8 @@
 - вручную вносим UPC (текстовое поле)                     +
 - вручную вносим "Ссылка на релиз" (текстовое поле)       +
 
--	подгружаем PDF файл                                     +
--	Сохраняем, отправляем на Модерацию                      +
+-	подгружаем PDF файл                                     
+-	Сохраняем, отправляем на Модерацию                      
  
 
 ## Migrations
@@ -67,6 +61,10 @@ sequelize-cli.cmd model:generate --name Tracks --attributes 'name:string,contrac
 sequelize-cli.cmd model:generate --name Contracts --attributes 'sku:string, contractorId:integer, trackId:integer, LicensorId:integer, date:date, tax:integer, iscr:string, upc:string, link:string, file:string, moderated:integer'
 
 sequelize-cli.cmd model:generate --name ContractsCtrs --attributes 'contractId:integer, contractorId:integer, type:string, percent:integer'
+
+sequelize-cli.cmd model:generate --name Incomes --attributes 'contractorId:integer, trackId:integer, year:integer, q1:integer, q2:integer, q3:integer, q4:integer, total:integer, comment: string'
+
+sequelize-cli.cmd model:generate --name Payments --attributes 'contractorId:integer, trackId:integer, year:integer, q1:integer, q1p:tinyint, q2:integer, q2p:tinyint, q3:integer, q3p:tinyint, q4:integer, q4p:tinyint, total:integer, comment:string'
 
 # pm2
 pm2 start npm --name "prod" -- run "start"

@@ -7,9 +7,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import Snackbar from '../../../components/Snackbar';
 
-import CreateContractDialog from './CreateContractDialog'
-import DeleteContractDialog from './DeleteContractDialog'
-import UpdateContractDialog from './UpdateContractDialog'
+import CreatePaymentDialog from './CreatePaymentsDialog'
+import DeletePaymentDialog from './DeletePaymentsDialog'
+import UpdatePaymentDialog from './UpdatePaymentsDialog'
+
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CloseIcon from '@mui/icons-material/Close';
 
 import {
   DataGrid,
@@ -20,7 +23,7 @@ import {
 import useFetch from "../../../modules/useFetch";
 
 
-export default function Contracts() {
+export default function Payments() {
   const apiRef = useGridApiRef();
 
   const [rows, setRows] = useState(null);
@@ -29,16 +32,16 @@ export default function Contracts() {
   const [dialogOpen, dialogOpenSet] = useState(false);
 
   const [dialogUpdate, dialogUpdateSet] = useState(false);
-  const [dialogUpdateContract, dialogUpdateContractSet] = useState(null);
+  const [dialogUpdatePayment, dialogUpdatePaymentset] = useState(null);
 
   const [dialogDelete, dialogDeleteSet] = useState(false);
-  const [dialogDeleteContract, dialogDeleteContractSet] = useState(null);
+  const [dialogDeletePayment, dialogDeletePaymentset] = useState(null);
 
-  const [snackbarText, snackbarTextSet] = useState('Ошибка: Договор не добавлен');
+  const [snackbarText, snackbarTextSet] = useState('Ошибка: Выплата не добавлена');
   const [snackbarType, snackbarTypeSet] = useState('error');
   const [snackbarOpen, snackbarOpenSet] = useState(false);
 
-  const [response] = useFetch("/api/private/contracts/all", {});
+  const [response] = useFetch("/api/private/payments/all", {});
 
   useEffect(() => {
     if(response) {
@@ -47,15 +50,15 @@ export default function Contracts() {
   }, [response])
 
   const handleUpdateClick = (id) => () => {
-    const contract = rows.filter((row) => row.id === id)[0];
+    const payment = rows.filter((row) => row.id === id)[0];
 
     dialogUpdateSet(true);
-    dialogUpdateContractSet(contract);
+    dialogUpdatePaymentset(payment);
   };
 
   const handleDeleteClick = (id) => () => {
     dialogDeleteSet(true);
-    dialogDeleteContractSet(id);
+    dialogDeletePaymentset(id);
   };
 
   const handleDialogClose = () => {
@@ -85,21 +88,21 @@ export default function Contracts() {
         apiRef.current.updateRows([
           { 
             id: data.id, 
-            sku: data.sku,
             contractorId: data.contractorId,
-            licensorId: data.licensorId,
-            trackId: data.trackId,
-            contractor: data.contractor, 
-            track: data.track, 
-            licensor: data.licensor, 
-            authors: data.authors, 
-            date: data.date, 
-            tax: data.tax, 
-            isrc: data.isrc, 
-            upc: data.upc, 
-            link: data.link, 
-            file: data.file, 
-            moderated: data.moderated, 
+            contractor: data.contractor,
+            trackId: data.trackId, 
+            track: data.track,
+            year: data.year, 
+            q1: data.q1,
+            q1p: data.q1p, 
+            q2: data.q2,
+            q2p: data.q2p, 
+            q3: data.q3,
+            q3p: data.q3p,
+            q4: data.q4,
+            q4p: data.q4p,
+            total: data.total, 
+            comment: data.comment,
           }
         ]);
       break;
@@ -107,21 +110,21 @@ export default function Contracts() {
         apiRef.current.updateRows([
           { 
             id: data.id, 
-            sku: data.sku, 
             contractorId: data.contractorId,
-            licensorId: data.licensorId,
-            trackId: data.trackId,
             contractor: data.contractor,
+            trackId: data.trackId, 
             track: data.track,
-            licensor: data.licensor,
-            authors: data.authors, 
-            date: data.date, 
-            tax: data.tax, 
-            isrc: data.isrc, 
-            upc: data.upc, 
-            link: data.link, 
-            file: data.file, 
-            moderated: data.moderated, 
+            year: data.year, 
+            q1: data.q1,
+            q1p: data.q1p, 
+            q2: data.q2,
+            q2p: data.q2p, 
+            q3: data.q3,
+            q3p: data.q3p,
+            q4: data.q4,
+            q4p: data.q4p,
+            total: data.total, 
+            comment: data.comment,
           }
         ]);
       break;
@@ -129,32 +132,40 @@ export default function Contracts() {
         apiRef.current.updateRows([{ id: data.id, _action: 'delete' }]);
       break;
     }
+    
   }
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 40, editable: false },
-    { field: 'sku', headerName: 'Договор №', width: 120 },
     { field: 'contractor', headerName: 'Гл. исп-тель', width: 240 },
     { field: 'track', headerName: 'Трек', width: 120 },
-    { field: 'licensor', headerName: 'Лицензиар', width: 120 },
-    { field: 'date', headerName: 'Дата релиза', width: 120 },
 
-    { field: 'authors', headerName: 'Авторы и певцы', width: 300 },
-
-    { field: 'tax', headerName: 'Налог', width: 120,
-      renderCell: (params) => <>{params.row.tax}%</>,
+    { field: 'year', headerName: 'Год', width: 120 },
+    { field: 'q1', headerName: 'Квартал I', width: 120 },
+    { field: 'q1p', headerName: 'Оплачен', width: 80,
+      renderCell: (params) => <>{params.row.q1p == 1 ? 
+        <CheckBoxIcon sx={{marginTop:1}} fontSize={'large'} color="success" /> : 
+        <CloseIcon fontSize={'large'} />}</>,
+     },
+    { field: 'q2', headerName: 'Квартал II', width: 120 },
+    { field: 'q2p', headerName: 'Оплачен', width: 80, 
+      renderCell: (params) => <>{params.row.q2p == 1 ? 
+        <CheckBoxIcon sx={{marginTop:1}} fontSize={'large'} color="success" /> : ''}</>,
     },
-    { field: 'isrc', headerName: 'ISRC', width: 120 },
-    { field: 'upc', headerName: 'UPC', width: 120 },
-    { field: 'link', headerName: 'Ссылка на релиз', width: 120,
-      renderCell: (params) => 
-        <a href={params.row.link} target='_blank'>{params.row.link}</a>,    
+    { field: 'q3', headerName: 'Квартал III', width: 120 },
+    { field: 'q3p', headerName: 'Оплачен', width: 80,
+      renderCell: (params) => <>{params.row.q3p == 1 ? 
+        <CheckBoxIcon sx={{marginTop:1}} fontSize={'large'} color="success" /> : 
+        <CloseIcon sx={{marginTop:1}} fontSize={'large'} color="error" />}</>,
     },
-    { field: 'file', headerName: 'PDF файл', width: 120 },
-    { field: 'moderated', headerName: 'На модерации', width: 120,
-      renderCell: (params) => <>{params.row.moderated == 1 ? 'На модерации' : 'Нет'}</>,
+    { field: 'q4', headerName: 'Квартал IV', width: 120 },
+    { field: 'q4p', headerName: 'Оплачен', width: 80,
+      renderCell: (params) => <>{params.row.q4p == 1 ? 
+        <CheckBoxIcon sx={{marginTop:1}} fontSize={'large'} color="success" /> : ''}</>,
     },
-    {
+    { field: 'total', headerName: 'Итого за год', width: 120 },
+    { field: 'comment', headerName: 'Коммент', width: 120 },
+     {
       field: 'actions',
       type: 'actions',
       headerName: 'Действия',
@@ -163,7 +174,7 @@ export default function Contracts() {
         return [
           <GridActionsCellItem
             icon={<EditIcon />}
-            label="Редактировать"
+            label="Edit"
             className="textPrimary"
             onClick={handleUpdateClick(id)}
             color="inherit"
@@ -203,10 +214,10 @@ export default function Contracts() {
         rowModesModel={rowModesModel}
         rowsLoadingMode="server"
       />
-
+      
       { dialogOpen && (
-        <CreateContractDialog
-          title={"Добавить договор"}
+        <CreatePaymentDialog
+          title={"Добавить выплату"}
           text={"Для добавления необходимо заполнить все поля"}
           open={dialogOpen}
           close={handleDialogClose}
@@ -215,20 +226,20 @@ export default function Contracts() {
       )}
 
       { dialogUpdate && (
-        <UpdateContractDialog
-          title={"Редактировать договор"}
-          text={"Для сохранения необходимо заполнить номер договора"}
+        <UpdatePaymentDialog
+          title={"Обновить выплату"}
+          text={"Для обновления необходимо заполнить все поля"}
           open={dialogUpdate} 
           close={handleDialogClose}
-          contract={dialogUpdateContract}
+          payment={dialogUpdatePayment}
           handleSnackbarOpen={handleSnackbarOpen}
         />
       )}
 
       { dialogDelete && (
-        <DeleteContractDialog
+        <DeletePaymentDialog
           open={dialogDelete} 
-          contractId={dialogDeleteContract}
+          paymentId={dialogDeletePayment}
           close={handleDialogClose}
           handleSnackbarOpen={handleSnackbarOpen}
         />

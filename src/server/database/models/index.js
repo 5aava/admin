@@ -14,6 +14,8 @@ const Licensors = require('./licensors');
 const Tracks = require('./tracks');
 const Contracts = require('./contracts');
 const ContractsCtrs = require('./contractsctrs');
+const Incomes = require('./incomes');
+const Payments = require('./payments');
 
 const db = {};
 db.sequelize = sequelize;
@@ -25,5 +27,7 @@ db.Licensors = Licensors(sequelize, Sequelize);
 db.Tracks = Tracks(sequelize, Sequelize);
 db.Contracts = Contracts(sequelize, Sequelize);
 db.ContractsCtrs = ContractsCtrs(sequelize, Sequelize);
+db.Incomes = Incomes(sequelize, Sequelize);
+db.Payments = Payments(sequelize, Sequelize);
 
 module.exports = db;

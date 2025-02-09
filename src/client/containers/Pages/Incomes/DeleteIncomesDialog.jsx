@@ -24,16 +24,16 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function DeleteContractDialog(props) {
+export default function DeleteIncomesDialog(props) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const response = await privateFetcher('/api/private/contracts/delete', {id: props.contractId});
+    const response = await privateFetcher('/api/private/incomes/delete', {id: props.incomeId});
     
     if(response.status == 'ok'){
       props.close();
-      props.handleSnackbarOpen(response.data, 'success', 'Договор удален', 'delete');
+      props.handleSnackbarOpen(response.data, 'success', 'Доход удален', 'delete');
     }
   }
 
@@ -61,7 +61,7 @@ export default function DeleteContractDialog(props) {
         </IconButton>
         <DialogContent dividers>
           <Typography gutterBottom>
-            Точно решили удалить запись c ID {props.contractId}?
+            Точно решили удалить запись c ID {props.incomeId}?
           </Typography>
         </DialogContent>
         <DialogActions>

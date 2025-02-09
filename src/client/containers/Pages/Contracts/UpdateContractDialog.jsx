@@ -33,6 +33,8 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 
+import InputMask from "react-input-mask";
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -45,14 +47,15 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 export default function UpdateContractDialog(props) {
   const [maxWidth, setMaxWidth] = useState(500);
+  const [linkValue, setLinkValue] = useState(props.contract?.link);
 
   const [contractors, setContractors] = useState([]);
   const [inputContractorName, setInputContractorName] = useState({});
-  const [inputContractorId, setInputContractorId] = useState('');
+  const [inputContractorId, setInputContractorId] = useState(props.contract?.contractorId);
 
   const [licensors, setLicensors] = useState([]);
   const [inputLicensorName, setInputLicensorName] = useState({});
-  const [inputLicensorId, setInputLicensorId] = useState('');
+  const [inputLicensorId, setInputLicensorId] = useState(props.contract?.licensorId);
 
   const [tracks, setTracks] = useState([]);
   const [inputTrackName, setInputTrackName] = useState({});
@@ -65,7 +68,7 @@ export default function UpdateContractDialog(props) {
   const [dopContractorType, setDopContractorType] = useState('');
   const [dopContractorTax, setDopContractorTax] = useState(0);
 
-  const [dopContractors, setDopContractors] = useState(props.contract?.dopContractors);
+  const [dopContractors, setDopContractors] = useState(props.contract?.dopContractors || []);
   
 
   const [constr] = useFetch("/api/private/contractors/all", {});
@@ -102,6 +105,17 @@ export default function UpdateContractDialog(props) {
 
   }, [constr, licensrs, trks]);
 
+  useEffect(() => {
+    if(inputContractorId){
+      const newTracks = []
+      trks.forEach(item => {
+        if(inputContractorId == item.contractorId){
+          newTracks.push( { id: item.id, title: item.name })
+        }
+      })
+      setTracks(newTracks);
+    }
+  })
   
   const handleAddContractors = async () => {
     const dopContrs = dopContractors.map(item => item);
@@ -434,17 +448,23 @@ export default function UpdateContractDialog(props) {
               }}
             /><br />
 
-            <TextField 
-              id="link"
-              name="link"
-              label="Сылка на релиз" 
-              variant="outlined"
-              defaultValue={props?.contract?.link}
-              sx={{ 
-                minWidth: maxWidth,
-                marginBottom: 2
-              }}
-            /><br />
+            <InputMask
+              mask="https://b\and.link/**************************"
+              value={linkValue}
+              disabled={false}
+              maskChar={' '}
+              alwaysShowMask={true}
+              onChange={(e) => setLinkValue(e.target.value)}
+            >
+              {() => <TextField 
+                        id="link"
+                        name="link"
+                        label="Сылка на релиз"
+                        sx={{ 
+                          minWidth: maxWidth,
+                          marginBottom: 2
+                        }} />}
+            </InputMask>
 
             <Divider />
 
@@ -456,7 +476,8 @@ export default function UpdateContractDialog(props) {
               <Switch 
                 id="moderated"
                 name="moderated"
-                defaultChecked 
+                // defaultChecked 
+                defaultValue={props?.contract?.moderated}
               />
               <Typography>Да</Typography>
             </Stack>

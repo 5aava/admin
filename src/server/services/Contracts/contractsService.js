@@ -23,8 +23,6 @@ export async function getContracts () {
     const [track] = await getItem(Tracks, c.trackId);
     const [licensor] = await getItem(Licensors, c.licensorId);
 
-    const moderated = c.moderated ? 'Да' : 'Нет';
-
     const cstrs = await getItems(ContractsCtrs, {contractId: c.id});
     // console.log(cstrs);
 
@@ -44,7 +42,7 @@ export async function getContracts () {
     };
 
     // console.log(c.date); // 2025-01-15T06:00:00.000Z
-    const date = dayjs(c.date).format('DD.MM.YYYY') ; // .add(9, 'hour')
+    const date = dayjs(c.date).format('DD.MM.YYYY');
 
     data.push({
       id: c.id,
@@ -54,6 +52,7 @@ export async function getContracts () {
       track: track.name,
       trackId: c.trackId,
       licensor: licensor.name,
+      licensorId: licensor.id,
       authors: authors,
       dopContractors: dopContractors,
       date: date,
@@ -62,7 +61,7 @@ export async function getContracts () {
       upc: c.upc,
       link: c.link,
       file: c.file,
-      moderated: moderated
+      moderated: c.moderated
     })
   }
 
@@ -95,6 +94,24 @@ export async function createContract (values) {
   const [track] = await getItem(Tracks, contract.trackId);
   const [licensor] = await getItem(Licensors, contract.licensorId);
 
+  const cstrs = await getItems(ContractsCtrs, {contractId: contract.id});
+  // console.log(cstrs);
+
+  let authors = '';
+  const dopContractors = [];
+
+  for(const cstr of cstrs){
+    const [ctr] = await getItem(Contractors, cstr.contractorId);
+    const contractor = `${ctr.lastname} ${ctr.firstname} ${ctr.patronymic} (${ctr.nickname})`;
+    authors += `${cstr.type} ${cstr.percent}% - ${contractor} \n`;
+    dopContractors.push({
+      id: cstr.id,
+      name: contractor,
+      type: cstr.type,
+      tax: cstr.percent
+    })
+  };
+
   data.push({
     id: contract.id,
     sku: contract.sku,
@@ -102,16 +119,15 @@ export async function createContract (values) {
     track: track.name,
     licensor: licensor.name,
     date: contract.date,
-    authors: '', // string
+    authors: authors,
+    dopContractors: dopContractors,
     tax: contract.tax,
     isrc: contract.isrc,
     upc: contract.upc,
     link: contract.link,
     file: 'filename',
-    moderated: 'Да'
+    moderated: contract.moderated,
   });
-
-  console.log(data);
 
   return data[0];
 }
@@ -125,32 +141,49 @@ export async function updateContract (id, values) {
   }
   
   if([contract] == 1){
-    /* const [ctr] = await getItem(Contractors, values.contractorId);
+    const [ctr] = await getItem(Contractors, values.contractorId);
     const contractor = `${ctr.lastname} ${ctr.firstname} ${ctr.patronymic} (${ctr.nickname})`;
   
     const [track] = await getItem(Tracks, values.trackId);
-    const [licensor] = await getItem(Licensors, values.licensorId); */
-    
+    const [licensor] = await getItem(Licensors, values.licensorId);
+
+    const date = dayjs(values.date).format('DD.MM.YYYY');
+
+    // delete dop contractors 
+    const cstrs = await getItems(ContractsCtrs, {contractId: id});
+    for(const c of cstrs){
+      await deleteItems(ContractsCtrs, c.id);
+    };
+
+    // update dop contractors
+    let authors = '';
+    const ctrsValues = values.contractors.map(c => {
+      authors += `${c.type} ${c.tax}% - ${c.name} \n`;
+      return {
+        contractId: id,
+        contractorId: c.id,
+        type: c.type,
+        percent: c.tax,
+      }
+    })
+    await createBulkItems(ContractsCtrs, ctrsValues);
+
     return {
       id: id,
       sku: values.sku,
-
       contractorId: values.contractorId,
-      licensorId: values.licensorId,
       trackId: values.trackId,
-      date: values.date,
-
+      licensorId: values.licensorId,
+      contractor: contractor,
+      track: track.name,
+      licensor: licensor.name,
+      date: date,
       tax: values.tax,
       isrc: values.isrc,
       upc: values.upc,
       link: values.link,
-      /* contractor: contractor,
-      track: track.name,
-      licensor: licensor.name,
-      date: values.date,
-      authors: '', // string
-
-      moderated: values.moderated, */
+      authors: authors,
+      moderated: values.moderated,
     }
   }
 
@@ -160,6 +193,12 @@ export async function updateContract (id, values) {
 
 export async function deleteContract (id) {
   const data = {}
+
+  const cstrs = await getItems(ContractsCtrs, {contractId: id});
+
+  for(const cstr of cstrs){
+    await deleteItems(ContractsCtrs, cstr.id);
+  };
 
   const isDeleted = await deleteItems(Contracts, id);
 
