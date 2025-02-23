@@ -34,6 +34,7 @@ import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 
 import InputMask from "react-input-mask";
+import { NumericFormat } from 'react-number-format';
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -69,6 +70,8 @@ export default function UpdateContractDialog(props) {
   const [dopContractorTax, setDopContractorTax] = useState(0);
 
   const [dopContractors, setDopContractors] = useState(props.contract?.dopContractors || []);
+  const [moderatedChecked, setModeratedChecked] = useState(props?.contract?.moderated ? true : false);
+
   
 
   const [constr] = useFetch("/api/private/contractors/all", {});
@@ -320,13 +323,13 @@ export default function UpdateContractDialog(props) {
             <Divider />
 
             <Typography sx={{ m: 0, p: 2 }} variant='h6'>
-              Добавить автора или певца
+              Добавить исполнителей
             </Typography>
 
             <TextField
               select
               fullWidth
-              label="Автор или певец"
+              label="Выбрать тип"
               variant="outlined"
               sx={{ 
                 minWidth: maxWidth,
@@ -337,9 +340,11 @@ export default function UpdateContractDialog(props) {
               defaultValue={''}
               onChange={(e) => setDopContractorType(e.target.value)}
             >
-              <MenuItem value={'Музыка'}>Автор музыки</MenuItem>
-              <MenuItem value={'Текст'}>Автор текста</MenuItem>
-              <MenuItem value={'Певец'}>Певец</MenuItem>
+              <MenuItem value={'Музыка'}>Музыка</MenuItem>
+              <MenuItem value={'Текст'}>Текст</MenuItem>
+              <MenuItem value={'Исполнитель'}>Исполнитель</MenuItem>
+              <MenuItem value={'Сведение'}>Сведение</MenuItem>
+              <MenuItem value={'Жесткий процент'}>Жесткий процент</MenuItem>
             </TextField><br />
 
             <Autocomplete
@@ -358,7 +363,7 @@ export default function UpdateContractDialog(props) {
               renderInput={(params) => (
                   <TextField 
                     {...params}
-                    label="Доп. исполнитель" 
+                    label="Ф.И.О." 
                   />
                 )
               }
@@ -368,17 +373,18 @@ export default function UpdateContractDialog(props) {
                }}
             />
 
-            <TextField 
+            <NumericFormat 
               id="outlined-basic" 
-              label="Доля в %" 
+              label="Процент %" 
               variant="outlined"
-              sx={{ 
-                width: 150,
-                marginBottom: 2,
-                marginRight: 2,
-               }}
-               type="number"
-               onChange={(e) => setDopContractorTax(e.target.value)}
+              value={dopContractorTax} 
+              customInput={TextField}
+              isAllowed={(values) => {
+                const { floatValue } = values;
+                return floatValue < 100;
+              }}
+              decimalScale={2} 
+              onChange={(e) => setDopContractorTax(e.target.value)}
             />
 
 
@@ -470,14 +476,14 @@ export default function UpdateContractDialog(props) {
 
             <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
               <Typography sx={{ m: 0, p: 2 }} variant='h6'>
-                Отправить на модерацию?
+                На модерации?
               </Typography>
               <Typography>Нет</Typography>
               <Switch 
                 id="moderated"
                 name="moderated"
-                // defaultChecked 
-                defaultValue={props?.contract?.moderated}
+                checked={moderatedChecked}
+                onClick={(e) => setModeratedChecked(e.target.checked)}
               />
               <Typography>Да</Typography>
             </Stack>

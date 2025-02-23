@@ -31,6 +31,7 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 
 import InputMask from "react-input-mask";
+import { NumericFormat } from 'react-number-format';
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -60,6 +61,7 @@ export default function CreateTrackDialog(props) {
   const [maxWidth, setMaxWidth] = useState(500);
   const [linkValue, setLinkValue] = useState(null);
 
+
   const [contractors, setContractors] = useState([]);
   const [inputContractorName, setInputContracortName] = useState({});
   const [inputContractorId, setInputContracortId] = useState('');
@@ -77,7 +79,7 @@ export default function CreateTrackDialog(props) {
   const [inputContractorId2, setInputContractorId2] = useState('');
   
   const [dopContractorType, setDopContractorType] = useState('');
-  const [dopContractorTax, setDopContractorTax] = useState(0);
+  const [dopContractorTax, setDopContractorTax] = useState("1.00");
 
   const [dopContractors, setDopContractors] = useState([]);
   
@@ -318,13 +320,13 @@ export default function CreateTrackDialog(props) {
             <Divider />
 
             <Typography sx={{ m: 0, p: 2 }} variant='h6'>
-              Добавить автора или певца
+              Добавить исполнителей
             </Typography>
 
             <TextField
               select
               fullWidth
-              label="Автор или певец"
+              label="Выбрать тип"
               variant="outlined"
               sx={{ 
                 minWidth: maxWidth,
@@ -335,9 +337,11 @@ export default function CreateTrackDialog(props) {
               defaultValue={''}
               onChange={(e) => setDopContractorType(e.target.value)}
             >
-              <MenuItem value={'Музыка'}>Автор музыки</MenuItem>
-              <MenuItem value={'Текст'}>Автор текста</MenuItem>
-              <MenuItem value={'Певец'}>Певец</MenuItem>
+              <MenuItem value={'Музыка'}>Музыка</MenuItem>
+              <MenuItem value={'Текст'}>Текст</MenuItem>
+              <MenuItem value={'Исполнитель'}>Исполнитель</MenuItem>
+              <MenuItem value={'Сведение'}>Сведение</MenuItem>
+              <MenuItem value={'Жесткий процент'}>Жесткий процент</MenuItem>
             </TextField><br />
 
             <Autocomplete
@@ -356,7 +360,7 @@ export default function CreateTrackDialog(props) {
               renderInput={(params) => (
                   <TextField 
                     {...params}
-                    label="Доп. исполнитель" 
+                    label="Ф.И.О."
                   />
                 )
               }
@@ -366,19 +370,19 @@ export default function CreateTrackDialog(props) {
                }}
             />
 
-            <TextField 
-              id="outlined-basic" 
-              label="Доля в %" 
+            <NumericFormat 
+              id="outlined-basic"
+              label="Процент %"
               variant="outlined"
-              sx={{ 
-                width: 150,
-                marginBottom: 2,
-                marginRight: 2,
-               }}
-               type="number"
-               onChange={(e) => setDopContractorTax(e.target.value)}
+              value={dopContractorTax} 
+              customInput={TextField}
+              isAllowed={(values) => {
+                const { floatValue } = values;
+                return floatValue < 100;
+              }}
+              decimalScale={2} 
+              onChange={(e) => setDopContractorTax(e.target.value)}
             />
-
 
             <Button 
               color="primary" 

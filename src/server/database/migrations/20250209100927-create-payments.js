@@ -18,31 +18,31 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       q1: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(15,2)
       },
       q1p: {
         type: Sequelize.TINYINT
       },
       q2: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(15,2)
       },
       q2p: {
         type: Sequelize.TINYINT
       },
       q3: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(15,2)
       },
       q3p: {
         type: Sequelize.TINYINT
       },
       q4: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(15,2)
       },
       q4p: {
         type: Sequelize.TINYINT
       },
       total: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(15,2)
       },
       comment: {
         type: Sequelize.STRING

@@ -18,19 +18,19 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       q1: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(15,2)
       },
       q2: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(15,2)
       },
       q3: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(15,2)
       },
       q4: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(15,2)
       },
       total: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(15,2)
       },
       comment: {
         type: Sequelize.STRING

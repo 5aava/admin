@@ -21,6 +21,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import { NumericFormat } from 'react-number-format';
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -32,7 +34,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 export default function CreateIncomesDialog(props) {
-  const [maxWidth, setMaxWidth] = useState(500);
+  const [maxWidth, setMaxWidth] = useState(550);
 
   const [contractors, setContractors] = useState([]);
   const [inputContractorName, setInputContracortName] = useState({});
@@ -132,6 +134,7 @@ export default function CreateIncomesDialog(props) {
         <DialogContent dividers>
 
             <Autocomplete
+              fullWidth
               disablePortal
               required
               options={contractors}
@@ -194,49 +197,61 @@ export default function CreateIncomesDialog(props) {
               />
           </LocalizationProvider><br />
 
-          <TextField
-            fullWidth
+          <NumericFormat
             label="Доход за I квартал"
             id="q1"
             name="q1"
-            type="number"
-            variant="outlined"
             onWheel={(e) => e.target.blur()} 
+            customInput={TextField}
+            isAllowed={(values) => {
+              const { floatValue } = values;
+              return floatValue;
+            }}
+            decimalScale={2}
             style={{marginBottom: 20, width: maxWidth}}
-          /><br />
+          />
 
-          <TextField
-            fullWidth
+          <NumericFormat
             label="Доход за II квартал"
             id="q2"
             name="q2"
-            type="number"
-            variant="outlined"
             onWheel={(e) => e.target.blur()} 
+            customInput={TextField}
+            isAllowed={(values) => {
+              const { floatValue } = values;
+              return floatValue;
+            }}
+            decimalScale={2}
             style={{marginBottom: 20, width: maxWidth}}
-          /><br />
+          />
 
-          <TextField
-            fullWidth
+          <NumericFormat
             label="Доход за III квартал"
             id="q3"
-            name="q3"
-            type="number"
-            variant="outlined"
+            name="q3"   
             onWheel={(e) => e.target.blur()} 
+            customInput={TextField}
+            isAllowed={(values) => {
+              const { floatValue } = values;
+              return floatValue;
+            }}
+            decimalScale={2}
             style={{marginBottom: 20, width: maxWidth}}
-          /><br />
+          />
 
-          <TextField
-            fullWidth
+          <NumericFormat
             label="Доход за IV квартал"
             id="q4"
             name="q4"
-            type="number"
-            variant="outlined"
             onWheel={(e) => e.target.blur()} 
+            customInput={TextField}
+            isAllowed={(values) => {
+              const { floatValue } = values;
+              return floatValue;
+            }}
+            decimalScale={2}
             style={{marginBottom: 20, width: maxWidth}}
-          /><br />
+          />
 
           <TextField
             fullWidth

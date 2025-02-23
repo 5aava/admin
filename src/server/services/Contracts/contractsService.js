@@ -30,16 +30,20 @@ export async function getContracts () {
     const dopContractors = [];
 
     for(const cstr of cstrs){
+      console.log(cstr);
       const [ctr] = await getItem(Contractors, cstr.contractorId);
+      console.log(ctr);
+
       const contractor = `${ctr.lastname} ${ctr.firstname} ${ctr.patronymic} (${ctr.nickname})`;
       authors += `${cstr.type} ${cstr.percent}% - ${contractor} \n`;
       dopContractors.push({
-        id: cstr.id,
+        id: cstr.contractorId,
         name: contractor,
         type: cstr.type,
         tax: cstr.percent
       })
     };
+
 
     // console.log(c.date); // 2025-01-15T06:00:00.000Z
     const date = dayjs(c.date).format('DD.MM.YYYY');
@@ -126,7 +130,7 @@ export async function createContract (values) {
     upc: contract.upc,
     link: contract.link,
     file: 'filename',
-    moderated: contract.moderated,
+    moderated: 0,
   });
 
   return data[0];
@@ -156,6 +160,7 @@ export async function updateContract (id, values) {
     };
 
     // update dop contractors
+    console.log(values)
     let authors = '';
     const ctrsValues = values.contractors.map(c => {
       authors += `${c.type} ${c.tax}% - ${c.name} \n`;
@@ -166,6 +171,8 @@ export async function updateContract (id, values) {
         percent: c.tax,
       }
     })
+
+    console.log(ctrsValues);
     await createBulkItems(ContractsCtrs, ctrsValues);
 
     return {

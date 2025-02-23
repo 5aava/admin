@@ -3,22 +3,7 @@ import { useRouter } from 'next/router'
 import { extendTheme, styled } from '@mui/material/styles';
 import { AppProvider } from '@toolpad/core/nextjs';
 
-
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import DescriptionIcon from '@mui/icons-material/Description';
-import ArticleIcon from '@mui/icons-material/Article';
-import LayersIcon from '@mui/icons-material/Layers';
-import GroupIcon from '@mui/icons-material/Group';
-import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
-import AudiotrackIcon from '@mui/icons-material/Audiotrack';
-import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import PaymentIcon from '@mui/icons-material/Payment';
-import PianoIcon from '@mui/icons-material/Piano';
-import PriceChangeIcon from '@mui/icons-material/PriceChange';
-
+import Navigation from '../components/Navigation.jsx';
 
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
@@ -35,89 +20,9 @@ import Contracts from './Pages/Contracts/Contracts';
 
 import Incomes from './Pages/Incomes/Incomes';
 import Payments from './Pages/Payments/Payments';
-/* import Royalties from './Pages/Royalties/Royalties';
-import Reports from './Pages/Reports/Reports'; */
+import Royalties from './Pages/Royalties/Royalties';
+import Reports from './Pages/Reports/Reports';
 
-
-const NAVIGATION = [
-  {
-    segment: 'contracts',
-    title: 'Договоры',
-    icon: <ArticleIcon />,
-  },
-  {
-    kind: 'header',
-    title: 'Справочник',
-  },
-
-  {
-    segment: 'contractors',
-    title: 'Исполнителя',
-    icon: <HeadsetMicIcon />,
-  },
-  {
-    segment: 'tracks',
-    title: 'Треки',
-    icon: <AudiotrackIcon />,
-  },
-  {
-    segment: 'licensors',
-    title: 'Лицензиары',
-    icon: <LocalPoliceIcon />,
-  },
-  {
-    segment: 'incomes',
-    title: 'Доходы',
-    icon: <MonetizationOnIcon />,
-  },
-  {
-    segment: 'payments',
-    title: 'Выплаты',
-    icon: <PaymentIcon />,
-  },
-  
-  {
-    kind: 'divider',
-  },
-  {
-    kind: 'header',
-    title: 'Административные',
-  },
-  {
-    segment: 'users',
-    title: 'Пользователи',
-    icon: <GroupIcon />,
-  },
-  {
-    segment: 'royalties',
-    title: 'Расчёт роялти',
-    icon: <PianoIcon />,
-  },
-  {
-    segment: 'reports',
-    title: 'Денежный отчет',
-    icon: <PriceChangeIcon />,
-  },
-
-  /* {
-    segment: 'reports',
-    title: 'Reports',
-    icon: <BarChartIcon />,
-    children: [
-      {
-        segment: 'sales',
-        
-        title: 'Sales',
-        icon: <DescriptionIcon />,
-      },
-      {
-        segment: 'traffic',
-        title: 'Traffic',
-        icon: <DescriptionIcon />,
-      },
-    ],
-  }, */
-];
 
 const demoTheme = extendTheme({
   colorSchemes: { light: true, dark: true },
@@ -167,6 +72,7 @@ export default function App() {
     setSession({ user: lsUser });
   }, [])
 
+
   const renderSwitchPages = (param) => {
     let obj = { page: <Dashboard /> };
 
@@ -194,14 +100,14 @@ export default function App() {
       case '/payments':
         obj = { page: <Payments /> };
         break;
-      /* 
+      
       case '/royalties':
         obj = { page: <Royalties /> };
         break;
 
       case '/reports':
         obj = { page: <Reports /> };
-        break; */
+        break;
     }
 
     return obj;
@@ -220,11 +126,12 @@ export default function App() {
     };
   }, []);
 
+
   return (
     <AppProvider
       session={session}
       authentication={authentication}
-      navigation={NAVIGATION}
+      navigation={Navigation(session?.user?.role)}
       router={demoRouter}
       theme={demoTheme}
       branding={{

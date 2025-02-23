@@ -24,6 +24,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
+import { NumericFormat } from 'react-number-format';
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -209,14 +211,16 @@ export default function CreatePaymentsDialog(props) {
           </LocalizationProvider><br />
 
 
-          <TextField
-            fullWidth
+          <NumericFormat
             label="Доход за I квартал"
             id="q1"
             name="q1"
-            type="number"
-            variant="outlined"
-            onWheel={(e) => e.target.blur()} 
+            customInput={TextField}
+            isAllowed={(values) => {
+              const { floatValue } = values;
+              return floatValue;
+            }}
+            decimalScale={2}
             style={{marginBottom: 20, width: 260}}
           />
           &nbsp;&nbsp;&nbsp;Выплачено?&nbsp;&nbsp;&nbsp;
@@ -233,14 +237,18 @@ export default function CreatePaymentsDialog(props) {
           </ToggleButtonGroup>
           <br />
 
-          <TextField
-            fullWidth
+
+
+          <NumericFormat
             label="Доход за II квартал"
             id="q2"
             name="q2"
-            type="number"
-            variant="outlined"
-            onWheel={(e) => e.target.blur()} 
+            customInput={TextField}
+            isAllowed={(values) => {
+              const { floatValue } = values;
+              return floatValue;
+            }}
+            decimalScale={2}
             style={{marginBottom: 20, width: 260}}
           />
           &nbsp;&nbsp;&nbsp;Выплачено?&nbsp;&nbsp;&nbsp;
@@ -257,14 +265,16 @@ export default function CreatePaymentsDialog(props) {
           </ToggleButtonGroup>
           <br />
 
-          <TextField
-            fullWidth
+          <NumericFormat
             label="Доход за III квартал"
             id="q3"
             name="q3"
-            type="number"
-            variant="outlined"
-            onWheel={(e) => e.target.blur()} 
+            customInput={TextField}
+            isAllowed={(values) => {
+              const { floatValue } = values;
+              return floatValue;
+            }}
+            decimalScale={2}
             style={{marginBottom: 20, width: 260}}
           />
           &nbsp;&nbsp;&nbsp;Выплачено?&nbsp;&nbsp;&nbsp;
@@ -281,14 +291,17 @@ export default function CreatePaymentsDialog(props) {
           </ToggleButtonGroup>
           <br />
 
-          <TextField
-            fullWidth
+
+          <NumericFormat
             label="Доход за IV квартал"
             id="q4"
             name="q4"
-            type="number"
-            variant="outlined"
-            onWheel={(e) => e.target.blur()} 
+            customInput={TextField}
+            isAllowed={(values) => {
+              const { floatValue } = values;
+              return floatValue;
+            }}
+            decimalScale={2}
             style={{marginBottom: 20, width: 260}}
           />
           &nbsp;&nbsp;&nbsp;Выплачено?&nbsp;&nbsp;&nbsp;
