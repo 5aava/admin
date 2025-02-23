@@ -104,7 +104,7 @@ export default function CreateIncomesDialog(props) {
     }
 
     if(response.status == 'error' && response.data == 'dublicate'){
-      props.handleSnackbarOpen(response.data, 'error', 'Доход с таким псевдонимом уже существует');
+      props.handleSnackbarOpen(response.data, 'error', 'Доход для это трека и года уже существует');
     }
 
   }

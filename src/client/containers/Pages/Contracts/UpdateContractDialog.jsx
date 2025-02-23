@@ -173,8 +173,8 @@ export default function UpdateContractDialog(props) {
       moderated: data.get('moderated'),
     });
 
-    console.log(data.get('sku'));
-    console.log(response);
+    // console.log(data.get('sku'));
+    // console.log(response);
 
     if(response.status == 'ok'){
       props.close();

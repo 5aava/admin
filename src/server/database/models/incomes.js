@@ -16,12 +16,12 @@ module.exports = (sequelize, DataTypes) => {
   Incomes.init({
     contractorId: DataTypes.INTEGER,
     trackId: DataTypes.INTEGER,
-    year: DataTypes.INTEGER,
-    q1: DataTypes.INTEGER,
-    q2: DataTypes.INTEGER,
-    q3: DataTypes.INTEGER,
-    q4: DataTypes.INTEGER,
-    total: DataTypes.INTEGER,
+    year: DataTypes.DECIMAL(4,0),
+    q1: DataTypes.DECIMAL(15,2),
+    q2: DataTypes.DECIMAL(15,2),
+    q3: DataTypes.DECIMAL(15,2),
+    q4: DataTypes.DECIMAL(15,2),
+    total: DataTypes.DECIMAL(15,2),
     comment: DataTypes.STRING
   }, {
     sequelize,

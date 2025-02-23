@@ -30,9 +30,9 @@ export async function getContracts () {
     const dopContractors = [];
 
     for(const cstr of cstrs){
-      console.log(cstr);
+      // console.log(cstr);
       const [ctr] = await getItem(Contractors, cstr.contractorId);
-      console.log(ctr);
+      // console.log(ctr);
 
       const contractor = `${ctr.lastname} ${ctr.firstname} ${ctr.patronymic} (${ctr.nickname})`;
       authors += `${cstr.type} ${cstr.percent}% - ${contractor} \n`;
@@ -160,7 +160,7 @@ export async function updateContract (id, values) {
     };
 
     // update dop contractors
-    console.log(values)
+    // console.log(values)
     let authors = '';
     const ctrsValues = values.contractors.map(c => {
       authors += `${c.type} ${c.tax}% - ${c.name} \n`;

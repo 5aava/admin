@@ -28,7 +28,7 @@ export default async function myauth(req, res) {
   });
 
   const isAuth = await bcrypt.compare(req.body.password, user.password);
-  console.log(isAuth);
+  // console.log(isAuth);
 
   logger.info(`login: ${isAuth}`);
 

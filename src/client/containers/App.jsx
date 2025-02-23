@@ -101,13 +101,13 @@ export default function App() {
         obj = { page: <Payments /> };
         break;
       
-      case '/royalties':
+      /* case '/royalties':
         obj = { page: <Royalties /> };
-        break;
+        break; */
 
-      case '/reports':
+      /* case '/reports':
         obj = { page: <Reports /> };
-        break;
+        break; */
     }
 
     return obj;
