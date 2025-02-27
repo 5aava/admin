@@ -74,7 +74,7 @@ export default function App() {
 
 
   const renderSwitchPages = (param) => {
-    let obj = { page: <Dashboard /> };
+    let obj = { page: <Royalties /> };
 
     switch (param) {
       case '/contracts':
@@ -101,9 +101,9 @@ export default function App() {
         obj = { page: <Payments /> };
         break;
       
-      /* case '/royalties':
+      case '/royalties':
         obj = { page: <Royalties /> };
-        break; */
+        break;
 
       /* case '/reports':
         obj = { page: <Reports /> };

@@ -8,8 +8,15 @@ export async function getIncome (id) {
 }
 
 
-export async function getIncomes () {
-  const incomes = await getItems(Incomes)
+export async function getIncomes (contractorId = null, trackIdArray = []) {
+  const where = {}
+
+  console.log(trackIdArray);
+
+  if(contractorId) {  where.contractorId = contractorId};
+  if(trackIdArray.length) { where.trackId = trackIdArray };
+
+  const incomes = await getItems(Incomes, where);
   const data = [];
 
   for(const income of incomes){
@@ -20,7 +27,9 @@ export async function getIncomes () {
     data.push({
       id: income.id,
       contractor: contractor,
+      contractorId: contractorId,
       track: track.name,
+      trackId: income.trackId,
       year: income.year,
       q1: income.q1,
       q2: income.q2,
@@ -30,8 +39,6 @@ export async function getIncomes () {
       comment: income.comment,
     });
   }
-
-
 
   return data;
 }
@@ -78,13 +85,13 @@ export async function updateIncome (id, values) {
     return {
       id: id,
       contractorId: values.contractorId,
-      trackId: values.trackId, 
-      year: values.year, 
-      q1: values.q1, 
-      q2: values.q2, 
-      q3: values.q3, 
+      trackId: values.trackId,
+      year: values.year,
+      q1: values.q1,
+      q2: values.q2,
+      q3: values.q3,
       q4: values.q4,
-      total: values.total, 
+      total: values.total,
       comment: values.comment,
     }
   }

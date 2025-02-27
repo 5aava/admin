@@ -1,4 +1,3 @@
-import {useState, useEffect} from 'react';
 import privateFetcher from '../../../modules/privateFetcher'
 
 import Button from '@mui/material/Button';
@@ -29,11 +28,11 @@ export default function DeleteTrackDialog(props) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const response = await privateFetcher('/api/private/tracks/delete', {id: props.trackId});
+    const response = await privateFetcher('/api/private/royalties/delete', {id: props.royaltyId});
     
     if(response.status == 'ok'){
       props.close();
-      props.handleSnackbarOpen(response.data, 'success', 'Лицензиар удален', 'delete');
+      props.handleSnackbarOpen(response.data, 'success', 'Запись удалена', 'delete');
     }
   }
 
@@ -45,7 +44,7 @@ export default function DeleteTrackDialog(props) {
     >
       <form onSubmit={handleSubmit} >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Удалить трек
+          Удалить запись
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -61,7 +60,7 @@ export default function DeleteTrackDialog(props) {
         </IconButton>
         <DialogContent dividers>
           <Typography gutterBottom>
-            Точно решили удалить трек c ID {props.licensorId}?
+            Точно решили удалить запись c ID {props.royaltyId}?
           </Typography>
         </DialogContent>
         <DialogActions>
