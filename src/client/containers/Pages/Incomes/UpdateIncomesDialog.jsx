@@ -43,7 +43,7 @@ export default function UpdateIncomesDialog(props) {
 
   const [tracks, setTracks] = useState([]);
   const [inputTrackName, setInputTrackName] = useState({});
-  const [inputTrackId, setInputTrackId] = useState(props.payment?.trackId);
+  const [inputTrackId, setInputTrackId] = useState(props.income?.trackId);
 
   const [constr] = useFetch("/api/private/contractors/all", {});
   const [trks] = useFetch("/api/private/tracks/all", {});
