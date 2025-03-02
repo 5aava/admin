@@ -216,9 +216,6 @@ export default function CreateTrackDialog(props) {
   }
 
 
-
-
-
   return (
     <BootstrapDialog
       onClose={props.close}
@@ -294,7 +291,7 @@ export default function CreateTrackDialog(props) {
 
               <br /><br />
               <Button onClick={handleLoadIncomes} variant='contained' sx={{m:1, width: maxWidth}}>
-                  Подгрузить из таблицы Доходов
+                Подгрузить из таблицы Доходов
               </Button>
             </>
 

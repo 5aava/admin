@@ -1,33 +1,103 @@
 import { getItem, getItems, createItems, createBulkItems, 
   updateItems, deleteItems} from '../crudService';
-import { Royalties, RoyaltiesCtrs, Incomes, Contracts, 
+import { Royalties, RoyaltiesCtrs, RoyaltiesTrks, Incomes, Contracts, 
   ContractsCtrs, Contractors, Tracks } from '../../database/models/index';
+
+import dayjs from 'dayjs';
+import customParseFormat from "dayjs/plugin/customParseFormat";
 
 
 export async function getRoyalty (id) {
-  const data = await getItem(Royalties, id)
-  return data;
+  dayjs.extend(customParseFormat);
+  const response = {};
+
+  const [data] = await getItem(Royalties, id);
+  const date = dayjs(data.createdAt).format('DD.MM.YYYY HH:mm');
+  const [cr] = await getItem(Contractors, data.contractorId);
+  const contractorName = `${cr.lastname} ${cr.firstname} ${cr.patronymic} (${cr.nickname})`;
+  response.total = {
+    id: data.id,
+    contractor: contractorName,
+    date: date,
+    totalValByYears: data.totalValByYears,
+    valMinusUsn: data.valMinusUsn,
+    valForGaz: data.valForGaz,
+    valForContractors: data.valForContractors,
+  };
+
+  response.tracks = [];
+  const trks = await getItems(RoyaltiesTrks, {royaltyId: id});
+
+  for(const trk of trks){
+
+    const dopCtrs = await getItems(RoyaltiesCtrs, {royaltyId: id, trackId: trk.trackId});
+    const dopContractors = [];
+
+    for(const dopCtr of dopCtrs){
+
+      const [dcr] = await getItem(Contractors, dopCtr.dopContractorId);
+      const dcrName = `${dcr.lastname} ${dcr.firstname} ${dcr.patronymic} (${dcr.nickname})`;
+
+      const dopContractor = {
+        // id: dopCtr.id,
+        // royaltyId: dopCtr.royaltyId,
+        // trackId: dopCtr.trackId,
+        // dopContractorId: dopCtr.dopContractorId,
+        dopContractorName: dcrName,
+        percent: dopCtr.percent,
+        type: dopCtr.type,
+        year: dopCtr.year,
+        q1: dopCtr.q1,
+        q2: dopCtr.q2,
+        q3: dopCtr.q3,
+        q4: dopCtr.q4,
+        total: dopCtr.total,
+      };
+
+      dopContractors.push(dopContractor);
+    }
+
+    const [tr] = await getItem(Tracks, trk.trackId);
+    const [ct] = await getItem(Contracts, trk.contractId);
+
+    const track = {
+      // id: trk.id,
+      // royaltyId: trk.royaltyId,
+      // contractorId: trk.contractorId,
+      // trackId: trk.trackId,
+      // contractId: trk.contractId,
+      contrackSku: ct.sku,
+      trackName: tr.name,
+      usnTax: trk.usnTax,
+      totalValByYears: trk.totalValByYears,
+      valMinusUsn: trk.valMinusUsn,
+      valForGaz: trk.valForGaz,
+      valForContractors: trk.valForContractors,
+      dopContractors: dopContractors
+    }
+
+    response.tracks.push(track);
+  }
+
+  return response;
 }
 
-
 export async function getRoyalties () {
+  dayjs.extend(customParseFormat);
+
   const cs = await getItems(Royalties);
 
   const data = [];
   for(const c of cs){
     const [ctr] = await getItem(Contractors, c.contractorId);
     const contractor = `${ctr.lastname} ${ctr.firstname} ${ctr.patronymic} (${ctr.nickname})`;
-    const [track] = await getItem(Tracks, c.trackId);
-    const [contract] = await getItem(Contracts, c.contractId);
+
+    const date = dayjs(c.createdAt).format('DD.MM.YYYY HH:mm');
 
     data.push({
       id: c.id,
-      contract: contract.sku,
       contractor: contractor,
-      contractorId: c.contractorId,
-      track: track.name,
-      trackId: c.trackId,
-      usnTax: c.usnTax,
+      date: date,
       totalValByYears: c.totalValByYears,
       valMinusUsn: c.valMinusUsn,
       valForGaz: c.valForGaz,
@@ -40,13 +110,22 @@ export async function getRoyalties () {
 
 
 export async function createRoyalty (values) {
+  dayjs.extend(customParseFormat);
 
-  const response = [];
+  const response = {}
   const bulkValues = [];
+  const totalRoyaltyUpValues = {      
+    totalValByYears: 0,
+    valForGaz: 0,
+    valMinusUsn: 0,
+    valForContractors: 0,
+  };
 
   // calculate
   const contractorId = values.contractorId;
   const tracks = getRequestObj(values.tracks);
+
+  const royaltyDBItem = await createItems(Royalties, { contractorId: contractorId });
 
   // идём по трекам
   for(const track of tracks){
@@ -63,6 +142,7 @@ export async function createRoyalty (values) {
       if(contract){
         return {
           contractId: contract.id,
+          sku: contract.sku,
           tax: contract.tax
         }
       }
@@ -91,13 +171,14 @@ export async function createRoyalty (values) {
 
     const upValues = {};
     const values = {
+      royaltyId: royaltyDBItem.id,
       contractorId: contractorId,
       trackId: trackId,
       contractId: contractId,
       usnTax: usnTax,
     }
-    const royaltyDBItem = await createItems(Royalties, values);
-    if(!royaltyDBItem.id) continue;
+    const trackDBItem = await createItems(RoyaltiesTrks, values);
+    if(!trackDBItem.id) continue;
 
     // идем по доп исполнителям
     for(const dopContractor of dopContractors){
@@ -150,6 +231,7 @@ export async function createRoyalty (values) {
 
         const qvalue = {
           royaltyId: royaltyDBItem.id,
+          trackId: trackId,
           dopContractorId: dopContractor.contractorId,
           percent: dopContractor.percent,
           type: dopContractor.type,
@@ -169,42 +251,54 @@ export async function createRoyalty (values) {
 
       // тут считаем Апдейт по всем годам
       const valByYears = +totalValByYears.toFixed(2);
-      upValues.totalValByYears = valByYears;
-
       const valMinusUsn = usnTax ? 
         +(valByYears - (valByYears * (usnTax * 0.01))).toFixed(2) :
         valByYears;
-      upValues.valMinusUsn = valMinusUsn;
-
       const valForGaz = +(valMinusUsn * 0.3).toFixed(2);
-      upValues.valForGaz = valForGaz;
+      const valForContractors = +(valMinusUsn - valForGaz).toFixed(2);
 
-      upValues.valForContractors = +(valMinusUsn - valForGaz).toFixed(2);
+      upValues.totalValByYears = valByYears;
+      upValues.valMinusUsn = valMinusUsn;
+      upValues.valForGaz = valForGaz;
+      upValues.valForContractors = valForContractors;
 
     // конец dopContractors
     }
-
-    await updateItems(Royalties, upValues, royaltyDBItem.id);
     
-    const contractor = await getItem(Contractors, contractorId)
+    totalRoyaltyUpValues.totalValByYears += +(upValues.totalValByYears).toFixed(2);
+    totalRoyaltyUpValues.valMinusUsn += +(upValues.valMinusUsn).toFixed(2);
+    totalRoyaltyUpValues.valForGaz += +(upValues.valForGaz).toFixed(2);
+    totalRoyaltyUpValues.valForContractors += +(upValues.valForContractors).toFixed(2);
 
-    upValues.contractor = contractor.name;
-    upValues.trackId = trackId;
-    upValues.contractId = contractId;
-    upValues.usnTax = usnTax;
-    upValues.id = royaltyDBItem.id
-    response.push(upValues);
+    await updateItems(RoyaltiesTrks, upValues, trackDBItem.id);
 
     await createBulkItems(RoyaltiesCtrs, bulkValues);
 
     // empty arrays
-    upValues.length = 0; 
+    upValues.length = 0;
     bulkValues.length = 0;
 
   // конец треков
   }
 
-  
+  // добавляем в общую таблицу
+  console.log(totalRoyaltyUpValues);
+  await updateItems(Royalties, totalRoyaltyUpValues, royaltyDBItem.id);
+
+  // формируем ответ
+  const [cr] = await getItem(Contractors, contractorId);
+  const contractorName = `${cr.lastname} ${cr.firstname} ${cr.patronymic} (${cr.nickname})`;
+
+  const date = dayjs(royaltyDBItem.createdAt).format('DD.MM.YYYY HH:mm');
+
+  response.id = royaltyDBItem.id;
+  response.contractor = contractorName;
+  response.date = date;
+  response.totalValByYears = +(totalRoyaltyUpValues.totalValByYears).toFixed(2);
+  response.valMinusUsn = +(totalRoyaltyUpValues.valMinusUsn).toFixed(2);
+  response.valForGaz = +(totalRoyaltyUpValues.valForGaz).toFixed(2);
+  response.valForContractors = +(totalRoyaltyUpValues.valForContractors).toFixed(2);
+
   return response;
 }
 
@@ -214,9 +308,14 @@ export async function deleteRoyalty (id) {
   const data = {};
 
   const cstrs = await getItems(RoyaltiesCtrs, {royaltyId: id});
+  const trks = await getItems(RoyaltiesTrks, {royaltyId: id});
 
   for(const cstr of cstrs){
     await deleteItems(RoyaltiesCtrs, cstr.id);
+  };
+
+  for(const trk of trks){
+    await deleteItems(RoyaltiesTrks, trk.id);
   };
 
   const isDeleted = await deleteItems(Royalties, id);

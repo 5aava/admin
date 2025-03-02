@@ -31,12 +31,10 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 export default function UpdateTrackDialog(props) {
-  const [contractors, setContractors] = useState([]);
-  const [inputContractorName, setInputContracortName] = useState({});
-  const [inputContractorId, setInputContracortId] = useState('');
 
-  const [constr] = useFetch("/api/private/contractors/all", {});
-  useEffect(() => {
+  const [royaltyData] = useFetch(`/api/private/royalties/${props?.royalty?.id}`, {});
+
+  /* useEffect(() => {
     if(constr) {
 
       const newContractors = constr.map(item => {
@@ -48,35 +46,15 @@ export default function UpdateTrackDialog(props) {
 
       setContractors(newContractors);
     }
-  }, [constr])
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    const data = new FormData(event.currentTarget);
-    const response = await privateFetcher('/api/private/tracks/update', {
-      id: props.track.id,
-      name: data.get('name'),
-      contractorId: inputContractorId
-    });
-    
-    if(response.status == 'ok'){
-      props.close();
-      props.handleSnackbarOpen(response.data, 'success', 'Данные трека обновлены', 'update');
-    }
-
-    if(response.status == 'error' && response.data == 'dublicate'){
-      props.handleSnackbarOpen(response.data, 'error', 'Трек с таким названием уже существует');
-    }
-  }
+  }, [constr]) */
 
   return (
     <BootstrapDialog
       onClose={props.close}
       aria-labelledby="customized-dialog-title"
       open={props.open}
+      maxWidth="lg"
     >
-      <form onSubmit={handleSubmit} >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
           {props.title}
         </DialogTitle>
@@ -93,51 +71,22 @@ export default function UpdateTrackDialog(props) {
           <CloseIcon />
         </IconButton>
         <DialogContent dividers>
-          <Typography gutterBottom>
-            {props.text}<br /><br />
-          </Typography>
-            {props.form}
-            <TextField
-              fullWidth
-              label="Название"
-              id="name"
-              name="name"
-              required
-              variant="outlined"
-              defaultValue={props?.track?.name}
-              style={{marginBottom: 20}}
-            /><br />
-            <Autocomplete
-              disablePortal
-              options={contractors}
-              id="contractorId"
-              name="contractorId"
-              inputValue={inputContractorName}
-              // defaultValue={}
-              getOptionLabel={(option) => {
-                setInputContracortId(option.id);
-                return option.title;
-              }}
-              onInputChange={(event, newInputValue) => {
-                // console.log(newInputValue);
-                setInputContracortName(newInputValue);
-              }}
-              renderInput={(params) => 
-                <TextField 
-                  {...params}
-                  label="Исполнители" 
-                />}
-            /><br />
+
+
+            =============================================================================================
+
+            <br /><br />
+
+            
         </DialogContent>
         <DialogActions>
           <Button onClick={props.close} startIcon={<CancelIcon />} >
-            Отменить
+            Закрыть
           </Button>
-          <Button type="submit" variant="contained" startIcon={<SaveIcon />}>
+          {/* <Button type="submit" variant="contained" startIcon={<SaveIcon />}>
             Обновить
-          </Button>
+          </Button> */}
         </DialogActions>
-      </form>
     </BootstrapDialog>
   );
 }

@@ -1,44 +1,26 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('RoyaltiesCtrs', {
+    await queryInterface.createTable('Royalties', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      royaltyId: {
+      contractorId: {
         type: Sequelize.INTEGER
       },
-      trackId: {
-        type: Sequelize.INTEGER
-      },
-      dopContractorId: {
-        type: Sequelize.INTEGER
-      },
-      percent: {
-        type: Sequelize.DECIMAL(4,2)
-      },
-      type: {
-        type: Sequelize.STRING
-      },
-      year: {
-        type: Sequelize.INTEGER
-      },
-      q1: {
+      totalValByYears: {
         type: Sequelize.DECIMAL(15,2)
       },
-      q2: {
+      valMinusUsn: {
         type: Sequelize.DECIMAL(15,2)
       },
-      q3: {
+      valForGaz: {
         type: Sequelize.DECIMAL(15,2)
       },
-      q4: {
-        type: Sequelize.DECIMAL(15,2)
-      },
-      total: {
+      valForContractors: {
         type: Sequelize.DECIMAL(15,2)
       },
       createdAt: {
@@ -52,6 +34,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('RoyaltiesCtrs');
+    await queryInterface.dropTable('Royalties');
   }
 };

@@ -5,6 +5,8 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import InfoIcon from '@mui/icons-material/Info';
+
 import Snackbar from '../../../components/Snackbar';
 
 import CreateRoyaltyDialog from './CreateRoyaltyDialog'
@@ -38,7 +40,7 @@ export default function Royalties() {
   const [snackbarType, snackbarTypeSet] = useState('error');
   const [snackbarOpen, snackbarOpenSet] = useState(false);
 
-  const [response] = useFetch("/api/private/royalties/all", {});
+  const [response] = useFetch("/api/private/royalties/", {});
 
   useEffect(() => {
     if(response) {
@@ -86,9 +88,7 @@ export default function Royalties() {
           { 
             id: data.id, 
             contractor: data.contractor,
-            track: data.track,
-            contract: data.contract,
-            usnTax: data.usnTax,
+            date: data.date,
             totalValByYears: data.totalValByYears,
             valMinusUsn: data.valMinusUsn,
             valForGaz: data.valForGaz,
@@ -101,9 +101,7 @@ export default function Royalties() {
           { 
             id: data.id, 
             contractor: data.contractor,
-            track: data.track,
-            contract: data.contract,
-            usnTax: data.usnTax,
+            date: data.date,
             totalValByYears: data.totalValByYears,
             valMinusUsn: data.valMinusUsn,
             valForGaz: data.valForGaz,
@@ -120,16 +118,17 @@ export default function Royalties() {
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 40, editable: false },
-    { field: 'contractor', headerName: 'Гл. исполнитель', width: 220 },
-    { field: 'track', headerName: 'Трек', width: 120 },
+    { field: 'contractor', headerName: 'Гл. исполнитель', width: 260 },
+    { field: 'date', headerName: 'Дата рачета', width: 180 },
+    /* { field: 'track', headerName: 'Трек', width: 120 },
     { field: 'contract', headerName: 'Договор №', width: 120 },
     { field: 'usnTax', headerName: 'Налог', width: 60,
       renderCell: (params) => <>{params.row.usnTax}%</>,
-    },
-    { field: 'totalValByYears', headerName: 'ВАЛ', width: 120 },
-    { field: 'valMinusUsn', headerName: 'ВАЛ -УСН', width: 120 },
-    { field: 'valForGaz', headerName: 'ВАЛ ГАЗ', width: 120 },
-    { field: 'valForContractors', headerName: 'ВАЛ для исполнителей', width: 120 },
+    }, */
+    { field: 'totalValByYears', headerName: 'ВАЛ', width: 140 },
+    { field: 'valMinusUsn', headerName: 'ВАЛ -усн', width: 140 },
+    { field: 'valForGaz', headerName: 'ВАЛ газ', width: 140 },
+    { field: 'valForContractors', headerName: 'ВАЛ исп.', width: 140 },
      {
       field: 'actions',
       type: 'actions',
@@ -137,6 +136,13 @@ export default function Royalties() {
       cellClassName: 'actions',
       getActions: ({ id }) => {
         return [
+          <GridActionsCellItem
+          icon={<InfoIcon />}
+          label="Информация"
+          className="textPrimary"
+          onClick={handleUpdateClick(id)}
+          color="inherit"
+        />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
@@ -175,7 +181,7 @@ export default function Royalties() {
 
       { dialogOpen && (
         <CreateRoyaltyDialog
-          title={"Добавить трек"}
+          title={"Расчитать роялти"}
           text={"Для добавления необходимо заполнить все поля"}
           open={dialogOpen}
           close={handleDialogClose}
@@ -183,16 +189,16 @@ export default function Royalties() {
         />
       )}
 
-      {/* { dialogUpdate && (
+      { dialogUpdate && (
         <UpdateRoyaltyDialog
-          title={"Обновить трек"}
+          title={"Информация о расчете"}
           text={"Для обновления необходимо заполнить все поля"}
           open={dialogUpdate} 
           close={handleDialogClose}
-          Royalty={dialogUpdateRoyalty}
+          royalty={dialogUpdateRoyalty}
           handleSnackbarOpen={handleSnackbarOpen}
         />
-      )} */}
+      )}
 
       { dialogDelete && (
         <DeleteRoyaltyDialog
