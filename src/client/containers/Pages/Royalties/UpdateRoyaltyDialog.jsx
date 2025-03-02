@@ -1,7 +1,6 @@
 import {useState, useEffect} from 'react';
 
 import useFetch from "../../../modules/useFetch";
-import privateFetcher from '../../../modules/privateFetcher';
 
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -14,11 +13,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 
 import CancelIcon from '@mui/icons-material/Close';
-import SaveIcon from '@mui/icons-material/Save';
 
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import Divider from '@mui/material/Divider';
+
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -31,22 +34,17 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 export default function UpdateTrackDialog(props) {
+  const [data, setData] = useState({});
+  const [loader, setLoader] = useState(true);
 
   const [royaltyData] = useFetch(`/api/private/royalties/${props?.royalty?.id}`, {});
 
-  /* useEffect(() => {
-    if(constr) {
-
-      const newContractors = constr.map(item => {
-        return {
-          id: item.id,
-          title: `${item.lastname} ${item.firstname} ${item.patronymic} (${item.nickname})`
-        }
-      });
-
-      setContractors(newContractors);
+  useEffect(() => {
+    if(royaltyData) {
+      setData(royaltyData);
     }
-  }, [constr]) */
+  }, [royaltyData]);
+
 
   return (
     <BootstrapDialog
@@ -71,9 +69,123 @@ export default function UpdateTrackDialog(props) {
           <CloseIcon />
         </IconButton>
         <DialogContent dividers>
+            {!data?.id &&
+                <Backdrop
+                sx={() => ({ zIndex: 1000 + 1 })}
+                open={loader}
+                onClick={() => setLoader(false)}
+              >
+                <CircularProgress color="inherit" />
+              </Backdrop>
+            }
 
+            {data?.id &&
+            <>
+            <Typography sx={{ m: 1 }} variant='h5'>
+              {data.contractor} от {data.date}
+            </Typography>
+            <Divider />
+            <Table sx={{ m: 0, p: 0 }} aria-label="simple table">
+              <TableBody>
 
-            =============================================================================================
+                <TableRow>
+                  <TableCell colSpan={2} align="center">
+                    Общий расчет
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Общ ВАЛ</TableCell>
+                  <TableCell align="right"><b>{data?.total?.totalValByYears}</b></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Общ ВАЛ минус УСН</TableCell>
+                  <TableCell align="right"><b>{data?.total?.valMinusUsn}</b></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Общ ВАЛ газ.</TableCell>
+                  <TableCell align="right"><b>{data?.total?.valForGaz}</b></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Общ ВАЛ исп.<Backdrop /></TableCell>
+                  <TableCell align="right"><b>{data?.total?.valForContractors}</b></TableCell>
+                </TableRow>
+
+                {
+                  data?.tracks?.map(track => (
+                    <>
+                    <TableRow>
+                      <TableCell align="center" colSpan={4}>
+                        <Typography sx={{ m: 1 }} variant='h6'>
+                          Информация по треку - <b>{track.trackName}</b>
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                      <TableCell>Название трека</TableCell>
+                      <TableCell align="right"><b>{track.trackName}</b></TableCell>
+                      <TableCell>ВАЛ</TableCell>
+                      <TableCell align="right"><b>{track.trackTotal.totalValByYears}</b></TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                      <TableCell>Номер договора</TableCell>
+                      <TableCell align="right"><b>{track.contrackSku}</b></TableCell>
+                      <TableCell>ВАЛ минус УСН</TableCell>
+                      <TableCell align="right"><b>{track.trackTotal.valMinusUsn}</b></TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                      <TableCell>Налог УНС</TableCell>
+                      <TableCell align="right"><b>{track.usnTax} %</b></TableCell>
+                      <TableCell>ВАЛ газ.</TableCell>
+                      <TableCell align="right"><b>{track.trackTotal.valForGaz}</b></TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                      <TableCell></TableCell>
+                      <TableCell align="right"></TableCell>
+                      <TableCell>ВАЛ исп.</TableCell>
+                      <TableCell align="right"><b>{track.trackTotal.valForContractors}</b></TableCell>
+                    </TableRow>
+                    
+                    {
+                      track?.dopContractors?.map(dc => (
+                        <>
+                          <TableRow>
+                            <TableCell colSpan={6}>
+                              {dc.dopContractorName} - {dc.type} {dc.percent} %
+                            </TableCell>
+                          </TableRow>
+
+                          <TableRow>
+                            <TableCell align="center">Год </TableCell>
+                            <TableCell align="center">I квартал</TableCell>
+                            <TableCell align="center">II квартал</TableCell>
+                            <TableCell align="center">III квартал</TableCell>
+                            <TableCell align="center">IV квартал</TableCell>
+                            <TableCell align="center">Итого </TableCell>
+                          </TableRow>
+
+                          <TableRow>
+                            <TableCell align="center">{dc.year}</TableCell>
+                            <TableCell align="right">{dc.q1}</TableCell>
+                            <TableCell align="right">{dc.q2}</TableCell>
+                            <TableCell align="right">{dc.q3}</TableCell>
+                            <TableCell align="right">{dc.q4}</TableCell>
+                            <TableCell align="right">{dc.total}</TableCell>
+                          </TableRow>
+                        </>
+                      ))
+                    }
+                  </>
+                  ))
+                }
+              </TableBody>
+                
+            </Table>
+            </>
+            }
 
             <br /><br />
 

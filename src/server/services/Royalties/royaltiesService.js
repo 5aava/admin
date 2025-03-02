@@ -15,15 +15,10 @@ export async function getRoyalty (id) {
   const date = dayjs(data.createdAt).format('DD.MM.YYYY HH:mm');
   const [cr] = await getItem(Contractors, data.contractorId);
   const contractorName = `${cr.lastname} ${cr.firstname} ${cr.patronymic} (${cr.nickname})`;
-  response.total = {
-    id: data.id,
-    contractor: contractorName,
-    date: date,
-    totalValByYears: data.totalValByYears,
-    valMinusUsn: data.valMinusUsn,
-    valForGaz: data.valForGaz,
-    valForContractors: data.valForContractors,
-  };
+
+  response.id = data.id;
+  response.contractor = contractorName;
+  response.date = date;
 
   response.tracks = [];
   const trks = await getItems(RoyaltiesTrks, {royaltyId: id});
@@ -60,6 +55,13 @@ export async function getRoyalty (id) {
     const [tr] = await getItem(Tracks, trk.trackId);
     const [ct] = await getItem(Contracts, trk.contractId);
 
+    const trackTotal = {
+      totalValByYears: trk.totalValByYears,
+      valMinusUsn: trk.valMinusUsn,
+      valForGaz: trk.valForGaz,
+      valForContractors: trk.valForContractors,
+    };
+
     const track = {
       // id: trk.id,
       // royaltyId: trk.royaltyId,
@@ -69,15 +71,23 @@ export async function getRoyalty (id) {
       contrackSku: ct.sku,
       trackName: tr.name,
       usnTax: trk.usnTax,
-      totalValByYears: trk.totalValByYears,
+      /* totalValByYears: trk.totalValByYears,
       valMinusUsn: trk.valMinusUsn,
       valForGaz: trk.valForGaz,
-      valForContractors: trk.valForContractors,
-      dopContractors: dopContractors
+      valForContractors: trk.valForContractors, */
+      dopContractors: dopContractors,
+      trackTotal: trackTotal
     }
 
     response.tracks.push(track);
   }
+
+  response.total = {
+    totalValByYears: data.totalValByYears,
+    valMinusUsn: data.valMinusUsn,
+    valForGaz: data.valForGaz,
+    valForContractors: data.valForContractors,
+  };
 
   return response;
 }
