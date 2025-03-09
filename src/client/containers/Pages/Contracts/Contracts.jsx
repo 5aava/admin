@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+import dayjs from 'dayjs';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -137,7 +138,10 @@ export default function Contracts() {
     { field: 'contractor', headerName: 'Гл. исп-тель', width: 240 },
     { field: 'track', headerName: 'Трек', width: 120 },
     { field: 'licensor', headerName: 'Лицензиар', width: 120 },
-    { field: 'date', headerName: 'Дата релиза', width: 120 },
+    
+    { field: 'date', headerName: 'Дата релиза', width: 120,
+      renderCell: (params) => <>{dayjs(params.row.date).format('DD.MM.YYYY')}</>,
+    },
 
     { field: 'authors', headerName: 'Авторы и певцы', width: 300 },
 

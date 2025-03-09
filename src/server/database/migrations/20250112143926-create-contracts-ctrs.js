@@ -39,6 +39,11 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
+
+    await queryInterface.addIndex(
+      'ContractsCtrs', ['contractId', 'contractorId', 'type'], {unique: true},
+    );
+
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('ContractsCtrs');

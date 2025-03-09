@@ -37,5 +37,8 @@
     "react-input-mask": "^2.0.4",
     "react-number-format": "^5.4.3",
     "sequelize": "^6.37.5"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.2"
   }
 }

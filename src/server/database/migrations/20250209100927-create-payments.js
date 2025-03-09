@@ -56,6 +56,11 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
+
+    await queryInterface.addIndex(
+      'Payments', ['contractorId', 'trackId', 'year'], {unique: true},
+    );
+
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Payments');

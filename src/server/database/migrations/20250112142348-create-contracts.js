@@ -69,6 +69,10 @@ module.exports = {
     await queryInterface.addIndex(
       'Contracts', ['sku'], {unique: true},
     );
+    await queryInterface.addIndex(
+      'Contracts', ['contractorId', 'trackId'], {unique: true},
+    );
+    
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Contracts');

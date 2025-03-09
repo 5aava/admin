@@ -1,5 +1,3 @@
-version: "3.0"
-
 services:
   mariadb:
     container_name: "itbot_db"

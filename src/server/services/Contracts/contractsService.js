@@ -46,7 +46,7 @@ export async function getContracts () {
 
 
     // console.log(c.date); // 2025-01-15T06:00:00.000Z
-    const date = dayjs(c.date).format('DD.MM.YYYY');
+    // const date = dayjs(c.date).format('DD.MM.YYYY');
 
     data.push({
       id: c.id,
@@ -59,7 +59,7 @@ export async function getContracts () {
       licensorId: licensor.id,
       authors: authors,
       dopContractors: dopContractors,
-      date: date,
+      date: c.date, // date
       tax: c.tax,
       isrc: c.isrc,
       upc: c.upc,
@@ -151,7 +151,7 @@ export async function updateContract (id, values) {
     const [track] = await getItem(Tracks, values.trackId);
     const [licensor] = await getItem(Licensors, values.licensorId);
 
-    const date = dayjs(values.date).format('DD.MM.YYYY');
+    // const date = dayjs(values.date).format('DD.MM.YYYY');
 
     // delete dop contractors 
     const cstrs = await getItems(ContractsCtrs, {contractId: id});
@@ -184,7 +184,7 @@ export async function updateContract (id, values) {
       contractor: contractor,
       track: track.name,
       licensor: licensor.name,
-      date: date,
+      date: values.date, // date
       tax: values.tax,
       isrc: values.isrc,
       upc: values.upc,

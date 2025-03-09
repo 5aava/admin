@@ -49,6 +49,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 export default function UpdateContractDialog(props) {
   const [maxWidth, setMaxWidth] = useState(500);
   const [linkValue, setLinkValue] = useState(props.contract?.link);
+  const [date, setDate] = useState({}); // props.contract?.date
 
   const [contractors, setContractors] = useState([]);
   const [inputContractorName, setInputContractorName] = useState({});
@@ -118,7 +119,19 @@ export default function UpdateContractDialog(props) {
       })
       setTracks(newTracks);
     }
-  })
+  });
+
+  /* useEffect(() => {
+    if(props?.contract?.date){
+      const date = () => dayjs(props?.contract?.date, 'DD.MM.YYYY');
+      console.log(props?.contract?.date);
+      setDate(date());
+    }
+  }, []); */
+
+  
+
+  
   
   const handleAddContractors = async () => {
     const dopContrs = dopContractors.map(item => item);
@@ -312,7 +325,7 @@ export default function UpdateContractDialog(props) {
                 variant="outlined"
                 width={maxWidth}
                 format="DD.MM.YYYY"
-                defaultValue={dayjs(props?.contract?.date, 'DD.MM.YYYY')}
+                defaultValue={dayjs(Date.parse(props.contract?.date))} 
                 sx={{ 
                   minWidth: maxWidth,
                   marginBottom: 2
