@@ -42,6 +42,10 @@ export default function CreateContractorDialog(props) {
     if(response.status == 'ok'){
       props.close();
       props.handleSnackbarOpen(response.data, 'success', 'Исполнитель добавлен', 'add');
+
+      // update all rows
+      const r = await privateFetcher('/api/private/contractors/all', {});
+      props.setNewRows(r.data);
     }
 
     if(response.status == 'error'){

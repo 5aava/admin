@@ -41,6 +41,10 @@ export default function UpdatelicensorDialog(props) {
     if(response.status == 'ok'){
       props.close();
       props.handleSnackbarOpen(response.data, 'success', 'Данные лицензиара обновлены', 'update');
+
+      // update all rows
+      const r = await privateFetcher('/api/private/licensors/all', {});
+      props.setNewRows(r.data);
     }
 
     if(response.status == 'error' && response.data == 'dublicate'){

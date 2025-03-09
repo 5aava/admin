@@ -1,11 +1,56 @@
 # admin
 
+> Можно ли сделать так, чтобы суммы и год, которые я заполняю за треки поквартально в «Доходы», автоматически подтягивались в «Выплаты»? 
+> Сейчас приходится вводить одни и те же данные вручную, что отнимает много времени.
+
+- Это можно будет сделать и будет думаю удобно да, но после того как доделаем и сдадим текущее ТЗ
+
+Проблемы в «Расчете роялти»:
+ • При загрузке всех треков для расчета Icegergert система учитывает только два трека. 
+- Правильно, потому что Договоров вы добавили всего 2, на трек "Вопрос времени" и "Genetica"
+ 
+> Такие же данные дублируются в «Денежном отчете».
+- денежный отчет будет, когда Расчёт Роялти полностью доделаем
+
+ • При проверке долей соавторов в треке “Genetica” подтягиваются данные только по двум соавторам, но без главвного исполнителя Гергерта. Из-за этого суммы роялти рассчитываются неверно.
+- Странно, я ничего не меняя сделал расчёт и у меня в таблице расчет по 3м доп. исполнителем. Вероятно вы 3го исполнителя добавили после созданного расчёта? Так работать не будет, так как расчёт и запись в таблицу происходит в момент нажатия расчитать.. Все исполнители, доп исполнителя должны быть добавлены к этому времени.
+
+ • Данные по суммам за кварталы сбрасываются (обнуляются).
+- Не понятно, не удалось воспроизвести проблему, в какой момент сбрасываются? можете записать видео?
+
+ • Чтобы увидеть введённые данные, приходится обновлять страницу.
+- есть пока что такая проблема, решаю ее..
+
+Проблемы в «Договорах»:
+ • Снова слетают даты релиза.
+- это исправил
+
+ • У трека “Твой мир” исчезли данные по доле и ФИО Саркисян Кристины.
+- вроде не исчезли.. 
+
+Ошибка в расчёте долей соавторов:
+ • Программа неправильно считает сумму для соавторов, чья доля идёт от 70% артиста (Кристина Си).
+- не понятно...
+
+ • Соавторы получают процент от доли главного исполнителя, а его доля может быть разной: 70% / 35% / 17% / 50%.
+- Соавторы по ТЗ и расчётам получают сумму за вычитом Налога, ГАЗ роялти 30% и с учетом своего процента..
+
+ • Сейчас программа не учитывает этот механизм, из-за чего расчёт некорректный. Нужно внедрить правильную формулу и возможность выбирать процент соавторов.
+- Формула взята из вашей таблицы. Доля соавторов равна все доходы за года, треки, вычитаем УСН, вычитаем 30% ГАЗ ВАЛ и умножаем на процент исполнителя.
+
+
+Ошибки в «Доходах»:
+ • Пропадает главный исполнитель. Когда нажимаю «Редактировать», он отображается, но в общем списке его нет.
+ • Исчезли все записи на странице.
+ • При создании отчёта в «Расчёте роялти» система не видит трек “Genetica” при попытке подгрузить его в «таблицы доходов».
+- трек Genetica корректно отображается в списке треков.. Можно скриншот
+
 
 На сегодня 
-
+- Баг с датой договоров, красным, не выводиться с 1 раза
 
 Для заказщиков
-- 
+- Исправлена ошибка с датой договоров, выводилось красным и не с 1 раза
 
 
 Осталось из глобального
@@ -139,21 +184,22 @@
 ## Migrations
 
 ```sh
-sequelize-cli.cmd db:migrate:undo:all | sequelize-cli.cmd db:migrate | sequelize-cli.cmd db:seed:all
+yarn sequelize-cli db:migrate 
+yarn sequelize-cli db:migrate:undo:all 
+yarn sequelize-cli db:seed:all
 
-sequelize-cli.cmd db:seed --seed 20250118134800-contracts.js
-
-sequelize-cli.cmd db:migrate --to 20250112142348-create-contracts.js
+yarn sequelize-cli db:seed --seed 20250118134800-contracts.js
+yarn sequelize-cli db:migrate --to 20250112142348-create-contracts.js
 
 # migration create
-sequelize-cli.cmd migration:create --name create-reports
+yarn sequelize-cli migration:create --name create-reports
 
 # model generate
-sequelize-cli.cmd model:generate --name Payments --attributes 'contractorId:integer, trackId:integer, year:integer, q1:integer, q1p:tinyint, q2:integer, q2p:tinyint, q3:integer, q3p:tinyint, q4:integer, q4p:tinyint, total:integer, comment:string'
+yarn sequelize-cli model:generate --name Payments --attributes 'contractorId:integer, trackId:integer, year:integer, q1:integer, q1p:tinyint, q2:integer, q2p:tinyint, q3:integer, q3p:tinyint, q4:integer, q4p:tinyint, total:integer, comment:string'
 
-sequelize-cli.cmd model:generate --name Royalties --attributes 'contractorId:integer, contractId:integer, trackId:integer, years:integer, totalValByYears:integer, usnTax:integer, valMinusUsn:integer, valForGaz:integer, valForContractors:integer'
+yarn sequelize-cli model:generate --name Royalties --attributes 'contractorId:integer, contractId:integer, trackId:integer, years:integer, totalValByYears:integer, usnTax:integer, valMinusUsn:integer, valForGaz:integer, valForContractors:integer'
 
-sequelize-cli.cmd model:generate --name RoyaltiesCtrs --attributes 'royaltyId:integer, contractorId:integer, contractId:integer, trackId:integer, usnTax:integer, amount:integer, year:integer, q1:integer, q2:integer, q3:integer,  q4:integer, total:integer'
+yarn sequelize-cli model:generate --name RoyaltiesCtrs --attributes 'royaltyId:integer, contractorId:integer, contractId:integer, trackId:integer, usnTax:integer, amount:integer, year:integer, q1:integer, q2:integer, q3:integer,  q4:integer, total:integer'
 
 
 

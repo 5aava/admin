@@ -164,6 +164,7 @@ export default function Licensors() {
           open={dialogOpen}
           close={handleDialogClose}
           handleSnackbarOpen={handleSnackbarOpen}
+          setNewRows={setRows}
         />
       )}
 
@@ -175,6 +176,7 @@ export default function Licensors() {
           close={handleDialogClose}
           licensor={dialogUpdateLicensor}
           handleSnackbarOpen={handleSnackbarOpen}
+          setNewRows={setRows}
         />
       )}
 

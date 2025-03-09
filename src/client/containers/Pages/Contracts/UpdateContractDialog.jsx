@@ -49,7 +49,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 export default function UpdateContractDialog(props) {
   const [maxWidth, setMaxWidth] = useState(500);
   const [linkValue, setLinkValue] = useState(props.contract?.link);
-  const [date, setDate] = useState({}); // props.contract?.date
 
   const [contractors, setContractors] = useState([]);
   const [inputContractorName, setInputContractorName] = useState({});
@@ -120,17 +119,6 @@ export default function UpdateContractDialog(props) {
       setTracks(newTracks);
     }
   });
-
-  /* useEffect(() => {
-    if(props?.contract?.date){
-      const date = () => dayjs(props?.contract?.date, 'DD.MM.YYYY');
-      console.log(props?.contract?.date);
-      setDate(date());
-    }
-  }, []); */
-
-  
-
   
   
   const handleAddContractors = async () => {
@@ -192,6 +180,10 @@ export default function UpdateContractDialog(props) {
     if(response.status == 'ok'){
       props.close();
       props.handleSnackbarOpen(response.data, 'success', 'Данные обновлены', 'update');
+
+      // update all rows
+      const r = await privateFetcher('/api/private/contracts/all', {});
+      props.setNewRows(r.data);
     }
 
     if(response.status == 'error' && response.data == 'dublicate'){
@@ -254,6 +246,7 @@ export default function UpdateContractDialog(props) {
               }}
               onInputChange={(event, value) => {
                 setInputContractorName(value);
+                setInputTrackName({}); // clear tracks
               }}
               renderInput={(params) => 
                 <TextField 

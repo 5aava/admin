@@ -176,6 +176,7 @@ export default function Tracks() {
           open={dialogOpen}
           close={handleDialogClose}
           handleSnackbarOpen={handleSnackbarOpen}
+          setNewRows={setRows}
         />
       )}
 
@@ -187,6 +188,7 @@ export default function Tracks() {
           close={handleDialogClose}
           track={dialogUpdateTrack}
           handleSnackbarOpen={handleSnackbarOpen}
+          setNewRows={setRows}
         />
       )}
 

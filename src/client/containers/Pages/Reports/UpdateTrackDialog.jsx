@@ -63,6 +63,10 @@ export default function UpdateTrackDialog(props) {
     if(response.status == 'ok'){
       props.close();
       props.handleSnackbarOpen(response.data, 'success', 'Данные трека обновлены', 'update');
+
+      // update all rows
+      const r = await privateFetcher('/api/private/tracks/all', {});
+      props.setNewRows(r.data);
     }
 
     if(response.status == 'error' && response.data == 'dublicate'){

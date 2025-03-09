@@ -173,6 +173,7 @@ export default function Сontractors() {
           open={dialogOpen} 
           close={handleDialogClose}
           handleSnackbarOpen={handleSnackbarOpen}
+          setNewRows={setRows}
         />
       )}
 
@@ -184,6 +185,7 @@ export default function Сontractors() {
           close={handleDialogClose}
           contractor={dialogUpdateContractor}
           handleSnackbarOpen={handleSnackbarOpen}
+          setNewRows={setRows}
         />
       )}
 

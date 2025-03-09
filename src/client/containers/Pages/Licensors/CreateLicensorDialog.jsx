@@ -39,6 +39,10 @@ export default function CreateLicensorDialog(props) {
     if(response.status == 'ok'){
       props.close();
       props.handleSnackbarOpen(response.data, 'success', 'Лицензиар добавлен', 'add');
+
+      // update all rows
+      const r = await privateFetcher('/api/private/licensors/all', {});
+      props.setNewRows(r.data);
     }
 
     if(response.status == 'error'){

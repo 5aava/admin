@@ -160,6 +160,7 @@ export default function Users() {
           open={dialogOpen} 
           close={handleDialogClose}
           handleSnackbarOpen={handleSnackbarOpen}
+          setNewRows={setRows}
         />
       )}
 
@@ -171,6 +172,7 @@ export default function Users() {
           close={handleDialogClose}
           user={dialogUpdateUser}
           handleSnackbarOpen={handleSnackbarOpen}
+          setNewRows={setRows}
         />
       )}
 

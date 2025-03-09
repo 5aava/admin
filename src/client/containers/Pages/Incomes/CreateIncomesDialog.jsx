@@ -97,6 +97,10 @@ export default function CreateIncomesDialog(props) {
     if(response.status == 'ok'){
       props.close();
       props.handleSnackbarOpen(response.data, 'success', 'Доход добавлен', 'add');
+
+      // update all rows
+      const r = await privateFetcher('/api/private/incomes/all', {});
+      props.setNewRows(r.data);
     }
 
     if(response.status == 'error'){

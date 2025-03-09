@@ -111,6 +111,10 @@ export default function UpdatePaymentsDialog(props) {
     if(response.status == 'ok'){
       props.close();
       props.handleSnackbarOpen(response.data, 'success', 'Данные выплаты обновлены', 'update');
+
+      // update all rows
+      const r = await privateFetcher('/api/private/payments/all', {});
+      props.setNewRows(r.data);
     }
 
     if(response.status == 'error' && response.data == 'dublicate'){

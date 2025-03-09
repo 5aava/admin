@@ -222,6 +222,7 @@ export default function Payments() {
           open={dialogOpen}
           close={handleDialogClose}
           handleSnackbarOpen={handleSnackbarOpen}
+          setNewRows={setRows}
         />
       )}
 
@@ -233,6 +234,7 @@ export default function Payments() {
           close={handleDialogClose}
           payment={dialogUpdatePayment}
           handleSnackbarOpen={handleSnackbarOpen}
+          setNewRows={setRows}
         />
       )}
 

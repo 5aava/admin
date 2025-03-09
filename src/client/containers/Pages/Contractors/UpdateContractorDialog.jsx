@@ -44,6 +44,10 @@ export default function UpdateContractorDialog(props) {
     if(response.status == 'ok'){
       props.close();
       props.handleSnackbarOpen(response.data, 'success', 'Данные пользователя обновлены', 'update');
+
+      // update all rows
+      const r = await privateFetcher('/api/private/contractors/all', {});
+      props.setNewRows(r.data);
     }
 
     if(response.status == 'error' && response.data == 'dublicate'){

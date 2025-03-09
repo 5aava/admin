@@ -183,6 +183,10 @@ export default function CreateTrackDialog(props) {
     if(response.status == 'ok'){
       props.close();
       props.handleSnackbarOpen(response.data, 'success', 'Договор добавлен', 'add');
+
+      // update all rows
+      const r = await privateFetcher('/api/private/contracts/all', {});
+      props.setNewRows(r.data);
     }
 
     if(response.status == 'error'){

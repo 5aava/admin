@@ -186,6 +186,7 @@ export default function Royalties() {
           open={dialogOpen}
           close={handleDialogClose}
           handleSnackbarOpen={handleSnackbarOpen}
+          setNewRows={setRows}
         />
       )}
 
@@ -197,6 +198,7 @@ export default function Royalties() {
           close={handleDialogClose}
           royalty={dialogUpdateRoyalty}
           handleSnackbarOpen={handleSnackbarOpen}
+          setNewRows={setRows}
         />
       )}
 

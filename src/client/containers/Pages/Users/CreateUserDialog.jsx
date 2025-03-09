@@ -83,6 +83,10 @@ export default function AddUserDialogs(props) {
     if(response.status == 'ok'){
       props.close();
       props.handleSnackbarOpen(response.data, 'success', 'Пользователь добавлен', 'add');
+
+      // update all rows
+      const r = await privateFetcher('/api/private/users/all', {});
+      props.setNewRows(r.data);
     }
 
     if(response.status == 'error'){

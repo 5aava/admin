@@ -46,6 +46,10 @@ export default function UpdateUserDialogs(props) {
     if(response.status == 'ok'){
       props.close();
       props.handleSnackbarOpen(response.data, 'success', 'Данные пользователя обновлены', 'update');
+
+      // update all rows
+      const r = await privateFetcher('/api/private/users/all', {});
+      props.setNewRows(r.data);
     }
 
     if(response.status == 'error' && response.data == 'dublicate'){

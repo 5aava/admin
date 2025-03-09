@@ -38,11 +38,11 @@ export default function UpdateIncomesDialog(props) {
   const [maxWidth, setMaxWidth] = useState(550);
 
   const [contractors, setContractors] = useState([]);
-  const [inputContractorName, setInputContracortName] = useState({});
+  const [inputContractorName, setInputContracortName] = useState(props?.income?.contractor);
   const [inputContractorId, setInputContracortId] = useState(props.income?.contractorId);
 
   const [tracks, setTracks] = useState([]);
-  const [inputTrackName, setInputTrackName] = useState({});
+  const [inputTrackName, setInputTrackName] = useState(props.income?.track);
   const [inputTrackId, setInputTrackId] = useState(props.income?.trackId);
 
   const [constr] = useFetch("/api/private/contractors/all", {});
@@ -99,6 +99,10 @@ export default function UpdateIncomesDialog(props) {
     if(response.status == 'ok'){
       props.close();
       props.handleSnackbarOpen(response.data, 'success', 'Данные обновлены', 'update');
+
+      // update all rows
+      const r = await privateFetcher('/api/private/incomes/all', {});
+      props.setNewRows(r.data);
     }
 
     if(response.status == 'error' && response.data == 'dublicate'){
@@ -148,6 +152,8 @@ export default function UpdateIncomesDialog(props) {
               }}
               onInputChange={(event, value) => {
                 setInputContracortName(value);
+                setInputTrackId(null);
+                setInputTrackName('');
               }}
               renderInput={(params) => 
                 <TextField 

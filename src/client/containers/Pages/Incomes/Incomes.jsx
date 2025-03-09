@@ -194,6 +194,7 @@ export default function Incomes() {
           open={dialogOpen}
           close={handleDialogClose}
           handleSnackbarOpen={handleSnackbarOpen}
+          setNewRows={setRows}
         />
       )}
 
@@ -205,6 +206,7 @@ export default function Incomes() {
           close={handleDialogClose}
           income={dialogUpdateIncome}
           handleSnackbarOpen={handleSnackbarOpen}
+          setNewRows={setRows}
         />
       )}
 

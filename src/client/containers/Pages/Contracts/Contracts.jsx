@@ -154,7 +154,7 @@ export default function Contracts() {
       renderCell: (params) => 
         <a href={params.row.link} target='_blank'>{params.row.link}</a>,    
     },
-    { field: 'file', headerName: 'PDF файл', width: 120 },
+    /* { field: 'file', headerName: 'PDF файл', width: 120 }, */
     { field: 'moderated', headerName: 'На модерации', width: 120,
       renderCell: (params) => <>{params.row.moderated == 1 ? 'На модерации' : 'Нет'}</>,
     },
@@ -215,6 +215,7 @@ export default function Contracts() {
           open={dialogOpen}
           close={handleDialogClose}
           handleSnackbarOpen={handleSnackbarOpen}
+          setNewRows={setRows}
         />
       )}
 
@@ -226,6 +227,7 @@ export default function Contracts() {
           close={handleDialogClose}
           contract={dialogUpdateContract}
           handleSnackbarOpen={handleSnackbarOpen}
+          setNewRows={setRows}
         />
       )}
 

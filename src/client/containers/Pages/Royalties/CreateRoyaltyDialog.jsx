@@ -126,6 +126,10 @@ export default function CreateTrackDialog(props) {
     if(response.status == 'ok'){
       props.close();
       props.handleSnackbarOpen(response.data, 'success', 'Запись добавлена', 'add');
+
+      // update all rows
+      const r = await privateFetcher('/api/private/royalties/', {});
+      props.setNewRows(r.data);
     }
 
     if(response.status == 'error'){

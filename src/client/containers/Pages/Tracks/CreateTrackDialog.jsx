@@ -64,6 +64,10 @@ export default function CreateTrackDialog(props) {
     if(response.status == 'ok'){
       props.close();
       props.handleSnackbarOpen(response.data, 'success', 'Трек добавлен', 'add');
+
+      // update all rows
+      const r = await privateFetcher('/api/private/tracks/all', {});
+      props.setNewRows(r.data);
     }
 
     if(response.status == 'error'){
