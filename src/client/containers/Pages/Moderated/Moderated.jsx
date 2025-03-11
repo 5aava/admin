@@ -172,12 +172,12 @@ export default function Moderated(props) {
             onClick={handleUpdateClick(id)}
             color="inherit"
           />,
-          <GridActionsCellItem
+          {/* <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"
-          />,
+          />, */}
         ];
       },
     }, 
@@ -196,9 +196,9 @@ export default function Moderated(props) {
         },
       }}
     >
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleCreateClick}>
+      {/* <Button color="primary" startIcon={<AddIcon />} onClick={handleCreateClick}>
         Добавить запись
-      </Button>
+      </Button> */}
       <DataGrid
         apiRef={apiRef} 
         rows={rows}
