@@ -230,8 +230,11 @@ export async function createRoyalty (values) {
           // доход за квартал минус УСН
           const qvalMinusUsn = +(dbIncome[`q${quarter}`] - (dbIncome[`q${quarter}`] * (usnTax * 0.01))).toFixed(2);
 
+          // считаем роялти для исполнителей в 70%... тоесть отнимаем 30% для ГАЗ
+          const qvalMinusUsnForContractors = +(qvalMinusUsn * 0.7).toFixed(2);
+
           // считаем роялти Исполнителя согласно проценту
-          q[quarter] = +(qvalMinusUsn * dopContractor.percent * 0.01).toFixed(2);
+          q[quarter] = +(qvalMinusUsnForContractors * dopContractor.percent * 0.01).toFixed(2);
         }
         const q1 = +q[1] || 0;
         const q2 = +q[2] || 0;
