@@ -8,8 +8,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import Snackbar from '../../../components/Snackbar';
 
-/* import CreateContractDialog from '../Contracts/CreateContractDialog';
-import DeleteContractDialog from '../Contracts/DeleteContractDialog'; */
+import CreateContractDialog from '../Contracts/CreateContractDialog';
+import DeleteContractDialog from '../Contracts/DeleteContractDialog';
 import UpdateContractDialog from '../Contracts/UpdateContractDialog';
 
 import {
@@ -172,12 +172,6 @@ export default function Moderated(props) {
             onClick={handleUpdateClick(id)}
             color="inherit"
           />,
-          {/* <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
-          />, */}
         ];
       },
     }, 
@@ -208,7 +202,7 @@ export default function Moderated(props) {
         rowsLoadingMode="server"
       />
 
-      {/* { dialogOpen && (
+      { dialogOpen && (
         <CreateContractDialog
           title={"Добавить договор"}
           text={"Для добавления необходимо заполнить все поля"}
@@ -217,7 +211,7 @@ export default function Moderated(props) {
           handleSnackbarOpen={handleSnackbarOpen}
           setNewRows={setRows}
         />
-      )} */}
+      )}
 
       { dialogUpdate && (
         <UpdateContractDialog
