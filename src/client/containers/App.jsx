@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/router'
 import { extendTheme, styled } from '@mui/material/styles';
 import { AppProvider } from '@toolpad/core/nextjs';
@@ -17,11 +17,14 @@ import Contractors from './Pages/Contractors/Contractors';
 import Licensors from './Pages/Licensors/Licensors';
 import Tracks from './Pages/Tracks/Tracks';
 import Contracts from './Pages/Contracts/Contracts';
+import Moderated from './Pages/Moderated/Moderated';
 
 import Incomes from './Pages/Incomes/Incomes';
 import Payments from './Pages/Payments/Payments';
 import Royalties from './Pages/Royalties/Royalties';
 import Reports from './Pages/Reports/Reports';
+
+import useFetch from "../modules/useFetch";
 
 
 const demoTheme = extendTheme({
@@ -39,9 +42,9 @@ const demoTheme = extendTheme({
 });
 
 function useDemoRouter(initialPath) {
-  const [pathname, setPathname] = React.useState(initialPath);
+  const [pathname, setPathname] = useState(initialPath);
 
-  const router = React.useMemo(() => {
+  const router = useMemo(() => {
     return {
       pathname: pathname,
       searchParams: new URLSearchParams(),
@@ -57,9 +60,12 @@ export default function App() {
   const router = useRouter()
   const demoRouter = useDemoRouter('/contracts');
   
-  const [session, setSession] = React.useState(null);
+  const [session, setSession] = useState(null);
+  const [count, setCount] = useState(null);
 
-  React.useEffect(() => {
+  const [c] = useFetch("/api/private/contracts/count");
+
+  useEffect(() => {
     const localUser = JSON.parse(localStorage.getItem('user'));
 
     const lsUser = {
@@ -70,7 +76,15 @@ export default function App() {
     };
 
     setSession({ user: lsUser });
-  }, [])
+  }, []);
+
+
+  useEffect(() => {
+    if(c) {
+      setCount(+c);
+    }
+  }, [c])
+
 
 
   const renderSwitchPages = (param) => {
@@ -78,7 +92,10 @@ export default function App() {
 
     switch (param) {
       case '/contracts':
-        obj = { page: <Contracts /> };
+        obj = { page: <Contracts setCount={setCount} /> };
+        break;
+      case '/moderated':
+        obj = { page: <Moderated setCount={setCount} /> };
         break;
       case '/users':
         obj = { page: <Users /> };
@@ -114,7 +131,7 @@ export default function App() {
   };
 
 
-  const authentication = React.useMemo(() => {
+  const authentication = useMemo(() => {
     return {
       signIn: () => {
         setSession(null);
@@ -131,7 +148,7 @@ export default function App() {
     <AppProvider
       session={session}
       authentication={authentication}
-      navigation={Navigation(session?.user?.role)}
+      navigation={Navigation(session?.user?.role, count)}
       router={demoRouter}
       theme={demoTheme}
       branding={{

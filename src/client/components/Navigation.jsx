@@ -8,11 +8,10 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import PianoIcon from '@mui/icons-material/Piano';
 import PriceChangeIcon from '@mui/icons-material/PriceChange';
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import Chip from '@mui/material/Chip';
 
 
-export default function Navigation(role) {
-  // console.log('role', role);
-
+export default function Navigation(role, count = false) {
   const navigation = [
     {
       segment: 'contracts',
@@ -21,13 +20,20 @@ export default function Navigation(role) {
     },
   ];
 
-  /* if(role != 'manager'){
-    navigation.push({
-      segment: 'moderation',
+  if(role != 'manager'){
+    const moderated = {
+      segment: 'moderated',
       title: 'На модерации',
       icon: <EditNoteIcon />,
-    })
-  } */
+    };
+
+    if(count){
+      moderated.action = <Chip label={count} color="primary" size="small" />
+    }
+
+
+    navigation.push(moderated)
+  }
   
   navigation.push(
     {

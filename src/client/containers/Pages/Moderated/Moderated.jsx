@@ -8,9 +8,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import Snackbar from '../../../components/Snackbar';
 
-import CreateContractDialog from './CreateContractDialog'
-import DeleteContractDialog from './DeleteContractDialog'
-import UpdateContractDialog from './UpdateContractDialog'
+import CreateContractDialog from '../Contracts/CreateContractDialog';
+import DeleteContractDialog from '../Contracts/DeleteContractDialog';
+import UpdateContractDialog from '../Contracts/UpdateContractDialog';
 
 import {
   DataGrid,
@@ -21,7 +21,7 @@ import {
 import useFetch from "../../../modules/useFetch";
 
 
-export default function Contracts(props) {
+export default function Moderated(props) {
   const apiRef = useGridApiRef();
 
   const [rows, setRows] = useState(null);
@@ -39,7 +39,7 @@ export default function Contracts(props) {
   const [snackbarType, snackbarTypeSet] = useState('error');
   const [snackbarOpen, snackbarOpenSet] = useState(false);
 
-  const [response] = useFetch("/api/private/contracts/all", {});
+  const [response] = useFetch("/api/private/contracts/all?isModerated=1", {});
 
   useEffect(() => {
     if(response) {

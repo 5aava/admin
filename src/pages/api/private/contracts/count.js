@@ -12,8 +12,6 @@ export default async function all(req, res) {
     res.status(403).json({ auth: false, error: '403 Forbidden' });
   }
 
-  const isModerated = req.query.isModerated == '1' ? true : false;
-    
-  const data = await getContracts(isModerated);
-  config.sendOk(res, data);
+  const data = await getContracts(true);
+  config.sendOk(res, data.length);
 }

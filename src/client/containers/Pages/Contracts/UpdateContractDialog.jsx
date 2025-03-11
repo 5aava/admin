@@ -184,6 +184,10 @@ export default function UpdateContractDialog(props) {
       // update all rows
       const r = await privateFetcher('/api/private/contracts/all', {});
       props.setNewRows(r.data);
+
+      // update Moderated Notifications
+      const count = await privateFetcher('/api/private/contracts/count', {});
+      props.setCount(count.data);
     }
 
     if(response.status == 'error' && response.data == 'dublicate'){

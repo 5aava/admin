@@ -11,9 +11,18 @@ export async function getContract (id) {
 }
 
 
-export async function getContracts () {
+export async function getContracts (isModerated = false) {
   dayjs.extend(customParseFormat);
-  const cs = await getItems(Contracts);
+
+  console.log('isModerated 2', isModerated)
+  const where = {};
+  if(isModerated){
+    where.moderated = 1;
+  };
+
+  console.log(where)
+
+  const cs = await getItems(Contracts, where);
 
   const data = [];
   for(const c of cs){
