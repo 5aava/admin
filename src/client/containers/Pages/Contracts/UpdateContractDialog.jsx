@@ -391,7 +391,7 @@ export default function UpdateContractDialog(props) {
               customInput={TextField}
               isAllowed={(values) => {
                 const { floatValue } = values;
-                return floatValue < 100;
+                return floatValue <= 100;
               }}
               decimalScale={2} 
               onChange={(e) => setDopContractorTax(e.target.value)}
