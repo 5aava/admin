@@ -18,7 +18,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       percent: {
-        type: Sequelize.DECIMAL(4,2)
+        type: Sequelize.DECIMAL(5,2)
       },
       type: {
         type: Sequelize.STRING

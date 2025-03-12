@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     royaltyId: DataTypes.INTEGER,
     trackId: DataTypes.INTEGER,
     dopContractorId: DataTypes.INTEGER,
-    percent: DataTypes.DECIMAL(4,2),
+    percent: DataTypes.DECIMAL(5,2),
     type: DataTypes.STRING,
     year: DataTypes.DECIMAL(4,0),
     q1: DataTypes.DECIMAL(15,2),

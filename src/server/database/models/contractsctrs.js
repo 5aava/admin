@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     contractId: DataTypes.INTEGER,
     contractorId: DataTypes.INTEGER,
     type: DataTypes.STRING,
-    percent: DataTypes.DECIMAL(4,2)
+    percent: DataTypes.DECIMAL(5,2)
   }, {
     sequelize,
     modelName: 'ContractsCtrs',
