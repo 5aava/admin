@@ -1,12 +1,9 @@
 # admin
 
 Осталось из глобального               
-- страница Денежный отчет
+- страница Денежный отчет                       +
 - Модерация договоров, отдельная страница       +
-- Сохранять где-то PDF файлы договоров          
-- черный список исполнителей                    
-      
-
+- Сохранять где-то PDF файлы договоров          +
 
 # HTTP 
 
@@ -55,9 +52,8 @@ yarn sequelize-cli model:generate --name Royalties --attributes 'contractorId:in
 
 yarn sequelize-cli model:generate --name RoyaltiesCtrs --attributes 'royaltyId:integer, contractorId:integer, contractId:integer, trackId:integer, usnTax:integer, amount:integer, year:integer, q1:integer, q2:integer, q3:integer,  q4:integer, total:integer'
 
-
+yarn sequelize-cli model:generate --name Reports --attributes 'royaltyId:integer, totalIncomes:integer, totalPayments:integer, totalSaldo:integer'
 
 # pm2
 pm2 start npm --name "prod" -- run "start"
 ```
-

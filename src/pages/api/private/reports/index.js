@@ -1,7 +1,7 @@
 import { logger } from '../../../../server/modules/logger.js';
 import isAuth from '../../../../server/modules/isAuth.js';
 import config from '../../../../server/config/config.server.js';
-import { getRoyalties } from '../../../../server/services/Royalties/royaltiesService.js';
+import { getReports } from '../../../../server/services/Reports/reportsService.js';
 
 
 export default async function all(req, res) {
@@ -12,6 +12,6 @@ export default async function all(req, res) {
     res.status(403).json({ auth: false, error: '403 Forbidden' })
   }
     
-  const data = await getRoyalties();
+  const data = await getReports();
   config.sendOk(res, data);
 }

@@ -29,11 +29,11 @@ export default function DeleteTrackDialog(props) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const response = await privateFetcher('/api/private/tracks/delete', {id: props.trackId});
+    const response = await privateFetcher('/api/private/reports/delete', {id: props.reportId});
     
     if(response.status == 'ok'){
       props.close();
-      props.handleSnackbarOpen(response.data, 'success', 'Лицензиар удален', 'delete');
+      props.handleSnackbarOpen(response.data, 'success', 'Отчет удален', 'delete');
     }
   }
 
@@ -61,7 +61,7 @@ export default function DeleteTrackDialog(props) {
         </IconButton>
         <DialogContent dividers>
           <Typography gutterBottom>
-            Точно решили удалить трек c ID {props.licensorId}?
+            Точно решили удалить отчет c ID {props.reportId}?
           </Typography>
         </DialogContent>
         <DialogActions>

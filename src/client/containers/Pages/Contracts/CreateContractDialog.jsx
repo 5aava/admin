@@ -378,13 +378,13 @@ export default function CreateTrackDialog(props) {
               id="outlined-basic"
               label="Процент %"
               variant="outlined"
-              value={dopContractorTax} 
+              value={dopContractorTax}
               customInput={TextField}
               isAllowed={(values) => {
                 const { floatValue } = values;
-                return floatValue < 100;
+                return floatValue <= 100;
               }}
-              decimalScale={2} 
+              decimalScale={2}
               onChange={(e) => setDopContractorTax(e.target.value)}
             />
 

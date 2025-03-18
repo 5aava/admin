@@ -49,6 +49,8 @@ export default function UpdateIncomesDialog(props) {
   const [trks] = useFetch("/api/private/tracks/all", {});
 
   useEffect(() => {
+    console.log(props.income);
+    
     if(constr) {
       const newContractors = constr.map(item => {
         return {
@@ -84,7 +86,7 @@ export default function UpdateIncomesDialog(props) {
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
-    const response = await privateFetcher('/api/private/incomes/update', {
+    const test = {
       id: props.income.id,
       contractorId: inputContractorId,
       trackId: inputTrackId,
@@ -94,7 +96,9 @@ export default function UpdateIncomesDialog(props) {
       q3: data.get('q3'),
       q4: data.get('q4'),
       comment: data.get('comment'),
-    });
+    };
+    console.log(test);
+    const response = await privateFetcher('/api/private/incomes/update', test);
     
     if(response.status == 'ok'){
       props.close();
@@ -213,10 +217,6 @@ export default function UpdateIncomesDialog(props) {
             name="q1"
             defaultValue={props?.income?.q1}
             customInput={TextField}
-            isAllowed={(values) => {
-              const { floatValue } = values;
-              return floatValue;
-            }}
             decimalScale={2}
             style={{marginBottom: 20, width: maxWidth}}
           />
@@ -227,10 +227,6 @@ export default function UpdateIncomesDialog(props) {
             name="q2"
             defaultValue={props?.income?.q2}
             customInput={TextField}
-            isAllowed={(values) => {
-              const { floatValue } = values;
-              return floatValue;
-            }}
             decimalScale={2}
             style={{marginBottom: 20, width: maxWidth}}
           />
@@ -241,10 +237,6 @@ export default function UpdateIncomesDialog(props) {
             name="q3"
             defaultValue={props?.income?.q3}
             customInput={TextField}
-            isAllowed={(values) => {
-              const { floatValue } = values;
-              return floatValue;
-            }}
             decimalScale={2}
             style={{marginBottom: 20, width: maxWidth}}
           />
@@ -255,10 +247,6 @@ export default function UpdateIncomesDialog(props) {
             name="q4"
             defaultValue={props?.income?.q4}
             customInput={TextField}
-            isAllowed={(values) => {
-              const { floatValue } = values;
-              return floatValue;
-            }}
             decimalScale={2}
             style={{marginBottom: 20, width: maxWidth}}
           />

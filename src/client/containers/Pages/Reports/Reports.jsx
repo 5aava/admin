@@ -5,11 +5,14 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import Snackbar from '../../../components/Snackbar';
 
-import CreateTrackDialog from './CreateTrackDialog'
-import DeleteTrackDialog from './DeleteTrackDialog'
-import UpdateTrackDialog from './UpdateTrackDialog'
+import InfoIcon from '@mui/icons-material/Info';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+
+import Snackbar from '../../../components/Snackbar';
+import CreateReportDialog from './CreateReportDialog'
+import DeleteReportDialog from './DeleteReportDialog'
+import UpdateReportDialog from './UpdateReportDialog'
 
 import {
   DataGrid,
@@ -20,7 +23,7 @@ import {
 import useFetch from "../../../modules/useFetch";
 
 
-export default function Tracks() {
+export default function Reports() {
   const apiRef = useGridApiRef();
 
   const [rows, setRows] = useState(null);
@@ -29,16 +32,16 @@ export default function Tracks() {
   const [dialogOpen, dialogOpenSet] = useState(false);
 
   const [dialogUpdate, dialogUpdateSet] = useState(false);
-  const [dialogUpdateTrack, dialogUpdateTrackSet] = useState(null);
+  const [dialogUpdateReport, dialogUpdateReportSet] = useState(null);
 
   const [dialogDelete, dialogDeleteSet] = useState(false);
-  const [dialogDeleteTrack, dialogDeleteTrackSet] = useState(null);
+  const [dialogDeleteReport, dialogDeleteReportSet] = useState(null);
 
   const [snackbarText, snackbarTextSet] = useState('Ошибка: Лицензиар не добавлен');
   const [snackbarType, snackbarTypeSet] = useState('error');
   const [snackbarOpen, snackbarOpenSet] = useState(false);
 
-  const [response] = useFetch("/api/private/tracks/all", {});
+  const [response] = useFetch("/api/private/reports", {});
 
   useEffect(() => {
     if(response) {
@@ -47,15 +50,19 @@ export default function Tracks() {
   }, [response])
 
   const handleUpdateClick = (id) => () => {
-    const track = rows.filter((row) => row.id === id)[0];
 
-    dialogUpdateSet(true);
-    dialogUpdateTrackSet(track);
+    const url = `pdfs/${id}.pdf`;
+    window.open(url, '_blank').focus();
+
+    /* const track = rows.filter((row) => row.id === id)[0];
+
+    dialogUpdateSet(true); 
+    dialogUpdateReportSet(track); */
   };
 
   const handleDeleteClick = (id) => () => {
     dialogDeleteSet(true);
-    dialogDeleteTrackSet(id);
+    dialogDeleteReportSet(id);
   };
 
   const handleDialogClose = () => {
@@ -85,11 +92,10 @@ export default function Tracks() {
         apiRef.current.updateRows([
           { 
             id: data.id, 
-            name: data.name, 
-            nickname: data.nickname,
-            firstname: data.firstname,
-            lastname: data.lastname,
-            patronymic: data.patronymic,
+            royaltyId: data.royaltyId,
+            totalIncomes: data.totalIncomes,
+            totalPayments: data.totalPayments,
+            totalSaldo: data.totalSaldo,
           }
         ]);
       break;
@@ -97,11 +103,10 @@ export default function Tracks() {
         apiRef.current.updateRows([
           { 
             id: data.id, 
-            name: data.name,
-            nickname: data.nickname,
-            firstname: data.firstname,
-            lastname: data.lastname,
-            patronymic: data.patronymic,
+            royaltyId: data.royaltyId,
+            totalIncomes: data.totalIncomes,
+            totalPayments: data.totalPayments,
+            totalSaldo: data.totalSaldo,
           }
         ]);
       break;
@@ -114,11 +119,12 @@ export default function Tracks() {
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 40, editable: false },
-    { field: 'name', headerName: 'Название трека', width: 180, editable: true },
-    { field: 'nickname', headerName: 'Псевдоним исполнителя', width: 180, editable: true },
-    { field: 'lastname', headerName: 'Фамилия', width: 180, editable: true },
-    { field: 'firstname', headerName: 'Имя', width: 180, editable: true },
-    { field: 'patronymic', headerName: 'Отчество', width: 180, editable: true },
+    { field: 'contractor', headerName: 'Исполнитель', width: 260 },
+    { field: 'date', headerName: 'Дата рачета', width: 160 },
+    { field: 'royaltyId', headerName: 'ID Роялти', width: 100 },
+    { field: 'totalIncomes', headerName: 'Доходы', width: 150 },
+    { field: 'totalPayments', headerName: 'Выплаты', width: 150 },
+    { field: 'totalSaldo', headerName: 'Сальдо', width: 150 },
      {
       field: 'actions',
       type: 'actions',
@@ -127,8 +133,8 @@ export default function Tracks() {
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
+            icon={<OpenInNewIcon />}
+            label="Информация"
             className="textPrimary"
             onClick={handleUpdateClick(id)}
             color="inherit"
@@ -158,7 +164,7 @@ export default function Tracks() {
       }}
     >
       <Button color="primary" startIcon={<AddIcon />} onClick={handleCreateClick}>
-        Добавить запись
+        Создать отчет
       </Button>
       <DataGrid
         apiRef={apiRef} 
@@ -170,8 +176,8 @@ export default function Tracks() {
       />
 
       { dialogOpen && (
-        <CreateTrackDialog
-          title={"Добавить трек"}
+        <CreateReportDialog
+          title={"Создать отчет"}
           text={"Для добавления необходимо заполнить все поля"}
           open={dialogOpen}
           close={handleDialogClose}
@@ -180,22 +186,22 @@ export default function Tracks() {
         />
       )}
 
-      { dialogUpdate && (
-        <UpdateTrackDialog
+      {/* { dialogUpdate && (
+        <UpdateReportDialog
           title={"Обновить трек"}
           text={"Для обновления необходимо заполнить все поля"}
           open={dialogUpdate} 
           close={handleDialogClose}
-          track={dialogUpdateTrack}
+          track={dialogUpdateReport}
           handleSnackbarOpen={handleSnackbarOpen}
           setNewRows={setRows}
         />
-      )}
+      )} */}
 
       { dialogDelete && (
-        <DeleteTrackDialog
+        <DeleteReportDialog
           open={dialogDelete} 
-          trackId={dialogDeleteTrack}
+          reportId={dialogDeleteReport}
           close={handleDialogClose}
           handleSnackbarOpen={handleSnackbarOpen}
         />

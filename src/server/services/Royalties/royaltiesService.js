@@ -107,6 +107,7 @@ export async function getRoyalties () {
     data.push({
       id: c.id,
       contractor: contractor,
+      contractorId: c.contractorId,
       date: date,
       totalValByYears: c.totalValByYears,
       valMinusUsn: c.valMinusUsn,

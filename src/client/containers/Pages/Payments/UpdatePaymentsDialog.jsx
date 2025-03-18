@@ -216,17 +216,12 @@ export default function UpdatePaymentsDialog(props) {
               />
           </LocalizationProvider><br />
 
-
           <NumericFormat
             label="Доход за I квартал"
             id="q1"
             name="q1"
             defaultValue={props?.payment?.q1}
             customInput={TextField}
-            isAllowed={(values) => {
-              const { floatValue } = values;
-              return floatValue;
-            }}
             decimalScale={2}
             style={{marginBottom: 20, width: 260}}
           />
@@ -250,10 +245,6 @@ export default function UpdatePaymentsDialog(props) {
             name="q2"
             defaultValue={props?.payment?.q2}
             customInput={TextField}
-            isAllowed={(values) => {
-              const { floatValue } = values;
-              return floatValue;
-            }}
             decimalScale={2}
             style={{marginBottom: 20, width: 260}}
           />
@@ -277,10 +268,6 @@ export default function UpdatePaymentsDialog(props) {
             name="q3"
             defaultValue={props?.payment?.q3}
             customInput={TextField}
-            isAllowed={(values) => {
-              const { floatValue } = values;
-              return floatValue;
-            }}
             decimalScale={2}
             style={{marginBottom: 20, width: 260}}
           />
@@ -304,10 +291,6 @@ export default function UpdatePaymentsDialog(props) {
             name="q4"
             defaultValue={props?.payment?.q4}
             customInput={TextField}
-            isAllowed={(values) => {
-              const { floatValue } = values;
-              return floatValue;
-            }}
             decimalScale={2}
             style={{marginBottom: 20, width: 260}}
           />

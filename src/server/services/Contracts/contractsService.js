@@ -20,8 +20,6 @@ export async function getContracts (isModerated = false) {
     where.moderated = 1;
   };
 
-  console.log(where)
-
   const cs = await getItems(Contracts, where);
 
   const data = [];

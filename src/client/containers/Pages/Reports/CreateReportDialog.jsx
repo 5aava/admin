@@ -10,15 +10,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
-
-import CancelIcon from '@mui/icons-material/Close';
-import SaveIcon from '@mui/icons-material/Save';
-
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
+
+import CancelIcon from '@mui/icons-material/Cancel';
+import SaveIcon from '@mui/icons-material/Save';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -30,12 +29,20 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function UpdateTrackDialog(props) {
+export default function CreateTrackDialog(props) {
+  const [maxWidth, setMaxWidth] = useState(516);
+
   const [contractors, setContractors] = useState([]);
   const [inputContractorName, setInputContracortName] = useState({});
   const [inputContractorId, setInputContracortId] = useState('');
 
+  const [royalties, setRoyalties] = useState([]);
+  const [inputRoyaltyName, setInputRoyaltyName] = useState({});
+  const [inputRoyaltyId, setInputRoyaltyId] = useState('');
+
   const [constr] = useFetch("/api/private/contractors/all", {});
+  const [rlts] = useFetch("/api/private/royalties", {});
+
   useEffect(() => {
     if(constr) {
 
@@ -48,30 +55,48 @@ export default function UpdateTrackDialog(props) {
 
       setContractors(newContractors);
     }
-  }, [constr])
+  }, [constr]);
+
+  useEffect(() => {
+    if(inputContractorId){
+      const newRoyalties = []
+      rlts.forEach(item => {
+        if(inputContractorId == item.contractorId){
+          newRoyalties.push( { id: item.id, title: `Расчет Роялти от ${item.date}` })
+        }
+      })
+      setRoyalties(newRoyalties);
+    }
+  });
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
-    const response = await privateFetcher('/api/private/tracks/update', {
-      id: props.track.id,
-      name: data.get('name'),
-      contractorId: inputContractorId
+    const response = await privateFetcher('/api/private/reports/create', {
+      contractorId: inputContractorId,
+      royaltyId: inputRoyaltyId,
     });
+
     
     if(response.status == 'ok'){
       props.close();
-      props.handleSnackbarOpen(response.data, 'success', 'Данные трека обновлены', 'update');
+      props.handleSnackbarOpen(response.data, 'success', 'Отчет создан', 'add');
 
       // update all rows
-      const r = await privateFetcher('/api/private/tracks/all', {});
+      const r = await privateFetcher('/api/private/reports', {});
       props.setNewRows(r.data);
     }
 
-    if(response.status == 'error' && response.data == 'dublicate'){
-      props.handleSnackbarOpen(response.data, 'error', 'Трек с таким названием уже существует');
+    if(response.status == 'error'){
+      props.handleSnackbarOpen(response.data, 'error', 'Отчет не создан');
     }
+
+    if(response.status == 'error' && response.data == 'dublicate'){
+      props.handleSnackbarOpen(response.data, 'error', 'Отчет с таким ИД Роялти уже существует');
+    }
+
   }
 
   return (
@@ -79,6 +104,7 @@ export default function UpdateTrackDialog(props) {
       onClose={props.close}
       aria-labelledby="customized-dialog-title"
       open={props.open}
+      maxWidth="lg"
     >
       <form onSubmit={handleSubmit} >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
@@ -97,27 +123,14 @@ export default function UpdateTrackDialog(props) {
           <CloseIcon />
         </IconButton>
         <DialogContent dividers>
-          <Typography gutterBottom>
-            {props.text}<br /><br />
-          </Typography>
-            {props.form}
-            <TextField
-              fullWidth
-              label="Название"
-              id="name"
-              name="name"
-              required
-              variant="outlined"
-              defaultValue={props?.track?.name}
-              style={{marginBottom: 20}}
-            /><br />
+
             <Autocomplete
               disablePortal
               options={contractors}
               id="contractorId"
               name="contractorId"
               inputValue={inputContractorName}
-              // defaultValue={}
+              sx={{width: maxWidth}}
               getOptionLabel={(option) => {
                 setInputContracortId(option.id);
                 return option.title;
@@ -132,13 +145,39 @@ export default function UpdateTrackDialog(props) {
                   label="Исполнители" 
                 />}
             /><br />
+
+            { inputContractorId && (
+              <>
+                <Autocomplete
+                  disablePortal
+                  options={royalties}
+                  id="royaltyId"
+                  name="royaltyId"
+                  inputValue={inputRoyaltyName}
+                  getOptionLabel={(option) => {
+                    setInputRoyaltyId(option.id);
+                    return option.title;
+                  }}
+                  onInputChange={(event, value) => {
+                    setInputRoyaltyName(value);
+                  }}
+                  renderInput={(params) => 
+                    <TextField 
+                      {...params}
+                      label="Расчёт роялти" 
+                    />}
+                /><br />
+                </>
+              )}
+
+        
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.close} startIcon={<CancelIcon />} >
+          <Button onClick={props.close} startIcon={<CancelIcon />}  >
             Отменить
           </Button>
-          <Button type="submit" variant="contained" startIcon={<SaveIcon />}>
-            Обновить
+          <Button type="submit" variant="contained" startIcon={<SaveIcon />} >
+            Создать отчет
           </Button>
         </DialogActions>
       </form>

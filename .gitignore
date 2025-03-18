@@ -12,3 +12,5 @@ yarn-error.log*
 
 # Next.js
 /.next
+
+public/pdfs/*

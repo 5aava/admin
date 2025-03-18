@@ -27,7 +27,7 @@ export async function getIncomes (contractorId = null, trackIdArray = []) {
     data.push({
       id: income.id,
       contractor: contractor,
-      contractorId: contractorId,
+      contractorId: income.contractorId,
       track: track.name,
       trackId: income.trackId,
       year: income.year,

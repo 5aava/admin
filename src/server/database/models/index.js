@@ -19,6 +19,7 @@ const Payments = require('./payments');
 const Royalties = require('./royalties');
 const RoyaltiesCtrs = require('./royaltiesctrs');
 const RoyaltiesTrks = require('./royaltiestrks');
+const Reports = require('./reports');
 
 const db = {};
 db.sequelize = sequelize;
@@ -35,5 +36,6 @@ db.Payments = Payments(sequelize, Sequelize);
 db.Royalties = Royalties(sequelize, Sequelize);
 db.RoyaltiesCtrs = RoyaltiesCtrs(sequelize, Sequelize);
 db.RoyaltiesTrks = RoyaltiesTrks(sequelize, Sequelize);
+db.Reports = Reports(sequelize, Sequelize);
 
 module.exports = db;

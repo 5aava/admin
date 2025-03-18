@@ -122,9 +122,9 @@ export default function App() {
         obj = { page: <Royalties /> };
         break;
 
-      /* case '/reports':
+      case '/reports':
         obj = { page: <Reports /> };
-        break; */
+        break;
     }
 
     return obj;

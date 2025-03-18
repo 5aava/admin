@@ -40,7 +40,7 @@ export default function Royalties() {
   const [snackbarType, snackbarTypeSet] = useState('error');
   const [snackbarOpen, snackbarOpenSet] = useState(false);
 
-  const [response] = useFetch("/api/private/royalties/", {});
+  const [response] = useFetch("/api/private/royalties", {});
 
   useEffect(() => {
     if(response) {
@@ -120,11 +120,6 @@ export default function Royalties() {
     { field: 'id', headerName: 'ID', width: 40, editable: false },
     { field: 'contractor', headerName: 'Гл. исполнитель', width: 260 },
     { field: 'date', headerName: 'Дата рачета', width: 180 },
-    /* { field: 'track', headerName: 'Трек', width: 120 },
-    { field: 'contract', headerName: 'Договор №', width: 120 },
-    { field: 'usnTax', headerName: 'Налог', width: 60,
-      renderCell: (params) => <>{params.row.usnTax}%</>,
-    }, */
     { field: 'totalValByYears', headerName: 'ВАЛ', width: 140 },
     { field: 'valMinusUsn', headerName: 'ВАЛ -усн', width: 140 },
     { field: 'valForGaz', headerName: 'ВАЛ газ', width: 140 },
@@ -137,12 +132,12 @@ export default function Royalties() {
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
-          icon={<InfoIcon />}
-          label="Информация"
-          className="textPrimary"
-          onClick={handleUpdateClick(id)}
-          color="inherit"
-        />,
+            icon={<InfoIcon />}
+            label="Информация"
+            className="textPrimary"
+            onClick={handleUpdateClick(id)}
+            color="inherit"
+          />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"

@@ -128,7 +128,7 @@ export default function CreateTrackDialog(props) {
       props.handleSnackbarOpen(response.data, 'success', 'Запись добавлена', 'add');
 
       // update all rows
-      const r = await privateFetcher('/api/private/royalties/', {});
+      const r = await privateFetcher('/api/private/royalties', {});
       props.setNewRows(r.data);
     }
 

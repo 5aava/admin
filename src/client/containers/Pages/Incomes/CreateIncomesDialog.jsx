@@ -207,10 +207,6 @@ export default function CreateIncomesDialog(props) {
             name="q1"
             onWheel={(e) => e.target.blur()} 
             customInput={TextField}
-            isAllowed={(values) => {
-              const { floatValue } = values;
-              return floatValue;
-            }}
             decimalScale={2}
             style={{marginBottom: 20, width: maxWidth}}
           />
@@ -221,10 +217,6 @@ export default function CreateIncomesDialog(props) {
             name="q2"
             onWheel={(e) => e.target.blur()} 
             customInput={TextField}
-            isAllowed={(values) => {
-              const { floatValue } = values;
-              return floatValue;
-            }}
             decimalScale={2}
             style={{marginBottom: 20, width: maxWidth}}
           />
@@ -235,10 +227,6 @@ export default function CreateIncomesDialog(props) {
             name="q3"   
             onWheel={(e) => e.target.blur()} 
             customInput={TextField}
-            isAllowed={(values) => {
-              const { floatValue } = values;
-              return floatValue;
-            }}
             decimalScale={2}
             style={{marginBottom: 20, width: maxWidth}}
           />
@@ -249,10 +237,6 @@ export default function CreateIncomesDialog(props) {
             name="q4"
             onWheel={(e) => e.target.blur()} 
             customInput={TextField}
-            isAllowed={(values) => {
-              const { floatValue } = values;
-              return floatValue;
-            }}
             decimalScale={2}
             style={{marginBottom: 20, width: maxWidth}}
           />
