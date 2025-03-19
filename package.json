@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prod": "next build && node src/server/server.js",
+    "prod": "node src/server/server.js",
     "lint": "next lint"
   },
   "dependencies": {
