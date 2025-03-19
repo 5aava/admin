@@ -55,5 +55,5 @@ yarn sequelize-cli model:generate --name RoyaltiesCtrs --attributes 'royaltyId:i
 yarn sequelize-cli model:generate --name Reports --attributes 'royaltyId:integer, totalIncomes:integer, totalPayments:integer, totalSaldo:integer'
 
 # pm2
-pm2 start npm --name "prod" -- run "start"
+pm2 start npm --name "prod" -- run "prod"
 ```

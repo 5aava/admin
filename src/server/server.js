@@ -1,6 +1,6 @@
-import express from 'express';
-import path from 'path';
-import next from 'next';
+const express = require('express');
+const path = require('path');
+const next = require('next');
  
 const port = process.env.SERVER_PORT || 3000;
 const app = next({production: true});
