@@ -3,16 +3,16 @@ import {useState, useEffect} from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 
-import InfoIcon from '@mui/icons-material/Info';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
+import IconButton from '@mui/material/IconButton';
+import Link from 'next/link';
+
 import Snackbar from '../../../components/Snackbar';
-import CreateReportDialog from './CreateReportDialog'
-import DeleteReportDialog from './DeleteReportDialog'
-import UpdateReportDialog from './UpdateReportDialog'
+import CreateReportDialog from './CreateReportDialog';
+import DeleteReportDialog from './DeleteReportDialog';
 
 import {
   DataGrid,
@@ -48,17 +48,6 @@ export default function Reports() {
       setRows(response);
     }
   }, [response])
-
-  const handleUpdateClick = (id) => () => {
-
-    const url = `pdfs/${id}.pdf`;
-    window.open(url, '_blank').focus();
-
-    /* const track = rows.filter((row) => row.id === id)[0];
-
-    dialogUpdateSet(true); 
-    dialogUpdateReportSet(track); */
-  };
 
   const handleDeleteClick = (id) => () => {
     dialogDeleteSet(true);
@@ -132,13 +121,9 @@ export default function Reports() {
       cellClassName: 'actions',
       getActions: ({ id }) => {
         return [
-          <GridActionsCellItem
-            icon={<OpenInNewIcon />}
-            label="Информация"
-            className="textPrimary"
-            onClick={handleUpdateClick(id)}
-            color="inherit"
-          />,
+          <IconButton component={Link} href={`pdfs/${id}.pdf`} target='_blank'>
+            <OpenInNewIcon />
+          </IconButton>,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
