@@ -145,12 +145,13 @@ export default function Payments() {
     { field: 'q1p', headerName: 'Оплачен', width: 80,
       renderCell: (params) => <>{params.row.q1p == 1 ? 
         <CheckBoxIcon sx={{marginTop:1}} fontSize={'large'} color="success" /> : 
-        <CloseIcon fontSize={'large'} />}</>,
-     },
+        <CloseIcon sx={{marginTop:1}} fontSize={'large'} color="error" />}</>,
+    },
     { field: 'q2', headerName: 'Квартал II', width: 120 },
-    { field: 'q2p', headerName: 'Оплачен', width: 80, 
+    { field: 'q2p', headerName: 'Оплачен', width: 80,
       renderCell: (params) => <>{params.row.q2p == 1 ? 
-        <CheckBoxIcon sx={{marginTop:1}} fontSize={'large'} color="success" /> : ''}</>,
+        <CheckBoxIcon sx={{marginTop:1}} fontSize={'large'} color="success" /> : 
+        <CloseIcon sx={{marginTop:1}} fontSize={'large'} color="error" />}</>,
     },
     { field: 'q3', headerName: 'Квартал III', width: 120 },
     { field: 'q3p', headerName: 'Оплачен', width: 80,
@@ -161,7 +162,8 @@ export default function Payments() {
     { field: 'q4', headerName: 'Квартал IV', width: 120 },
     { field: 'q4p', headerName: 'Оплачен', width: 80,
       renderCell: (params) => <>{params.row.q4p == 1 ? 
-        <CheckBoxIcon sx={{marginTop:1}} fontSize={'large'} color="success" /> : ''}</>,
+        <CheckBoxIcon sx={{marginTop:1}} fontSize={'large'} color="success" /> : 
+        <CloseIcon sx={{marginTop:1}} fontSize={'large'} color="error" />}</>,
     },
     { field: 'total', headerName: 'Итого за год', width: 120 },
     { field: 'comment', headerName: 'Коммент', width: 120 },
