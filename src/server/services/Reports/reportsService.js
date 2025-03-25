@@ -120,8 +120,14 @@ export async function createReport (values) {
               }).then(p => {
                 if(p){
 
+                  // - если нет галки выплачено, то 0
+                  const pq1 = p.q1p ? p.q1 : 0;
+                  const pq2 = p.q2p ? p.q2 : 0;
+                  const pq3 = p.q3p ? p.q3 : 0;
+                  const pq4 = p.q4p ? p.q4 : 0;
+
                   // - считаем разницу, выводим все что можно 
-                  const paymentsTotal = +(p.q1 + p.q2 + p.q3 + p.q4).toFixed(2);
+                  const paymentsTotal = +(pq1 + pq2 + pq3 + pq4).toFixed(2);
                   const saldo = +(year.total - paymentsTotal).toFixed(2);
                   pdfBody.push([
                     track.name,
@@ -131,10 +137,10 @@ export async function createReport (values) {
                     year.q3,
                     year.q4,
                     year.total,
-                    p.q1,
-                    p.q2,
-                    p.q3,
-                    p.q4,
+                    pq1,
+                    pq2,
+                    pq3,
+                    pq4,
                     paymentsTotal,
                     saldo
                   ]);
@@ -142,7 +148,6 @@ export async function createReport (values) {
                   totalIncomes += +(year.total).toFixed(2);
                   totalPayments += +(paymentsTotal).toFixed(2);
                   totalSaldo += +(saldo).toFixed(2);
-
                 }
 
               });

@@ -1,7 +1,7 @@
 import { getItem, getItems, createItems, createBulkItems, 
   updateItems, deleteItems} from '../crudService';
 import { Royalties, RoyaltiesCtrs, RoyaltiesTrks, Incomes, Contracts, 
-  ContractsCtrs, Contractors, Tracks } from '../../database/models/index';
+  ContractsCtrs, Contractors, Tracks, Reports} from '../../database/models/index';
 
 import dayjs from 'dayjs';
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -323,6 +323,7 @@ export async function deleteRoyalty (id) {
 
   const cstrs = await getItems(RoyaltiesCtrs, {royaltyId: id});
   const trks = await getItems(RoyaltiesTrks, {royaltyId: id});
+  const rpts = await getItems(Reports, {royaltyId: id});
 
   for(const cstr of cstrs){
     await deleteItems(RoyaltiesCtrs, cstr.id);
@@ -330,6 +331,10 @@ export async function deleteRoyalty (id) {
 
   for(const trk of trks){
     await deleteItems(RoyaltiesTrks, trk.id);
+  };
+
+  for(const rpt of rpts){
+    await deleteItems(Reports, rpt.id);
   };
 
   const isDeleted = await deleteItems(Royalties, id);
