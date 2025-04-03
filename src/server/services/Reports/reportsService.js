@@ -159,6 +159,10 @@ export async function createReport (values) {
   }).catch(e => e);
   // console.log(tracks);
 
+  totalIncomes = +(totalIncomes).toFixed(2);
+  totalPayments = +(totalPayments).toFixed(2);
+  totalSaldo = +(totalSaldo).toFixed(2);
+
   pdfBody.push([
     { content: '', colSpan: 6},
     totalIncomes,
