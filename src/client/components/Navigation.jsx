@@ -90,18 +90,20 @@ export default function Navigation(role, count = false) {
     }
   )
   
-  navigation.push({
-    kind: 'divider',
-  },
-  {
-    kind: 'header',
-    title: 'Административные',
-  },
-  {
-    segment: 'users',
-    title: 'Пользователи',
-    icon: <GroupIcon />,
-  }) 
+  if(role == 'admin'){
+    navigation.push({
+      kind: 'divider',
+    },
+    {
+      kind: 'header',
+      title: 'Административные',
+    },
+    {
+      segment: 'users',
+      title: 'Пользователи',
+      icon: <GroupIcon />,
+    }) 
+  }
 
   if(role){
     return navigation;

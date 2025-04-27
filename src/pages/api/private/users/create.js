@@ -1,5 +1,6 @@
 import { logger } from '../../../../server/modules/logger.js';
 import isAuth from '../../../../server/modules/isAuth.js';
+import isAdmin from '../../../../server/modules/isAdmin.js';
 import config from '../../../../server/config/config.server.js';
 import { createUser } from '../../../../server/services/Users/usersServices.js';
 
@@ -9,6 +10,10 @@ export default async function create(req, res) {
   logger.info(log);
 
   if(!isAuth(req.headers)){
+    res.status(403).json({ auth: false, error: '403 Forbidden' })
+  }
+
+  if(!await isAdmin(req.headers)){
     res.status(403).json({ auth: false, error: '403 Forbidden' })
   }
 

@@ -39,8 +39,7 @@ export default function UpdateUserDialogs(props) {
       name: data.get('name'),
       email: data.get('email'),
       role: data.get('role'),
-      // password: data.get('password'),
-      // confirm: data.get('confirm'),
+      password: data.get('password'),
     });
     
     if(response.status == 'ok'){
@@ -121,29 +120,19 @@ export default function UpdateUserDialogs(props) {
               <MenuItem value={'manager'}>Менеджер</MenuItem>
               <MenuItem value={'finance'}>Финансист</MenuItem>
             </TextField><br />
-           {/*  <TextField
+
+           <TextField
               fullWidth
               label="Пароль"
               name="password"
-              placeholder="••••••"
-              type="password"
               id="password"
+              placeholder="••••••••"
+              type="password"
               autoComplete="current-password"
-              required
               variant="outlined"
               style={{marginBottom: 20}}
             /><br />
-            <TextField
-              fullWidth
-              label="Подтвердить пароль"
-              name="confirm"
-              placeholder="••••••"
-              type="password"
-              id="confirm"
-              required
-              variant="outlined"
-              style={{marginBottom: 20}}
-            /> */}
+
         </DialogContent>
         <DialogActions>
           <Button onClick={props.close} startIcon={<CancelIcon />} >

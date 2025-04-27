@@ -33,6 +33,17 @@ export async function createUser (values) {
 
 
 export async function updateUser (id, values) {
+
+  if(values.password && values.password != ''){
+    // bcrypt password
+    const saltRounds = 10;
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const hash = bcrypt.hashSync(values.password, salt);
+    values.password = hash;
+  }else{
+    delete values.password;
+  }
+  
   const data = await updateItems(Users, values, id);
 
   if(data.name == 'SequelizeUniqueConstraintError'){
